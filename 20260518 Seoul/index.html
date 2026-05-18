@@ -2,6 +2,7 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>首爾動漫美食通 — 4天3夜互動導航地圖 (莫蘭迪舒適風格)</title>
     <style>
         @page {
@@ -16,19 +17,28 @@
             margin: 0;
             padding: 0;
             font-family: 'Helvetica Neue', Arial, 'Apple LiGothic Medium', 'Microsoft JhengHei', sans-serif;
-            background-color: #eeeae6; /* 莫蘭迪溫潤灰 */
-            color: #55504c; /* 深灰褐，降低環境對比刺眼感 */
-            font-size: 10pt;
-            line-height: 1.6;
+            background-color: #eeeae6;
+            color: #55504c;
+            font-size: 16px;
+            line-height: 1.7;
         }
         .container {
             width: 100%;
             max-width: 800px;
-            margin: 20px auto;
+            margin: 0 auto;
             background: #ffffff;
-            padding: 25px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(85, 80, 76, 0.04);
+            padding: 16px;
+            border-radius: 0;
+            box-shadow: none;
+        }
+        @media (min-width: 600px) {
+            body { font-size: 15px; }
+            .container {
+                margin: 20px auto;
+                padding: 25px;
+                border-radius: 12px;
+                box-shadow: 0 4px 15px rgba(85, 80, 76, 0.04);
+            }
         }
         header {
             text-align: center;
@@ -37,23 +47,23 @@
             margin-bottom: 25px;
         }
         header h1 {
-            color: #8c7b70; /* 莫蘭迪暖褐 */
+            color: #8c7b70;
             margin: 0 0 8px 0;
-            font-size: 20pt;
+            font-size: 22px;
             letter-spacing: 0.5px;
         }
         header p {
             margin: 0;
-            color: #a3968e; /* 淺灰褐 */
-            font-size: 10.5pt;
+            color: #a3968e;
+            font-size: 15px;
         }
         .tip-box {
-            background-color: #f0f4f1; /* 溫和極淺綠灰 */
-            border-left: 4px solid #8fa89b; /* 莫蘭迪豆綠 */
-            padding: 12px 15px;
+            background-color: #f0f4f1;
+            border-left: 4px solid #8fa89b;
+            padding: 13px 15px;
             margin-bottom: 25px;
             border-radius: 0 6px 6px 0;
-            font-size: 9.5pt;
+            font-size: 14px;
             color: #5b6660;
         }
         
@@ -83,29 +93,31 @@
         
         /* 仿地圖視覺化引導 */
         .map-visual-container {
-            padding: 15px;
+            padding: 12px;
             background: #ffffff;
             border-bottom: 1px solid #eae5e1;
             text-align: center;
         }
         .map-zone-grid {
-            display: table;
-            width: 100%;
-            border-collapse: separate;
-            border-spacing: 12px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
         }
         .map-zone-row {
-            display: table-row;
+            display: contents;
         }
         .map-zone {
-            display: table-cell;
+            display: block;
             background: #ffffff;
             border: 2px dashed #dbd5d0;
             border-radius: 8px;
             padding: 12px;
-            width: 50%;
-            vertical-align: top;
             text-align: left;
+        }
+        @media (min-width: 520px) {
+            .map-zone-grid {
+                grid-template-columns: 1fr 1fr;
+            }
         }
         
         /* 莫蘭迪分區柔和配色 */
@@ -116,7 +128,7 @@
         
         .zone-title {
             font-weight: bold;
-            font-size: 10.5pt;
+            font-size: 15px;
             margin-bottom: 8px;
             padding-bottom: 4px;
             border-bottom: 1px solid #f0eae6;
@@ -127,7 +139,7 @@
         .zone-title.d4 { color: #7f7194; }
         
         .zone-item {
-            font-size: 9pt;
+            font-size: 13px;
             margin: 5px 0;
             padding-left: 12px;
             position: relative;
@@ -147,9 +159,9 @@
             page-break-inside: avoid;
         }
         .day-title {
-            font-size: 12.5pt;
+            font-size: 15px;
             font-weight: bold;
-            padding: 12px 15px;
+            padding: 14px 15px;
             border-radius: 6px;
             margin-bottom: 15px;
             color: #ffffff;
@@ -160,20 +172,24 @@
             user-select: none;
             box-shadow: 0 2px 5px rgba(0,0,0,0.02);
             transition: opacity 0.2s ease;
+            line-height: 1.4;
+            gap: 8px;
         }
         .day-title:hover {
             opacity: 0.9;
         }
         .day-title::after {
-            content: "🕒 點擊摺疊";
-            font-size: 8.5pt;
+            content: "🕒 摺疊";
+            font-size: 12px;
             font-weight: normal;
             background: rgba(255, 255, 255, 0.25);
-            padding: 2px 8px;
+            padding: 3px 9px;
             border-radius: 12px;
+            white-space: nowrap;
+            flex-shrink: 0;
         }
         .day-section.collapsed .day-title::after {
-            content: "👁️ 點擊展開";
+            content: "👁️ 展開";
         }
         .day-section.collapsed .timeline {
             display: none;
@@ -225,56 +241,50 @@
         .time-tag {
             font-weight: bold;
             color: #9c8e85;
-            font-size: 9.5pt;
+            font-size: 13px;
             margin-bottom: 5px;
             letter-spacing: 0.5px;
         }
         .spot-name {
-            font-size: 11pt;
+            font-size: 17px;
             font-weight: bold;
             color: #474340;
-            margin-bottom: 5px;
+            margin-bottom: 6px;
         }
         .spot-desc {
-            font-size: 9pt;
+            font-size: 14px;
             color: #7a716a;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
         }
         .queue-badge {
-            background-color: #f5f0eb; 
-            color: #8c7565; 
+            background-color: #f5f0eb;
+            color: #8c7565;
             border: 1px solid #e3dac3;
-            padding: 4px 10px; 
-            border-radius: 4px; 
-            font-size: 8.5pt; 
-            font-weight: bold; 
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 13px;
+            font-weight: bold;
             margin-bottom: 10px;
             display: inline-block;
         }
         
         /* 導航按鈕樣式 */
         .btn-group {
-            display: table;
-            width: 100%;
+            display: flex;
+            gap: 8px;
             margin-top: 5px;
         }
         .btn-cell {
-            display: table-cell;
-            width: 50%;
-            padding-right: 6px;
-        }
-        .btn-cell:last-child {
-            padding-right: 0;
-            padding-left: 6px;
+            flex: 1;
         }
         .nav-btn {
             display: block;
             text-align: center;
-            padding: 7px 0;
+            padding: 10px 4px;
             border-radius: 6px;
             text-decoration: none;
             font-weight: bold;
-            font-size: 9pt;
+            font-size: 14px;
             color: #ffffff;
             box-shadow: 0 2px 4px rgba(0,0,0,0.04);
             transition: background-color 0.2s ease;
@@ -287,7 +297,7 @@
         
         .footer {
             text-align: center;
-            font-size: 8.5pt;
+            font-size: 13px;
             color: #a3968e;
             margin-top: 35px;
             border-top: 1px solid #e8e2dd;
@@ -449,9 +459,15 @@
                     • <b>🔵 百變怪遊樂場</b>：整棟粉嫩怪奇Ditto主題世界，超級出片。<br>
                     • <b>🍔 午餐彈性規劃</b>：由於等號時間不定，建議在聖水主街尋找免排隊餐館，以便隨時進場！
                 </div>
+                <div style="font-size:12px;color:#9c8e85;margin:8px 0 3px;">🌳 首爾林寶可夢活動</div>
                 <div class="btn-group">
-                    <div class="btn-cell"><a href="https://www.google.com/maps/search/?api=1&query=서울숲+성동구+뚝섬로+273" target="_blank" class="nav-btn btn-google">首爾林 Google</a></div>
-                    <div class="btn-cell"><a href="https://www.google.com/maps/search/?api=1&query=서울+성동구+성수이로7길+9" target="_blank" class="nav-btn btn-google">百變怪 Google</a></div>
+                    <div class="btn-cell"><a href="https://www.google.com/maps/search/?api=1&query=서울숲+성동구+뚝섬로+273" target="_blank" class="nav-btn btn-google">Google Map</a></div>
+                    <div class="btn-cell"><a href="https://map.naver.com/v5/search/%EC%84%9C%EC%9A%B8%EC%88%B2" target="_blank" class="nav-btn btn-naver">Naver Map 🧭</a></div>
+                </div>
+                <div style="font-size:12px;color:#9c8e85;margin:10px 0 3px;">🔵 百變怪遊樂場</div>
+                <div class="btn-group">
+                    <div class="btn-cell"><a href="https://www.google.com/maps/search/?api=1&query=서울+성동구+성수이로7길+9" target="_blank" class="nav-btn btn-google">Google Map</a></div>
+                    <div class="btn-cell"><a href="https://map.naver.com/v5/search/%EC%84%B1%EC%88%98%EC%9D%B4%EB%A1%9C7%EA%B0%80%EA%B8%B8+9" target="_blank" class="nav-btn btn-naver">Naver Map 🧭</a></div>
                 </div>
             </div>
             <div class="timeline-item">
