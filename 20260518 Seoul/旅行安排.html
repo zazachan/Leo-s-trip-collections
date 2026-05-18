@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <title>首爾動漫美食通 — 4天3夜互動導航地圖 (莫蘭迪舒適風格)</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 10mm 10mm;
+            background-color: #f5f6f8;
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Helvetica Neue', Arial, 'Apple LiGothic Medium', 'Microsoft JhengHei', sans-serif;
+            background-color: #eeeae6; /* 莫蘭迪溫潤灰 */
+            color: #55504c; /* 深灰褐，降低環境對比刺眼感 */
+            font-size: 10pt;
+            line-height: 1.6;
+        }
+        .container {
+            width: 100%;
+            max-width: 800px;
+            margin: 20px auto;
+            background: #ffffff;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(85, 80, 76, 0.04);
+        }
+        header {
+            text-align: center;
+            border-bottom: 2px solid #c2b8b2; /* 莫蘭迪土灰 */
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+        header h1 {
+            color: #8c7b70; /* 莫蘭迪暖褐 */
+            margin: 0 0 8px 0;
+            font-size: 20pt;
+            letter-spacing: 0.5px;
+        }
+        header p {
+            margin: 0;
+            color: #a3968e; /* 淺灰褐 */
+            font-size: 10.5pt;
+        }
+        .tip-box {
+            background-color: #f0f4f1; /* 溫和極淺綠灰 */
+            border-left: 4px solid #8fa89b; /* 莫蘭迪豆綠 */
+            padding: 12px 15px;
+            margin-bottom: 25px;
+            border-radius: 0 6px 6px 0;
+            font-size: 9.5pt;
+            color: #5b6660;
+        }
+        
+        /* 模擬地圖大區塊布局 */
+        .map-dashboard {
+            border: 1px solid #d9d2cc;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 30px;
+            background: #faf9f7;
+            position: relative;
+        }
+        .map-header {
+            background: #737980; /* 莫蘭迪鐵灰藍 */
+            color: #ffffff;
+            padding: 12px 15px;
+            font-weight: bold;
+            font-size: 11pt;
+            display: table;
+            width: 100%;
+            letter-spacing: 0.5px;
+        }
+        .map-header-cell {
+            display: table-cell;
+            vertical-align: middle;
+        }
+        
+        /* 仿地圖視覺化引導 */
+        .map-visual-container {
+            padding: 15px;
+            background: #ffffff;
+            border-bottom: 1px solid #eae5e1;
+            text-align: center;
+        }
+        .map-zone-grid {
+            display: table;
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 12px;
+        }
+        .map-zone-row {
+            display: table-row;
+        }
+        .map-zone {
+            display: table-cell;
+            background: #ffffff;
+            border: 2px dashed #dbd5d0;
+            border-radius: 8px;
+            padding: 12px;
+            width: 50%;
+            vertical-align: top;
+            text-align: left;
+        }
+        
+        /* 莫蘭迪分區柔和配色 */
+        .map-zone.active-d1 { border-color: #9ab2c9; background: #f2f6fa; } /* 霧藍 */
+        .map-zone.active-d2 { border-color: #d1b49e; background: #faf6f2; } /* 駝粉 */
+        .map-zone.active-d3 { border-color: #9cbda8; background: #f3f7f5; } /* 灰綠 */
+        .map-zone.active-d4 { border-color: #b0a4c4; background: #f7f5fa; } /* 藕紫 */
+        
+        .zone-title {
+            font-weight: bold;
+            font-size: 10.5pt;
+            margin-bottom: 8px;
+            padding-bottom: 4px;
+            border-bottom: 1px solid #f0eae6;
+        }
+        .zone-title.d1 { color: #6b849c; }
+        .zone-title.d2 { color: #a8866d; }
+        .zone-title.d3 { color: #688c75; }
+        .zone-title.d4 { color: #7f7194; }
+        
+        .zone-item {
+            font-size: 9pt;
+            margin: 5px 0;
+            padding-left: 12px;
+            position: relative;
+            color: #6e6762;
+        }
+        .zone-item::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+            color: #bfaea4;
+        }
+        
+        /* 行程流水線樣式 */
+        .day-section {
+            margin-bottom: 25px;
+            page-break-inside: avoid;
+        }
+        .day-title {
+            font-size: 12.5pt;
+            font-weight: bold;
+            padding: 12px 15px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            color: #ffffff;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            user-select: none;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+            transition: opacity 0.2s ease;
+        }
+        .day-title:hover {
+            opacity: 0.9;
+        }
+        .day-title::after {
+            content: "🕒 點擊摺疊";
+            font-size: 8.5pt;
+            font-weight: normal;
+            background: rgba(255, 255, 255, 0.25);
+            padding: 2px 8px;
+            border-radius: 12px;
+        }
+        .day-section.collapsed .day-title::after {
+            content: "👁️ 點擊展開";
+        }
+        .day-section.collapsed .timeline {
+            display: none;
+        }
+        
+        /* 天數背景莫蘭迪色 */
+        .day1-bg { background-color: #8da6bd; } /* 舒適霧藍 */
+        .day2-bg { background-color: #c7a78f; } /* 舒適駝粉 */
+        .day3-bg { background-color: #8fa89b; } /* 舒適灰綠 */
+        .day4-bg { background-color: #a195b8; } /* 舒適藕紫 */
+        
+        .timeline {
+            border-left: 2px solid #e6dfda;
+            margin-left: 18px;
+            padding-left: 18px;
+            animation: fadeIn 0.3s ease;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .timeline-item {
+            position: relative;
+            margin-bottom: 18px;
+            background: #ffffff;
+            padding: 12px 15px;
+            border: 1px solid #ede8e4;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.01);
+        }
+        .timeline-item::before {
+            content: "";
+            position: absolute;
+            left: -26px;
+            top: 16px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #ffffff;
+            border: 3px solid #dbd5d0;
+            z-index: 2;
+        }
+        .day1 .timeline-item::before { border-color: #8da6bd; }
+        .day2 .timeline-item::before { border-color: #c7a78f; }
+        .day3 .timeline-item::before { border-color: #8fa89b; }
+        .day4 .timeline-item::before { border-color: #a195b8; }
+        
+        .time-tag {
+            font-weight: bold;
+            color: #9c8e85;
+            font-size: 9.5pt;
+            margin-bottom: 5px;
+            letter-spacing: 0.5px;
+        }
+        .spot-name {
+            font-size: 11pt;
+            font-weight: bold;
+            color: #474340;
+            margin-bottom: 5px;
+        }
+        .spot-desc {
+            font-size: 9pt;
+            color: #7a716a;
+            margin-bottom: 10px;
+        }
+        .queue-badge {
+            background-color: #f5f0eb; 
+            color: #8c7565; 
+            border: 1px solid #e3dac3;
+            padding: 4px 10px; 
+            border-radius: 4px; 
+            font-size: 8.5pt; 
+            font-weight: bold; 
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+        
+        /* 導航按鈕樣式 */
+        .btn-group {
+            display: table;
+            width: 100%;
+            margin-top: 5px;
+        }
+        .btn-cell {
+            display: table-cell;
+            width: 50%;
+            padding-right: 6px;
+        }
+        .btn-cell:last-child {
+            padding-right: 0;
+            padding-left: 6px;
+        }
+        .nav-btn {
+            display: block;
+            text-align: center;
+            padding: 7px 0;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 9pt;
+            color: #ffffff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+            transition: background-color 0.2s ease;
+        }
+        /* 按鈕也全面改為低飽和柔和色系 */
+        .btn-google { background-color: #9cb4cc; } 
+        .btn-google:hover { background-color: #8da6bd; }
+        .btn-naver { background-color: #99bda8; } 
+        .btn-naver:hover { background-color: #8fa89b; }
+        
+        .footer {
+            text-align: center;
+            font-size: 8.5pt;
+            color: #a3968e;
+            margin-top: 35px;
+            border-top: 1px solid #e8e2dd;
+            padding-top: 15px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>🇰🇷 首爾動漫 × 美食通 — 互動導航面板</h1>
+        <p>4天3夜核心主街與大連動特化行程 (舒適柔和版)</p>
+    </header>
+    
+    <div class="tip-box">
+        <b>💡 行程導航貼心叮嚀：</b> 韓國境內步行與大眾運輸導航請優先點擊 <b>Naver Map</b>。5/25(一)逢韓國佛誕節連假，部分人氣名店排隊人潮較多，請依攻略提早前往！點擊下方各天莫蘭迪色調標題可自由「摺疊/展開」內容。
+    </div>
+    
+    <div class="map-dashboard">
+        <div class="map-header">
+            <div class="map-header-cell">🗺️ 首爾核心戰略分區示意圖 (修訂版)</div>
+        </div>
+        <div class="map-visual-container">
+            <div class="map-zone-grid">
+                <div class="map-zone-row">
+                    <div class="map-zone active-d1">
+                        <div class="zone-title d1">西北區【弘大/新村/龍山】</div>
+                        <div class="zone-item">Hithere 民宿 (弘大)</div>
+                        <div class="zone-item">龍山 I'Park 吉伊卡哇</div>
+                        <div class="zone-item">弘大 ☕ 연어롭다 (鮭魚專賣)</div>
+                        <div class="zone-item">新村孔陵一隻雞</div>
+                    </div>
+                    <div class="map-zone active-d3">
+                        <div class="zone-title d3">城東區【聖水/首爾林】</div>
+                        <div class="zone-item">首爾林寶可夢30週年(抽票)</div>
+                        <div class="zone-item">聖水百變怪遊樂場(抽票)</div>
+                        <div class="zone-item">聖水30週年快閃店(抽票)</div>
+                        <div class="zone-item">自嘲熊常設店 / Jojo刀削麵</div>
+                    </div>
+                </div>
+                <div class="map-zone-row">
+                    <div class="map-zone active-d2">
+                        <div class="zone-title d2">東南區【蠶室/江南/清潭】</div>
+                        <div class="zone-item">樂天世界 (楓之谷全天)</div>
+                        <div class="zone-item">石村湖巨型裝置</div>
+                        <div class="zone-item">江南 MAPLE AGIT</div>
+                        <div class="zone-item">清潭永川永華生牛肉</div>
+                    </div>
+                    <div class="map-zone active-d4">
+                        <div class="zone-title d4">市中心【鐘路/安國】</div>
+                        <div class="zone-item">Artist Bakery 鹽可頌 (連假)</div>
+                        <div class="zone-item">Olive Young 廣和門店</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="day-section day1" id="day1">
+        <div class="day-title day1-bg" onclick="toggleDay('day1')">📌 DAY 1：5/22 (五) 潮流動漫開序幕與極鮮鮭魚名店【弘大、龍山】</div>
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="time-tag">16:30 - 17:00</div>
+                <div class="spot-name">🏨 Hithere Guesthouse (旅宿 Check-in)</div>
+                <div class="spot-desc">地址：22-3 Wausan-ro 29ra-gil, Mapo-gu 首爾。本次行程的大本營，放好行李準備出發！</div>
+                <div class="btn-group">
+                    <div class="btn-cell"><a href="https://maps.google.com/?q=Hithere+Guesthouse+Seoul" target="_blank" class="nav-btn btn-google">Google Map</a></div>
+                    <div class="btn-cell"><a href="https://map.naver.com/v5/search/Hithere+Guesthouse" target="_blank" class="nav-btn btn-naver">Naver Map 🧭</a></div>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="time-tag">17:30 - 19:30</div>
+                <div class="spot-name">🧸 龍山 I'Park Mall 吉伊卡哇常設店</div>
+                <div class="spot-desc">位於 Living Park 3樓 Dopamine Station。朝聖全韓最紅小可愛，狂搶限定周邊。</div>
+                <div class="btn-group">
+                    <div class="btn-cell"><a href="https://maps.google.com/?q=I-Park+Mall+Yongsan" target="_blank" class="nav-btn btn-google">Google Map</a></div>
+                    <div class="btn-cell"><a href="https://map.naver.com/v5/search/%EC%95%84%EC%9D%B4%ED%8C%8C%ED%81%AC%EB%AA%B0+%EC%A7%84%EC%82%B0" target="_blank" class="nav-btn btn-naver">Naver Map 🧭</a></div>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="time-tag">20:00 - 21:30</div>
+                <div class="spot-name">🍣 弘大主街美食：연어롭다 (鮭魚專賣店)</div>
+                <div class="spot-desc">弘大超人氣極鮮厚切鮭魚！必點招牌鮭魚拼盤及鮭魚千層麵，滑嫩鮮甜。</div>
+                <div class="btn-group">
+                    <div class="btn-cell"><a href="https://maps.google.com/?q=%EC%97%B0%EC%96%B4%EB%A1%AD%EB%8B%A4" target="_blank" class="nav-btn btn-google">Google Map</a></div>
+                    <div class="btn-cell"><a href="https://map.naver.com/v5/search/%EC%97%B0%EC%96%B4%EB%A1%AD%EB%8B%A4" target="_blank" class="nav-btn btn-naver">Naver Map 🧭</a></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="day-section day2" id="day2">
+        <div class="day-title day2-bg" onclick="toggleDay('day2')">📌 DAY 2：5/23 (六) 楓之谷 MapleStory 皇家大連動【蠶室、江南】</div>
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="time-tag">09:30 - 16:30</div>
+                <div class="spot-name">🍁 首爾樂天世界 Lotte World (全天攻略)</div>
+                <div class="spot-desc">2026 楓之谷主題限定活動，園區化身為冒險世界，限定設施與爆量周邊等你入手。</div>
+                <div class="btn-group">
+                    <div class="btn-cell"><a href="https://maps.google.com/?q=Lotte+World+Seoul" target="_blank" class="nav-btn btn-google">Google Map</a></div>
+                    <div class="btn-cell"><a href="https://map.naver.com/v5/search/%EB%A1%AF%EB%8D%B0%EC%9B%94%EB%93%9C" target="_blank" class="nav-btn btn-naver">Naver Map 🧭</a></div>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="time-tag">16:30 - 17:30</div>
+                <div class="spot-name">🍁 石村湖 Seokchon Lake</div>
+                <div class="spot-desc">就在樂天世界旁！捕捉浮在湖面上的 MapleStory 巨型綠水靈、皮卡丘等怪物裝置。</div>
+                <div class="btn-group">
+                    <div class="btn-cell"><a href="https://maps.google.com/?q=Seokchon+Lake+Seoul" target="_blank" class="nav-btn btn-google">Google Map</a></div>
+                    <div class="btn-cell"><a href="https://map.naver.com/v5/search/%EC%84%9D%EC%B1%8C%ED%98%B8%EC%88%98" target="_blank" class="nav-btn btn-naver">Naver Map 🧭</a></div>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="time-tag">18:00 - 19:15</div>
+                <div class="spot-name">🍁 楓之谷基地 MAPLE AGIT (메い플 아지特)</div>
+                <div class="spot-desc">地址：江南大路364 1樓。骨灰級玩家終極秘密基地，沉浸式虛實投影與特製 Cafe！</div>
+                <div class="btn-group">
+                    <div class="btn-cell"><a href="https://maps.google.com/?q=Gangnam-daero+364" target="_blank" class="nav-btn btn-google">Google Map</a></div>
+                    <div class="btn-cell"><a href="https://map.naver.com/v5/search/%EA%B0%95%EB%82%A8%EB%8C%80%EB%A1%9C+364" target="_blank" class="nav-btn btn-naver">Naver Map 🧭</a></div>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="time-tag">19:30 - 21:00</div>
+                <div class="spot-name">🥩 清潭永川永華 (晚餐)</div>
+                <div class="spot-desc">頂級巨星無限回訪名店！招牌生拌牛肉飯肉質鮮甜，配上濃郁麻油狂推！</div>
+                <div class="btn-group">
+                    <div class="btn-cell"><a href="https://maps.google.com/?q=Yeongcheon+Yeonghwa+Cheongdam" target="_blank" class="nav-btn btn-google">Google Map</a></div>
+                    <div class="btn-cell"><a href="https://map.naver.com/v5/search/%EC%98%AF%EC%B2%90%EC%98%AF%ED%99%94+%EC%B2%AD%EB%8B%B4%EC%A0%90" target="_blank" class="nav-btn btn-naver">Naver Map 🧭</a></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="day-section day3" id="day3">
+        <div class="day-title day3-bg" onclick="toggleDay('day3')">📌 DAY 3：5/24 (日) 寶可夢 30 週年狂歡、抽票叫號全攻略與自嘲熊【聖水、首爾林】</div>
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="time-tag">08:00 - 09:00</div>
+                <div class="spot-name">⏰ 聖水特攻早起出發</div>
+                <div class="spot-desc">最晚 08:30 出發前往聖水站（地鐵 2 號線），迎戰今日高強度抽票行程！</div>
+            </div>
+            <div class="timeline-item">
+                <div class="time-tag">09:00 - 09:40</div>
+                <div class="spot-name">🎫 抵達聖水站，依序領取三大場次號碼券</div>
+                <div class="queue-badge">📋 核心細節：一到現場立刻按順序完成以下抽票</div>
+                <div class="spot-desc">
+                    ① <b>首爾林寶可夢活動號碼券</b>（地點：首爾林公園）<br>
+                    ② <b>百變怪遊樂場號碼券</b>（地點：성수이로7가길 9）<br>
+                    ③ <b>30 週年快閃店號碼券</b>（Olive Young N / Trendpot 聖水）
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="time-tag">09:40 - 14:00</div>
+                <div class="spot-name">⚡ 依號碼券跳號順序彈性進場（含自主快速午餐）</div>
+                <div class="queue-badge">💡 美食提醒：取消大排長龍店，保留等號彈性</div>
+                <div class="spot-desc">
+                    • <b>🌳 首爾林寶可夢活動</b>：林蔭草皮間尋找 1:1 精緻雕像與隱藏打卡點。<br>
+                    • <b>🔵 百變怪遊樂場</b>：整棟粉嫩怪奇Ditto主題世界，超級出片。<br>
+                    • <b>🍔 午餐彈性規劃</b>：由於等號時間不定，建議在聖水主街尋找免排隊餐館，以便隨時進場！
+                </div>
+                <div class="btn-group">
+                    <div class="btn-cell"><a href="https://www.google.com/maps/search/?api=1&query=서울숲+성동구+뚝섬로+273" target="_blank" class="nav-btn btn-google">首爾林 Google</a></div>
+                    <div class="btn-cell"><a href="https://www.google.com/maps/search/?api=1&query=서울+성동구+성수이로7길+9" target="_blank" class="nav-btn btn-google">百變怪 Google</a></div>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="time-tag">14:00 - 15:45</div>
+                <div class="spot-name">🎂 聖水｜30週年快閃店 (Olive Young N Seongsu)</div>
+                <div class="spot-desc">30週年潮流服飾連動、限定潮流公仔與盲盒大本營，戰利品直接收滿。</div>
+                <div class="btn-group">
+                    <div class="btn-cell"><a href="https://maps.google.com/?q=Olive+Young+N+Seongsu" target="_blank" class="nav-btn btn-google">Google Map</a></div>
+                    <div class="btn-cell"><a href="https://map.naver.com/v5/search/%EC%98%AC%EB%A6%AC%EB%B8%8E%EC%98%81+N+%EC%84%B1%EC%88%98" target="_blank" class="nav-btn btn-naver">Naver Map 🧭</a></div>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="time-tag">15:45 - 16:30</div>
+                <div class="spot-name">⚡ IG熱門：3D裸視皮卡丘立體牆</div>
+                <div class="spot-desc">聖水潮流工廠外牆巨型像素風立體牆，還能現場領取限量明信片！</div>
+            </div>
+            <div class="timeline-item">
+                <div class="time-tag">16:45 - 17:45</div>
+                <div class="spot-name">🧸 自嘲熊韓國常設店 (Nagano Market)</div>
+                <div class="spot-desc">地址：城東區演武場街97。超多韓服限定自嘲熊吊飾與文具，治癒感拉滿。</div>
+                <div class="btn-group">
+                    <div class="btn-cell"><a href="https://maps.google.com/?q=연무장길+97" target="_blank" class="nav-btn btn-google">Google Map</a></div>
+                    <div class="btn-cell"><a href="https://map.naver.com/v5/search/%EC%84%9D%EC%88%98%EB%8F%99+%EC%97%B0%EB%AC%B4%EC%9E%A5%EA%B8%B8+97" target="_blank" class="nav-btn btn-naver">Naver Map 🧭</a></div>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="time-tag">18:15 - 19:45</div>
+                <div class="spot-name">🍕 Jojo刀削麵 Seongsu店 (晚餐)</div>
+                <div class="spot-desc">地址：聖水洞二街289-257。鋪滿滿鮮蝦與蛤蜊的超大厚蔥煎餅，酥脆到靈魂深處。</div>
+                <div class="btn-group">
+                    <div class="btn-cell"><a href="https://maps.google.com/?q=Jojo+Noodles+Seongsu" target="_blank" class="nav-btn btn-google">Google Map</a></div>
+                    <div class="btn-cell"><a href="https://map.naver.com/v5/search/%EC%A1%B0%EC%A1%B0%EC%B9%BC%EA%B5%AD%EC%88%98+%EC%84%B1%EC%88%98%EC%A0%B0" target="_blank" class="nav-btn btn-naver">Naver Map 🧭</a></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="day-section day4" id="day4">
+        <div class="day-title day4-bg" onclick="toggleDay('day4')">📌 DAY 4：5/25 (一) 鹽可頌、百變怪美妝最終衝刺【安國、新村】</div>
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="time-tag">08:00 - 09:15</div>
+                <div class="spot-name">🍕 Artist Bakery 安國店 (早餐)</div>
+                <div class="queue-badge">⚠️ 連假警戒：今日為佛誕節連假，排隊人潮極多，務必提早卡位！</div>
+                <div class="spot-desc">英倫風極致鹽可頌名店。必點：糖霜鮮奶油口味，滑順甜蜜入口即化。</div>
+                <div class="btn-group">
+                    <div class="btn-cell"><a href="https://maps.google.com/?q=Artist+Bakery+Anguk" target="_blank" class="nav-btn btn-google">Google Map</a></div>
+                    <div class="btn-cell"><a href="https://map.naver.com/v5/search/%EC%9A%B0%EC%92%84%ED%8B%B0%EC%8A%A4%ED%8A%B8%EB%B2%A0%EC%9D%B4%EC%BB%A4%EB%A6%AC" target="_blank" class="nav-btn btn-naver">Naver Map 🧭</a></div>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="time-tag">09:30 - 10:30</div>
+                <div class="spot-name">⚡ Olive Young 廣和門店 (百變怪特展聯動)</div>
+                <div class="spot-desc">地址：鐘路區清進洞246。指定旗艦級百變怪主題彩妝陳列，買爆當季韓系美妝並瘋狂打卡。</div>
+                <div class="btn-group">
+                    <div class="btn-cell"><a href="https://maps.google.com/?q=Cheongjin-dong+246" target="_blank" class="nav-btn btn-google">Google Map</a></div>
+                    <div class="btn-cell"><a href="https://map.naver.com/v5/search/%EC%B2%A0%EC%A7%84%EB%8F%99+246" target="_blank" class="nav-btn btn-naver">Naver Map 🧭</a></div>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="time-tag">11:00 - 12:15</div>
+                <div class="spot-name">🍕 新村孔陵一隻雞 (終極午餐)</div>
+                <div class="spot-desc">地址：西大門區大峴洞104-69。雞肉嫩滑、湯頭清甜，最驚艷的是收尾的海苔雞汁雞蛋粥！</div>
+                <div class="btn-group">
+                    <div class="btn-cell"><a href="https://maps.google.com/?q=Gongneung+One+Chicken+Shinchon" target="_blank" class="nav-btn btn-google">Google Map</a></div>
+                    <div class="btn-cell"><a href="https://map.naver.com/v5/search/%EA%B3%B5%EB%A6%89%EB%94%B5%ED%95%9C%EB%A7%88%EB%A6%AC+%EC%8B%A0%EC%B3%8C%EC%A0%90" target="_blank" class="nav-btn btn-naver">Naver Map 🧭</a></div>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="time-tag">12:45 - 13:40</div>
+                <div class="spot-name">🚆 機場交通：前往仁川機場</div>
+                <div class="spot-desc">搭乘 AREX 機場鐵路前往仁川機場（13:40 前抵達辦理退稅與登機，搭乘 14:50 班機返台）。</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        © 2026 首爾動漫 × 美食特化小組 ── 祝您連假旅行順利、戰利品滿載！
+    </div>
+</div>
+
+<script>
+    function toggleDay(dayId) {
+        var element = document.getElementById(dayId);
+        if (element.classList.contains('collapsed')) {
+            element.classList.remove('collapsed');
+        } else {
+            element.classList.add('collapsed');
+        }
+    }
+</script>
+
+</body>
+</html>
