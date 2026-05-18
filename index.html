@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leo's Trip Collections — 旅遊行程收藏</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Helvetica Neue', Arial, 'Apple LiGothic Medium', 'Microsoft JhengHei', sans-serif;
+            background-color: #eeeae6;
+            color: #55504c;
+            font-size: 16px;
+            line-height: 1.7;
+        }
+        .container {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 16px;
+        }
+        @media (min-width: 600px) {
+            body { font-size: 15px; }
+            .container {
+                margin: 30px auto;
+                padding: 35px 40px;
+                border-radius: 14px;
+                box-shadow: 0 4px 20px rgba(85, 80, 76, 0.07);
+            }
+        }
+
+        /* ── Header ── */
+        header {
+            text-align: center;
+            border-bottom: 2px solid #c2b8b2;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        header h1 {
+            color: #8c7b70;
+            margin: 0 0 8px 0;
+            font-size: 24px;
+            letter-spacing: 1px;
+        }
+        header p {
+            margin: 0;
+            color: #a3968e;
+            font-size: 14px;
+        }
+
+        /* ── Trip Cards Grid ── */
+        .trips-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 18px;
+        }
+        @media (min-width: 520px) {
+            .trips-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        /* ── Single Trip Card ── */
+        .trip-card {
+            display: block;
+            text-decoration: none;
+            color: inherit;
+            border: 1.5px solid #dbd5d0;
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.18s ease, box-shadow 0.18s ease;
+            background: #faf9f7;
+        }
+        .trip-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 18px rgba(85, 80, 76, 0.10);
+        }
+
+        /* color accent bar at top of each card */
+        .trip-card-bar {
+            height: 6px;
+        }
+        .bar-blue   { background-color: #8da6bd; }
+        .bar-pink   { background-color: #c7a78f; }
+        .bar-green  { background-color: #8fa89b; }
+        .bar-purple { background-color: #a195b8; }
+
+        .trip-card-body {
+            padding: 16px 18px 18px;
+        }
+        .trip-flag {
+            font-size: 28px;
+            line-height: 1;
+            margin-bottom: 10px;
+        }
+        .trip-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #474340;
+            margin-bottom: 4px;
+        }
+        .trip-date {
+            font-size: 12px;
+            color: #a3968e;
+            margin-bottom: 10px;
+            letter-spacing: 0.3px;
+        }
+        .trip-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        .tag {
+            background: #f0ece8;
+            color: #7a716a;
+            border-radius: 20px;
+            padding: 2px 10px;
+            font-size: 12px;
+        }
+        .trip-arrow {
+            float: right;
+            font-size: 18px;
+            color: #c2b8b2;
+            margin-top: -2px;
+            transition: color 0.18s ease;
+        }
+        .trip-card:hover .trip-arrow {
+            color: #8c7b70;
+        }
+
+        /* ── Footer ── */
+        .footer {
+            text-align: center;
+            font-size: 12px;
+            color: #b5a9a2;
+            margin-top: 40px;
+            padding-top: 18px;
+            border-top: 1px solid #e8e2dd;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>✈️ Leo's Trip Collections</h1>
+        <p>點擊卡片查看詳細行程 · Click a card to view the itinerary</p>
+    </header>
+
+    <div class="trips-grid">
+
+        <!-- ── 2026/05/18 Seoul ── -->
+        <a href="./20260518 Seoul/index.html" class="trip-card">
+            <div class="trip-card-bar bar-blue"></div>
+            <div class="trip-card-body">
+                <div class="trip-arrow">›</div>
+                <div class="trip-flag">🇰🇷</div>
+                <div class="trip-title">首爾動漫 × 美食通</div>
+                <div class="trip-date">2026 · 05/22 — 05/25　4天3夜</div>
+                <div class="trip-tags">
+                    <span class="tag">韓國</span>
+                    <span class="tag">弘大</span>
+                    <span class="tag">樂天世界</span>
+                    <span class="tag">聖水</span>
+                    <span class="tag">楓之谷</span>
+                    <span class="tag">寶可夢</span>
+                </div>
+            </div>
+        </a>
+
+        <!-- 新增旅遊時在此貼上新卡片 -->
+
+    </div>
+
+    <div class="footer">
+        © Leo's Trip Collections
+    </div>
+</div>
+
+</body>
+</html>
