@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>台東熱氣球 × 吉伊卡哇企劃 — 2天1夜完美行程 (莫蘭迪舒適風格)</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 10mm 10mm;
+            background-color: #f5f6f8;
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Helvetica Neue', Arial, 'Apple LiGothic Medium', 'Microsoft JhengHei', sans-serif;
+            background-color: #eeeae6;
+            color: #55504c;
+            font-size: 16px;
+            line-height: 1.7;
+        }
+        .container {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 16px;
+            border-radius: 0;
+            box-shadow: none;
+        }
+        @media (min-width: 600px) {
+            body { font-size: 15px; }
+            .container {
+                margin: 20px auto;
+                padding: 25px;
+                border-radius: 12px;
+                box-shadow: 0 4px 15px rgba(85, 80, 76, 0.04);
+            }
+        }
+        header {
+            text-align: center;
+            border-bottom: 2px solid #c2b8b2;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+        header h1 {
+            color: #8c7b70;
+            margin: 0 0 8px 0;
+            font-size: 22px;
+            letter-spacing: 0.5px;
+        }
+        header p {
+            margin: 0;
+            color: #a3968e;
+            font-size: 15px;
+        }
+        .tip-box {
+            background-color: #f0f4f1;
+            border-left: 4px solid #8fa89b;
+            padding: 13px 15px;
+            margin-bottom: 25px;
+            border-radius: 0 6px 6px 0;
+            font-size: 14px;
+            color: #5b6660;
+        }
+        .checklist-box {
+            background-color: #faf6f2;
+            border-left: 4px solid #c7a78f;
+            padding: 13px 15px;
+            margin-bottom: 25px;
+            border-radius: 0 6px 6px 0;
+            font-size: 14px;
+            color: #6a5c52;
+        }
+        .checklist-box h3 {
+            margin: 0 0 10px 0;
+            font-size: 15px;
+            color: #8c7565;
+        }
+        .checklist-box ul {
+            margin: 0;
+            padding-left: 18px;
+        }
+        .checklist-box li {
+            margin-bottom: 6px;
+        }
+
+        /* 地圖大區塊 */
+        .map-dashboard {
+            border: 1px solid #d9d2cc;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 30px;
+            background: #faf9f7;
+        }
+        .map-header {
+            background: #737980;
+            color: #ffffff;
+            padding: 12px 15px;
+            font-weight: bold;
+            font-size: 11pt;
+            display: table;
+            width: 100%;
+            letter-spacing: 0.5px;
+        }
+        .map-header-cell {
+            display: table-cell;
+            vertical-align: middle;
+        }
+        .map-visual-container {
+            padding: 12px;
+            background: #ffffff;
+            border-bottom: 1px solid #eae5e1;
+        }
+        .map-zone-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+        }
+        .map-zone-row {
+            display: contents;
+        }
+        .map-zone {
+            background: #ffffff;
+            border: 2px dashed #dbd5d0;
+            border-radius: 8px;
+            padding: 12px;
+            text-align: left;
+        }
+        @media (min-width: 520px) {
+            .map-zone-grid {
+                grid-template-columns: 1fr 1fr 1fr;
+            }
+        }
+        .map-zone.active-d1 { border-color: #9ab2c9; background: #f2f6fa; }
+        .map-zone.active-d2 { border-color: #d1b49e; background: #faf6f2; }
+        .map-zone.active-d3 { border-color: #9cbda8; background: #f3f7f5; }
+        .zone-title {
+            font-weight: bold;
+            font-size: 15px;
+            margin-bottom: 8px;
+            padding-bottom: 4px;
+            border-bottom: 1px solid #f0eae6;
+        }
+        .zone-title.d1 { color: #6b849c; }
+        .zone-title.d2 { color: #a8866d; }
+        .zone-title.d3 { color: #688c75; }
+        .zone-item {
+            font-size: 13px;
+            margin: 5px 0;
+            padding-left: 12px;
+            position: relative;
+            color: #6e6762;
+        }
+        .zone-item::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+            color: #bfaea4;
+        }
+
+        /* 行程流水線 */
+        .day-section {
+            margin-bottom: 25px;
+            page-break-inside: avoid;
+        }
+        .day-title {
+            font-size: 15px;
+            font-weight: bold;
+            padding: 14px 15px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            color: #ffffff;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            user-select: none;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+            transition: opacity 0.2s ease;
+            line-height: 1.4;
+            gap: 8px;
+        }
+        .day-title:hover { opacity: 0.9; }
+        .day-title::after {
+            content: "🕒 摺疊";
+            font-size: 12px;
+            font-weight: normal;
+            background: rgba(255,255,255,0.25);
+            padding: 3px 9px;
+            border-radius: 12px;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        .day-section.collapsed .day-title::after { content: "👁️ 展開"; }
+        .day-section.collapsed .timeline { display: none; }
+
+        .day1-bg { background-color: #8da6bd; }
+        .day2-bg { background-color: #c7a78f; }
+
+        .timeline {
+            border-left: 2px solid #e6dfda;
+            margin-left: 18px;
+            padding-left: 18px;
+            animation: fadeIn 0.3s ease;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 18px;
+            background: #ffffff;
+            padding: 12px 15px;
+            border: 1px solid #ede8e4;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.01);
+        }
+        .timeline-item::before {
+            content: "";
+            position: absolute;
+            left: -26px;
+            top: 16px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #ffffff;
+            border: 3px solid #dbd5d0;
+            z-index: 2;
+        }
+        .day1 .timeline-item::before { border-color: #8da6bd; }
+        .day2 .timeline-item::before { border-color: #c7a78f; }
+
+        /* 時間列：時間 + 地圖 chip 同行 */
+        .time-row {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 5px;
+        }
+        .time-tag {
+            font-weight: bold;
+            color: #9c8e85;
+            font-size: 13px;
+            letter-spacing: 0.5px;
+        }
+        .map-chip {
+            font-size: 11px;
+            background-color: #9cb4cc;
+            color: #ffffff;
+            padding: 2px 10px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: bold;
+            white-space: nowrap;
+            transition: background-color 0.2s ease;
+        }
+        .map-chip:hover { background-color: #8da6bd; }
+
+        .spot-name {
+            font-size: 17px;
+            font-weight: bold;
+            color: #474340;
+            margin-bottom: 6px;
+        }
+        .spot-desc {
+            font-size: 14px;
+            color: #7a716a;
+            margin-bottom: 0;
+        }
+        .queue-badge {
+            background-color: #f5f0eb;
+            color: #8c7565;
+            border: 1px solid #e3dac3;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+        .hours-tag {
+            font-size: 12px;
+            color: #688c75;
+            background: #f3f7f5;
+            border: 1px solid #c8dcd0;
+            border-radius: 12px;
+            padding: 2px 10px;
+            display: inline-block;
+            margin-bottom: 8px;
+        }
+
+        /* 子地點列（含 map chip） */
+        .sub-spot {
+            font-size: 13px;
+            color: #7a716a;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 6px 0 2px;
+            flex-wrap: wrap;
+        }
+
+        .footer {
+            text-align: center;
+            font-size: 13px;
+            color: #a3968e;
+            margin-top: 35px;
+            border-top: 1px solid #e8e2dd;
+            padding-top: 15px;
+        }
+        .back-btn {
+            display: inline-block;
+            margin-bottom: 18px;
+            text-decoration: none;
+            color: #8c7b70;
+            font-size: 14px;
+            padding: 6px 14px;
+            border: 1.5px solid #c2b8b2;
+            border-radius: 20px;
+            transition: background-color 0.18s ease;
+        }
+        .back-btn:hover { background-color: #f0ece8; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <a href="../index.html" class="back-btn">← 返回所有行程</a>
+    <header>
+        <h1>🎈 台東熱氣球 × 吉伊卡哇企劃 — 互動導航面板</h1>
+        <p>2天1夜完美行程｜潭子出發 ⟶ 台東市區 ⟶ 鹿野高台 ⟶ 池上稻浪</p>
+    </header>
+
+    <div class="tip-box">
+        <b>💡 行程導航貼心叮嚀：</b><br>
+        ① <b>台灣好行 8168A（縱谷鹿野線）</b>：台東轉運站出發直達鹿野高台，刷悠遊卡或一卡通享半價（約 NT$38）。<br>
+        ② <b>下午場展演 17:00 ~ 18:30</b>，建議 <b>16:00 前抵達</b>鹿野高台，搶佔草皮最佳觀看位！<br>
+        ③ <b>Day 2 行李核心策略</b>：退房後直接帶行李寄存台東火車站置物櫃，池上回來取行李直接上車，不走回頭路！<br>
+        ④ 點擊下方各天莫蘭迪色調標題可自由「摺疊/展開」行程內容。
+    </div>
+
+    <div class="map-dashboard">
+        <div class="map-header">
+            <div class="map-header-cell">🗺️ 台東 2天1夜戰略分區示意圖</div>
+        </div>
+        <div class="map-visual-container">
+            <div class="map-zone-grid">
+                <div class="map-zone-row">
+                    <div class="map-zone active-d1">
+                        <div class="zone-title d1">台東市區【DAY 1 / 2】</div>
+                        <div class="zone-item">旅人驛站鐵花文創館（住宿）</div>
+                        <div class="zone-item">台東轉運站（台灣好行搭車點）</div>
+                        <div class="zone-item">藍蜻蜓 / 阿鋐炸雞 / 客來吃樂（午餐）</div>
+                        <div class="zone-item">隱山茶道（紅烏龍必喝！）</div>
+                        <div class="zone-item">琵琶湖觀景台（腳踏車）</div>
+                        <div class="zone-item">鐵花村夜市 & 貨櫃市集</div>
+                    </div>
+                    <div class="map-zone active-d2">
+                        <div class="zone-title d2">鹿野鄉【DAY 1 下午】</div>
+                        <div class="zone-item">鹿野高台熱氣球展演會場</div>
+                        <div class="zone-item">吉伊卡哇造型球地面展示</div>
+                        <div class="zone-item">展演時段 17:00 ~ 18:30</div>
+                        <div class="zone-item">大草皮野餐卡位區</div>
+                    </div>
+                    <div class="map-zone active-d3">
+                        <div class="zone-title d3">池上鄉【DAY 2 上午】</div>
+                        <div class="zone-item">伯朗大道（電動自行車）</div>
+                        <div class="zone-item">金城武樹 / 天堂路稻浪</div>
+                        <div class="zone-item">大池豆包（現煎）</div>
+                        <div class="zone-item">池上木盒便當</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══ DAY 1 ══ -->
+    <div class="day-section day1" id="day1">
+        <div class="day-title day1-bg" onclick="toggleDay('day1')">📌 DAY 1：7/11 (六)　潭子出發 ➔ 飯店放行李 ➔ 追球大作戰！</div>
+        <div class="timeline">
+
+            <div class="timeline-item">
+                <div class="time-row"><span class="time-tag">06:15 - 06:40</span></div>
+                <div class="spot-name">🚆 區間車出發：潭子 → 台中火車站</div>
+                <div class="spot-desc">清晨由潭子站搭台鐵區間車出發，約 12-15 分鐘抵達台中車站，準備轉乘新自強號南下。</div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="time-row"><span class="time-tag">06:57 - 11:32</span></div>
+                <div class="spot-name">🚆 新自強號 371 車次：台中 → 台東（全程補眠）</div>
+                <div class="spot-desc">車程約 4.5 小時，一路南迴直達台東。在車上好好補眠、享用早餐，養精蓄銳準備追球！</div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="time-row">
+                    <span class="time-tag">11:40 - 12:10</span>
+                    <a href="https://maps.google.com/?q=旅人驛站鐵花文創館+台東" target="_blank" class="map-chip">📍 Google Maps</a>
+                </div>
+                <div class="spot-name">🏨 旅人驛站鐵花文創館（寄放行李）</div>
+                <div class="spot-desc">
+                    出台東站後選擇以下任一方式前往飯店：<br>
+                    1️⃣ <b>高CP值公車：</b>搭普悠瑪客運 101線 / 202線 / 203線，在「台東轉運站」下車，步行 1 分鐘抵達飯店。<br>
+                    2️⃣ <b>舒適快速：</b>站前直接搭計程車（車程約 12 分鐘，車資約 NT$200-250）。
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="time-row"><span class="time-tag">12:10 - 13:30</span></div>
+                <div class="spot-name">🍗 市區午餐：口袋名單四選一</div>
+                <div class="spot-desc">先在飯店寄放行李，隨後步行悠閒覓食。以下皆在市區徒步可達：</div>
+                <div class="sub-spot">🐔 藍蜻蜓炸雞（台東必吃炸物名店）<a href="https://maps.app.goo.gl/Ma2sCLr87N43tCMN9" target="_blank" class="map-chip">📍 Google Maps</a></div>
+                <div class="sub-spot">🍗 阿鋐炸雞・正氣店（在地人激推）<a href="https://maps.app.goo.gl/dwhXcMiTGTEVmNMU6" target="_blank" class="map-chip">📍 Google Maps</a></div>
+                <div class="sub-spot">🍜 台東客來吃樂・麵線（<b>店休不固定，請先查詢粉絲專頁！</b>）<a href="https://maps.app.goo.gl/fyh5pQEoh5v9SCj78" target="_blank" class="map-chip">📍 Google Maps</a></div>
+                <div class="sub-spot">🥩 王媽媽牛肉麵（紅燒牛肉湯底濃醇）<a href="https://maps.app.goo.gl/BkrZncUbMpmQPn5bA" target="_blank" class="map-chip">📍 Google Maps</a></div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="time-row"><span class="time-tag">13:30 - 14:30</span></div>
+                <div class="spot-name">🧋 飯後散策：隱山茶道紅烏龍 ＋ 琵琶湖觀景台騎行</div>
+                <div class="spot-desc">飯後悠閒散步時光，推薦以下兩站依序走：</div>
+                <div class="sub-spot">🫖 隱山茶道總店（<b>一定要喝紅烏龍！</b>）<a href="https://maps.app.goo.gl/HigmbJnYXth2zE8KA" target="_blank" class="map-chip">📍 Google Maps</a></div>
+                <div class="sub-spot">🚲 琵琶湖觀景台（如時間充裕可租自行車漫遊）<a href="https://maps.app.goo.gl/3AaptbATQrYECe5RA" target="_blank" class="map-chip">📍 Google Maps</a></div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="time-row">
+                    <span class="time-tag">14:45 - 16:00</span>
+                    <a href="https://maps.google.com/?q=台東轉運站" target="_blank" class="map-chip">📍 Google Maps</a>
+                </div>
+                <div class="spot-name">🚌 台灣好行 8168A 縱谷鹿野線：台東 → 鹿野高台（約50-60分鐘）</div>
+                <div class="hours-tag">🕐 刷悠遊卡 / 一卡通等電子票證享半價（約 NT$38）</div>
+                <div class="queue-badge">💡 搭車點：台東轉運站｜飯店步行 1 分鐘即達（就在隔壁！）</div>
+                <div class="spot-desc">最關鍵一腳！走路到隔壁台東轉運站，一車直達鹿野高台，絕不塞車。</div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="time-row">
+                    <span class="time-tag">16:00 - 18:40</span>
+                    <a href="https://maps.google.com/?q=鹿野高台+台東縣鹿野鄉" target="_blank" class="map-chip">📍 Google Maps</a>
+                </div>
+                <div class="spot-name">🎈 鹿野高台熱氣球節 ── 吉伊卡哇造型球下午場！</div>
+                <div class="hours-tag">🕐 展演時段：17:00 ~ 18:30｜請 16:00 前抵達搶佔位置！</div>
+                <div class="queue-badge">✨ 造型球地面展示 + 主視覺球升空展演｜大草皮野餐卡位最舒服</div>
+                <div class="spot-desc">抵達後步行進入大草原，鋪好野餐墊找最佳視角卡位。17:00 準時開始，瘋狂捕獲地面展示的吉伊卡哇！</div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="time-row"><span class="time-tag">18:50 - 20:00</span></div>
+                <div class="spot-name">🚌 台灣好行回程：鹿野高台 → 台東轉運站（辦理正式入住）</div>
+                <div class="spot-desc">散場後步行至高台候車區，搭乘回程台灣好行縱谷鹿野線直達台東轉運站，下車步行 1 分鐘回飯店辦理正式 Check-in！</div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="time-row">
+                    <span class="time-tag">20:00 之後</span>
+                    <a href="https://maps.google.com/?q=鐵花村音樂聚落+台東" target="_blank" class="map-chip">📍 Google Maps</a>
+                </div>
+                <div class="spot-name">🌃 鐵花村音樂聚落 & 貨櫃市集（晚間漫步）</div>
+                <div class="spot-desc">飯店就在隔壁，步行即達鐵花村市集，品嚐在地小吃、感受台東夜間氛圍，回房放鬆迎接明天的池上！</div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ══ DAY 2 ══ -->
+    <div class="day-section day2" id="day2">
+        <div class="day-title day2-bg" onclick="toggleDay('day2')">📌 DAY 2：7/12 (日)　行李寄存 ➔ 池上稻浪漫遊 ➔ 採買返家！</div>
+        <div class="timeline">
+
+            <div class="timeline-item">
+                <div class="time-row">
+                    <span class="time-tag">08:30 - 09:00</span>
+                    <a href="https://maps.google.com/?q=台東火車站" target="_blank" class="map-chip">📍 Google Maps</a>
+                </div>
+                <div class="spot-name">🧳 飯店退房 → 台東火車站寄存行李（核心策略！）</div>
+                <div class="queue-badge">🚨 到站第一件事：行李存置物櫃或行李房，解放雙手！</div>
+                <div class="spot-desc">
+                    帶上行李，搭台東轉運站公車（101線/202線）或計程車回台東火車站。<br>
+                    行李存好後，下午從池上回來直接拿了就上車，完全不走回頭路，省下 30 分鐘！
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="time-row"><span class="time-tag">09:15 - 10:00</span></div>
+                <div class="spot-name">🚆 台鐵縱谷線：台東 → 池上（約35-50分鐘）</div>
+                <div class="spot-desc">搭乘台鐵區間車或自強號北上，抵達池上車站。沿途縱谷風光絕美，建議坐靠山側欣賞綠色稻田！</div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="time-row"><span class="time-tag">10:00 - 13:30</span></div>
+                <div class="spot-name">🌾 池上漫遊：伯朗大道 × 金城武樹 × 天堂路（電動自行車）</div>
+                <div class="hours-tag">🕐 站前租車店約 08:00 ~ 18:00｜出池上站步行 1 分鐘即有多家</div>
+                <div class="spot-desc">
+                    1️⃣ 出池上站後，步行 1 分鐘到站前租借<b>兩人座電動自行車</b>（免流汗、有遮陽頂棚）。<br>
+                    2️⃣ 騎車漫遊伯朗大道、金城武樹、天堂路（約 15 分鐘可騎到景區）。<br>
+                    3️⃣ 中午騎行順道品嚐以下兩處！
+                </div>
+                <div class="sub-spot">🌾 伯朗大道（電動自行車起點）<a href="https://maps.google.com/?q=伯朗大道+池上鄉+台東" target="_blank" class="map-chip">📍 Google Maps</a></div>
+                <div class="sub-spot">🫘 大池豆包（現煎必吃）<a href="https://maps.google.com/?q=大池豆包+池上" target="_blank" class="map-chip">📍 Google Maps</a></div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="time-row"><span class="time-tag">13:40 - 14:30</span></div>
+                <div class="spot-name">🚆 還車 → 搭火車返回台東火車站</div>
+                <div class="spot-desc">騎車回站前還車，步行進池上站，搭乘南下火車返回台東火車站（車程約 35-50 分鐘）。</div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="time-row"><span class="time-tag">14:30 - 17:10</span></div>
+                <div class="spot-name">🎁 台東伴手禮大採買！（台東火車站周邊）</div>
+                <div class="spot-desc">
+                    時間非常充裕！車站大廳內與周邊必逛名店一網打盡：<br>
+                    🍠 <b>楊記家傳地瓜酥</b>、<b>番薯伯</b>（地瓜系列首選）<br>
+                    🌿 <b>青澤</b>（台東在地農特產）<br>
+                    🍡 <b>陳記麻糬</b>（新鮮手工麻糬）<br>
+                    戰利品滿載，準備踏上回家的列車！
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="time-row"><span class="time-tag">17:15 - 17:30</span></div>
+                <div class="spot-name">🎒 領取行李 → 提前入站準備登車</div>
+                <div class="spot-desc">從置物櫃領回早上寄存的行李，提前 15 分鐘過閘門，準備搭乘 17:30 發車的新自強號！</div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="time-row"><span class="time-tag">17:30 - 22:07</span></div>
+                <div class="spot-name">🚆 新自強號 385 車次：台東 → 台中（車廂晚餐時光）</div>
+                <div class="spot-desc">搭乘 17:30 發車的新自強號，買個鐵路便當在車上當晚餐，看著夕陽西下一路舒適地坐回台中！</div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="time-row"><span class="time-tag">22:15 - 22:35</span></div>
+                <div class="spot-name">🏡 區間車：台中 → 潭子（充滿吉伊卡哇療癒感地平安返家！）</div>
+                <div class="spot-desc">抵達台中後直接轉乘往北區間車（班次密集），約 12-15 分鐘返抵潭子，這趟充滿熱氣球與吉伊卡哇的療癒之旅圓滿結束！🎈</div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="checklist-box">
+        <h3>🎒 行前貼心小清單</h3>
+        <ul>
+            <li><b>野餐墊（必帶）</b>：鹿野高台草坡很大，有防水野餐墊坐起來最舒服，看展演超享受！</li>
+            <li><b>防曬 & 防蚊</b>：台東夏天太陽非常熱情，高台草皮小黑蚊也多。遮陽傘、防曬乳與防蚊液一定要隨身攜帶！</li>
+            <li><b>電子票證儲值</b>：出發前悠遊卡或一卡通至少儲值 NT$200-300/人，搭普悠瑪客運、台灣好行一刷即走，還能享半價，省去找零的麻煩！</li>
+        </ul>
+    </div>
+
+    <div class="footer">
+        © 2026 台東熱氣球 × 吉伊卡哇療癒企劃 ── 祝您追球順利、戰利品滿載！🎈
+    </div>
+</div>
+
+<script>
+    function toggleDay(dayId) {
+        var element = document.getElementById(dayId);
+        if (element.classList.contains('collapsed')) {
+            element.classList.remove('collapsed');
+        } else {
+            element.classList.add('collapsed');
+        }
+    }
+</script>
+
+</body>
+</html>
