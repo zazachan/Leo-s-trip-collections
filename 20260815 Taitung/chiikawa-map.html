@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026 台東熱氣球嘉年華 × 吉伊卡哇人魚島地圖 (莫蘭迪舒適風格)</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 10mm 10mm;
+            background-color: #f5f6f8;
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Helvetica Neue', Arial, 'Apple LiGothic Medium', 'Microsoft JhengHei', sans-serif;
+            background-color: #eeeae6;
+            color: #55504c;
+            font-size: 16px;
+            line-height: 1.7;
+        }
+        .container {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 16px;
+            border-radius: 0;
+            box-shadow: none;
+        }
+        @media (min-width: 600px) {
+            body { font-size: 15px; }
+            .container {
+                margin: 20px auto;
+                padding: 25px;
+                border-radius: 12px;
+                box-shadow: 0 4px 15px rgba(85, 80, 76, 0.04);
+            }
+        }
+        header {
+            text-align: center;
+            border-bottom: 2px solid #c2b8b2;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+        header h1 {
+            color: #8c7b70;
+            margin: 0 0 8px 0;
+            font-size: 21px;
+            letter-spacing: 0.5px;
+        }
+        header p {
+            margin: 0;
+            color: #a3968e;
+            font-size: 14px;
+        }
+        .tip-box {
+            background-color: #f0f4f1;
+            border-left: 4px solid #8fa89b;
+            padding: 13px 15px;
+            margin-bottom: 25px;
+            border-radius: 0 6px 6px 0;
+            font-size: 13px;
+            color: #5b6660;
+        }
+        .checklist-box {
+            background-color: #faf6f2;
+            border-left: 4px solid #c7a78f;
+            padding: 13px 15px;
+            margin-bottom: 25px;
+            border-radius: 0 6px 6px 0;
+            font-size: 14px;
+            color: #6a5c52;
+        }
+        .checklist-box h3 {
+            margin: 0 0 10px 0;
+            font-size: 15px;
+            color: #8c7565;
+        }
+        .checklist-box ul {
+            margin: 0;
+            padding-left: 18px;
+        }
+        .checklist-box li {
+            margin-bottom: 6px;
+        }
+
+        /* 打卡點清單 */
+        .spot-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+        .spot-card {
+            background: #ffffff;
+            border: 1px solid #ede8e4;
+            border-radius: 10px;
+            padding: 14px 16px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.01);
+        }
+        .spot-card.included { border-left: 4px solid #8fa89b; }
+        .spot-card.excluded { border-left: 4px solid #cbb8c0; opacity: 0.88; }
+        .spot-card-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 6px;
+        }
+        .spot-card-name {
+            font-size: 15px;
+            font-weight: bold;
+            color: #474340;
+        }
+        .status-badge {
+            font-size: 12px;
+            font-weight: bold;
+            padding: 3px 10px;
+            border-radius: 12px;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        .status-badge.included { background: #eef4f0; color: #5f7d68; border: 1px solid #b9d3c1; }
+        .status-badge.excluded { background: #f7f0f4; color: #8a6d8f; border: 1px solid #ddc7d8; }
+        .spot-card-desc {
+            font-size: 13px;
+            color: #7a716a;
+            margin-bottom: 10px;
+        }
+        .spot-card-when {
+            font-size: 12px;
+            color: #688c75;
+            background: #f3f7f5;
+            border: 1px solid #c8dcd0;
+            border-radius: 12px;
+            padding: 2px 10px;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+        .map-chip {
+            font-size: 12px;
+            background-color: #9cb4cc;
+            color: #ffffff;
+            padding: 3px 12px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: bold;
+            white-space: nowrap;
+            display: inline-block;
+            transition: background-color 0.2s ease;
+        }
+        .map-chip:hover { background-color: #8da6bd; }
+
+        .footer {
+            text-align: center;
+            font-size: 13px;
+            color: #a3968e;
+            margin-top: 35px;
+            border-top: 1px solid #e8e2dd;
+            padding-top: 15px;
+        }
+        .back-btn {
+            display: inline-block;
+            margin-bottom: 18px;
+            text-decoration: none;
+            color: #8c7b70;
+            font-size: 14px;
+            padding: 6px 14px;
+            border: 1.5px solid #c2b8b2;
+            border-radius: 20px;
+            transition: background-color 0.18s ease;
+        }
+        .back-btn:hover { background-color: #f0ece8; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <a href="index.html" class="back-btn">← 返回台東行程</a>
+    <header>
+        <h1>🌊 2026 台東熱氣球嘉年華 × 吉伊卡哇人魚島地圖</h1>
+        <p>全台東 8 大打卡點總覽，手機快速確認這趟行程排了哪些！</p>
+    </header>
+
+    <div class="tip-box">
+        <b>💡 使用方式：</b><br>
+        ✅ <b>已排入</b> = 本次行程有安排前往，可點地圖按鈕直接導航。<br>
+        ⛔ <b>未排入</b> = 本次行程沒有排，出發前若想加碼可自行評估路線與時間。
+    </div>
+
+    <div class="spot-list">
+
+        <div class="spot-card included">
+            <div class="spot-card-head">
+                <span class="spot-card-name">📍 鹿野高台｜人魚島市集與熱氣球</span>
+                <span class="status-badge included">✅ 已排入</span>
+            </div>
+            <div class="spot-card-when">Day 1　15:00~18:40</div>
+            <div class="spot-card-desc">熱氣球嘉年華主會場！看全球首顆「吉伊卡哇造型熱氣球」，還能逛海島風市集。</div>
+            <a href="https://maps.google.com/?q=鹿野高台+人魚島市集+台東縣鹿野鄉" target="_blank" class="map-chip">📍 Google Maps</a>
+        </div>
+
+        <div class="spot-card included">
+            <div class="spot-card-head">
+                <span class="spot-card-name">📍 關山米國學校｜電影主題彩繪稻田</span>
+                <span class="status-badge included">✅ 已排入</span>
+            </div>
+            <div class="spot-card-when">Day 2　11:45~13:00</div>
+            <div class="spot-card-desc">直上觀景台，賽蓮寶寶跟小人魚，熱情迎接大家！</div>
+            <a href="https://maps.google.com/?q=關山米國學校+台東縣關山鎮" target="_blank" class="map-chip">📍 Google Maps</a>
+        </div>
+
+        <div class="spot-card excluded">
+            <div class="spot-card-head">
+                <span class="spot-card-name">📍 台東活水湖｜水上小船</span>
+                <span class="status-badge excluded">⛔ 未排入</span>
+            </div>
+            <div class="spot-card-desc">夢幻還原劇場版畫面！吉伊卡哇們坐在小船漂浮在湛藍湖面，視覺效果超讚！（本次為確保追球與搶購順利，戰略性捨棄）</div>
+            <a href="https://maps.google.com/?q=活水湖+台東" target="_blank" class="map-chip">📍 Google Maps</a>
+        </div>
+
+        <div class="spot-card included">
+            <div class="spot-card-head">
+                <span class="spot-card-name">📍 鐵花新聚落｜草裙兔兔</span>
+                <span class="status-badge included">✅ 已排入</span>
+            </div>
+            <div class="spot-card-when">Day 1　20:10 之後</div>
+            <div class="spot-card-desc">巨大化 Usagi 穿草裙在草皮上熱情打招呼，可愛張力直接拉滿！</div>
+            <a href="https://maps.google.com/?q=鐵花新聚落+台東" target="_blank" class="map-chip">📍 Google Maps</a>
+        </div>
+
+        <div class="spot-card included">
+            <div class="spot-card-head">
+                <span class="spot-card-name">📍 台東故事館｜街頭小八貓</span>
+                <span class="status-badge included">✅ 已排入</span>
+            </div>
+            <div class="spot-card-when">Day 1　20:10 之後</div>
+            <div class="spot-card-desc">轉角遇到愛！小八貓驚喜出沒在故事館路口，路過絕對要拍。</div>
+            <a href="https://maps.google.com/?q=台東故事館" target="_blank" class="map-chip">📍 Google Maps</a>
+        </div>
+
+        <div class="spot-card included">
+            <div class="spot-card-head">
+                <span class="spot-card-name">📍 台東火車站｜迎賓度假背板</span>
+                <span class="status-badge included">✅ 已排入</span>
+            </div>
+            <div class="spot-card-when">Day 1　12:15~12:45</div>
+            <div class="spot-card-desc">一出站就能感受到滿滿海洋度假風，秒切換放假模式！</div>
+            <a href="https://maps.google.com/?q=台東火車站" target="_blank" class="map-chip">📍 Google Maps</a>
+        </div>
+
+        <div class="spot-card excluded">
+            <div class="spot-card-head">
+                <span class="spot-card-name">📍 富岡漁港候船室｜藍色草裙牆</span>
+                <span class="status-badge excluded">⛔ 未排入</span>
+            </div>
+            <div class="spot-card-desc">搭船去綠島前必拍！穿草裙的吉伊卡哇們在藍色大海牆面迎接大家。（本次為確保追球與搶購順利，戰略性捨棄）</div>
+            <a href="https://maps.google.com/?q=富岡漁港+台東" target="_blank" class="map-chip">📍 Google Maps</a>
+        </div>
+
+        <div class="spot-card excluded">
+            <div class="spot-card-head">
+                <span class="spot-card-name">📍 綠島免稅店｜離島限定打卡點</span>
+                <span class="status-badge excluded">⛔ 未排入</span>
+            </div>
+            <div class="spot-card-desc">冒險地圖最後一塊拼圖！綠島免稅店限定的人魚島主題造景。（本次行程無安排前往綠島）</div>
+            <a href="https://maps.google.com/?q=綠島+免稅店" target="_blank" class="map-chip">📍 Google Maps</a>
+        </div>
+
+    </div>
+
+    <div class="checklist-box">
+        <h3>💡 加碼隱藏版踩點指南</h3>
+        <ul>
+            <li>🧢 <b>鹿野高台限定</b>：每週現場排隊發放限量特典（數量有限領完為止）。</li>
+            <li>🚢 <b>富岡漁港限定</b>：憑綠島/蘭嶼船票可兌換「吉伊卡哇紀念船票」。</li>
+        </ul>
+    </div>
+
+    <div class="footer">
+        © 2026 台東熱氣球 × 吉伊卡哇療癒企劃 ── 打卡地圖總覽，祝戰利品滿載！🎈
+    </div>
+</div>
+
+</body>
+</html>

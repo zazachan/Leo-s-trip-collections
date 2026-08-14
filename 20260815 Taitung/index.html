@@ -349,12 +349,34 @@
             transition: background-color 0.18s ease;
         }
         .back-btn:hover { background-color: #f0ece8; }
+        .nav-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 18px;
+        }
+        .nav-row .back-btn { margin-bottom: 0; }
+        .map-guide-btn {
+            display: inline-block;
+            text-decoration: none;
+            color: #ffffff;
+            background-color: #a98fae;
+            font-size: 14px;
+            font-weight: bold;
+            padding: 7px 16px;
+            border-radius: 20px;
+            transition: opacity 0.18s ease;
+        }
+        .map-guide-btn:hover { opacity: 0.85; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <a href="../index.html" class="back-btn">← 返回所有行程</a>
+    <div class="nav-row">
+        <a href="../index.html" class="back-btn">← 返回所有行程</a>
+        <a href="chiikawa-map.html" class="map-guide-btn">🌊 吉伊卡哇打卡地圖攻略 →</a>
+    </div>
     <header>
         <h1>🎈 台東熱氣球 × 吉伊卡哇企劃 — 互動導航面板</h1>
         <p>2026/08/15 - 08/16　2天1夜制霸行程｜潭子出發 ⟶ 台東市區 ⟶ 鹿野高台 ⟶ 池上稻浪 ⟶ 關山彩繪田</p>
