@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>釜山樂園美食通 — 5天4夜互動導航地圖 (莫蘭迪舒適風格)</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 10mm 10mm;
+            background-color: #f5f6f8;
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Helvetica Neue', Arial, 'Apple LiGothic Medium', 'Microsoft JhengHei', sans-serif;
+            background-color: #eeeae6;
+            color: #55504c;
+            font-size: 16px;
+            line-height: 1.7;
+        }
+        .container {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 16px;
+            border-radius: 0;
+            box-shadow: none;
+        }
+        @media (min-width: 600px) {
+            body { font-size: 15px; }
+            .container {
+                margin: 20px auto;
+                padding: 25px;
+                border-radius: 12px;
+                box-shadow: 0 4px 15px rgba(85, 80, 76, 0.04);
+            }
+        }
+        header {
+            text-align: center;
+            border-bottom: 2px solid #c2b8b2; /* 莫蘭迪土灰 */
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+        header h1 {
+            color: #8c7b70;
+            margin: 0 0 8px 0;
+            font-size: 22px;
+            letter-spacing: 0.5px;
+        }
+        header p {
+            margin: 0;
+            color: #a3968e;
+            font-size: 15px;
+        }
+        .tip-box {
+            background-color: #f0f4f1;
+            border-left: 4px solid #8fa89b;
+            padding: 13px 15px;
+            margin-bottom: 25px;
+            border-radius: 0 6px 6px 0;
+            font-size: 14px;
+            color: #5b6660;
+        }
+        
+        /* 模擬地圖大區塊布局 */
+        .map-dashboard {
+            border: 1px solid #d9d2cc;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 30px;
+            background: #faf9f7;
+            position: relative;
+        }
+        .map-header {
+            background: #737980; /* 莫蘭迪鐵灰藍 */
+            color: #ffffff;
+            padding: 12px 15px;
+            font-weight: bold;
+            font-size: 11pt;
+            display: table;
+            width: 100%;
+            letter-spacing: 0.5px;
+        }
+        .map-header-cell {
+            display: table-cell;
+            vertical-align: middle;
+        }
+        
+        /* 仿地圖視覺化引導 */
+        .map-visual-container {
+            padding: 12px;
+            background: #ffffff;
+            border-bottom: 1px solid #eae5e1;
+            text-align: center;
+        }
+        .map-zone-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+        }
+        .map-zone-row {
+            display: contents;
+        }
+        .map-zone {
+            display: block;
+            background: #ffffff;
+            border: 2px dashed #dbd5d0;
+            border-radius: 8px;
+            padding: 12px;
+            text-align: left;
+        }
+        @media (min-width: 520px) {
+            .map-zone-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        
+        /* 莫蘭迪分區柔和配色 */
+        .map-zone.active-d1 { border-color: #9ab2c9; background: #f2f6fa; } /* 霧藍 */
+        .map-zone.active-d2 { border-color: #d1b49e; background: #faf6f2; } /* 駝粉 */
+        .map-zone.active-d3 { border-color: #9cbda8; background: #f3f7f5; } /* 灰綠 */
+        .map-zone.active-d4 { border-color: #b0a4c4; background: #f7f5fa; } /* 藕紫 */
+        
+        .zone-title {
+            font-weight: bold;
+            font-size: 15px;
+            margin-bottom: 8px;
+            padding-bottom: 4px;
+            border-bottom: 1px solid #f0eae6;
+        }
+        .zone-title.d1 { color: #6b849c; }
+        .zone-title.d2 { color: #a8866d; }
+        .zone-title.d3 { color: #688c75; }
+        .zone-title.d4 { color: #7f7194; }
+        
+        .zone-item {
+            font-size: 13px;
+            margin: 5px 0;
+            padding-left: 12px;
+            position: relative;
+            color: #6e6762;
+        }
+        .zone-item::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+            color: #bfaea4;
+        }
+        
+        /* 行程流水線樣式 */
+        .day-section {
+            margin-bottom: 25px;
+            page-break-inside: avoid;
+        }
+        .day-title {
+            font-size: 15px;
+            font-weight: bold;
+            padding: 14px 15px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            color: #ffffff;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            user-select: none;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+            transition: opacity 0.2s ease;
+            line-height: 1.4;
+            gap: 8px;
+        }
+        .day-title:hover {
+            opacity: 0.9;
+        }
+        .day-title::after {
+            content: "🕒 摺疊";
+            font-size: 12px;
+            font-weight: normal;
+            background: rgba(255, 255, 255, 0.25);
+            padding: 3px 9px;
+            border-radius: 12px;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        .day-section.collapsed .day-title::after {
+            content: "👁️ 展開";
+        }
+        .day-section.collapsed .timeline {
+            display: none;
+        }
+        
+        /* 天數背景莫蘭迪色 */
+        .day1-bg { background-color: #8da6bd; } /* 舒適霧藍 */
+        .day2-bg { background-color: #c7a78f; } /* 舒適駝粉 */
+        .day3-bg { background-color: #8fa89b; } /* 舒適灰綠 */
+        .day4-bg { background-color: #a195b8; } /* 舒適藕紫 */
+        
+        .timeline {
+            border-left: 2px solid #e6dfda;
+            margin-left: 18px;
+            padding-left: 18px;
+            animation: fadeIn 0.3s ease;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .timeline-item {
+            position: relative;
+            margin-bottom: 18px;
+            background: #ffffff;
+            padding: 12px 15px;
+            border: 1px solid #ede8e4;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.01);
+        }
+        .timeline-item::before {
+            content: "";
+            position: absolute;
+            left: -26px;
+            top: 16px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #ffffff;
+            border: 3px solid #dbd5d0;
+            z-index: 2;
+        }
+        .day1 .timeline-item::before { border-color: #8da6bd; }
+        .day2 .timeline-item::before { border-color: #c7a78f; }
+        .day3 .timeline-item::before { border-color: #8fa89b; }
+        .day4 .timeline-item::before { border-color: #a195b8; }
+        
+        .time-tag {
+            font-weight: bold;
+            color: #9c8e85;
+            font-size: 13px;
+            margin-bottom: 5px;
+            letter-spacing: 0.5px;
+        }
+        .spot-name {
+            font-size: 17px;
+            font-weight: bold;
+            color: #474340;
+            margin-bottom: 6px;
+        }
+        .spot-desc {
+            font-size: 14px;
+            color: #7a716a;
+            margin-bottom: 12px;
+        }
+        .queue-badge {
+            background-color: #f5f0eb;
+            color: #8c7565;
+            border: 1px solid #e3dac3;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+        
+        /* 導航按鈕樣式 */
+        .btn-group {
+            display: flex;
+            gap: 8px;
+            margin-top: 5px;
+        }
+        .btn-cell {
+            flex: 1;
+        }
+        .nav-btn {
+            display: block;
+            text-align: center;
+            padding: 10px 4px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 14px;
+            color: #ffffff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+            transition: background-color 0.2s ease;
+        }
+        /* 按鈕也全面改為低飽和柔和色系 */
+        .btn-google { background-color: #9cb4cc; } 
+        .btn-google:hover { background-color: #8da6bd; }
+        .btn-naver { background-color: #99bda8; }
+        .btn-naver:hover { background-color: #8fa89b; }
+
+        .hours-tag {
+            font-size: 12px;
+            color: #688c75;
+            background: #f3f7f5;
+            border: 1px solid #c8dcd0;
+            border-radius: 12px;
+            padding: 2px 10px;
+            display: inline-block;
+            margin-bottom: 8px;
+        }
+
+        .footer {
+            text-align: center;
+            font-size: 13px;
+            color: #a3968e;
+            margin-top: 35px;
+            border-top: 1px solid #e8e2dd;
+            padding-top: 15px;
+        }
+        .back-btn {
+            display: inline-block;
+            margin-bottom: 18px;
+            text-decoration: none;
+            color: #8c7b70;
+            font-size: 14px;
+            padding: 6px 14px;
+            border: 1.5px solid #c2b8b2;
+            border-radius: 20px;
+            transition: background-color 0.18s ease;
+        }
+        .back-btn:hover {
+            background-color: #f0ece8;
+        }
+    
+        /* ── 釜山新增樣式 ── */
+        .map-zone.active-d5 { border-color: #c4a3a8; background: #faf5f6; } /* 灰玫瑰 */
+        .zone-title.d5 { color: #a37d84; }
+        .day5-bg { background-color: #b99aa0; } /* 舒適灰玫瑰 */
+        .day5 .timeline-item::before { border-color: #b99aa0; }
+        .map-zone.wide { grid-column: 1 / -1; }
+
+        .vbp-badge {
+            font-size: 11px;
+            font-weight: bold;
+            color: #8c5f4d;
+            background: #f8ece6;
+            border: 1px solid #e8cfc3;
+            border-radius: 10px;
+            padding: 1px 8px;
+            margin-left: 4px;
+            white-space: nowrap;
+            vertical-align: middle;
+        }
+        .info-list {
+            margin: 0 0 12px 0;
+            padding: 8px 10px;
+            background: #faf9f7;
+            border-radius: 6px;
+            font-size: 13px;
+            color: #6e6762;
+        }
+        .info-row { display: flex; gap: 8px; margin: 3px 0; line-height: 1.55; }
+        .info-k { flex: 0 0 62px; font-weight: bold; color: #9c8e85; }
+        .info-v { flex: 1; }
+        .spot-label {
+            font-size: 13px;
+            font-weight: bold;
+            color: #6e6762;
+            margin: 12px 0 2px;
+        }
+        .addr {
+            font-size: 12.5px;
+            color: #7a716a;
+            margin: 2px 0 6px;
+            word-break: break-word;
+        }
+        .addr-en { color: #a3968e; font-size: 12px; }
+        .checklist {
+            background: #fbf6f1;
+            border: 1px solid #ecdccf;
+            border-radius: 8px;
+            padding: 12px 15px;
+            margin-bottom: 25px;
+            font-size: 14px;
+            color: #6e5f55;
+        }
+        .checklist h3 { margin: 0 0 8px; font-size: 15px; color: #a8866d; }
+        .checklist ul { margin: 0; padding-left: 20px; }
+        .checklist li { margin: 4px 0; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <a href="../index.html" class="back-btn">← 返回所有行程</a>
+    <header>
+        <h1>🇰🇷 釜山樂園 × 美食通 — 互動導航面板</h1>
+        <p>11/4 – 11/8　5天4夜 Visit Busan Pass 48hr 極限活用 (舒適柔和版)</p>
+    </header>
+
+    <div class="tip-box">
+        <b>💡 行程導航貼心叮嚀：</b> 韓國境內步行與大眾運輸導航請優先點擊 <b>Naver Map</b>。每個地點都附上韓文與英文地址（可直接給計程車司機看）；多選一的餐廳已全部列出各自的地址與按鈕，臨時點對應的即可。<b>⚠️ Visit Busan Pass 於 11/5 10:30 在青沙浦啟用，效期至 11/7 10:29 止，Day 4 的 ARTE MUSEUM 必須在 10:25 前入場。</b>11/7 煙火節 S 席 17:55 關閉入口。點擊下方各天標題可「摺疊/展開」內容。
+    </div>
+
+    <div class="checklist">
+        <h3>📝 出發前「必先預訂」總點交清單</h3>
+        <ul>
+            <li><b>機票與住宿：</b>確認 11/4 抵達、11/8 離開。強烈建議住宿訂在「西面站」周邊。</li>
+            <li><b>Visit Busan Pass (VBP) 48 小時券：</b>請先上網買好虛擬票券（QR Code），<b>千萬先不要點擊啟用</b>。</li>
+            <li><b>Yacht Holic 遊艇出海：</b>買好 VBP 後，請提前透過官方 IG（@yachtholic）預約 11/5 15:30 的班次。</li>
+            <li><b>CatchTable 國際版 App：</b>出發前請先下載並註冊，Day 2 鰻魚飯與 Day 4 炸豬排必用。</li>
+        </ul>
+    </div>
+
+    <div class="map-dashboard">
+        <div class="map-header">
+            <div class="map-header-cell">🗺️ 釜山核心戰略分區示意圖</div>
+        </div>
+        <div class="map-visual-container">
+            <div class="map-zone-grid">
+                <div class="map-zone active-d1">
+                    <div class="zone-title d1">西面【Day 1・2・5】</div>
+                    <div class="zone-item">金海機場（抵達／返程）</div>
+                    <div class="zone-item">西面站周邊住宿</div>
+                    <div class="zone-item">味贊王 / 螞蟻家 / 松亭豬肉湯飯</div>
+                    <div class="zone-item">三正塔 ＆ SPAO 西面中央店</div>
+                    <div class="zone-item">Gojip / Gop 晚餐</div>
+                </div>
+                <div class="map-zone active-d2">
+                    <div class="zone-title d2">海雲台・青沙浦【Day 2】</div>
+                    <div class="zone-item">天空膠囊列車（尾浦 ➔ 青沙浦）</div>
+                    <div class="zone-item">海岸列車（VBP 啟動）</div>
+                    <div class="zone-item">海木鰻魚飯 / 海雲台市場</div>
+                    <div class="zone-item">Club D Oasis 足湯 SPA</div>
+                    <div class="zone-item">Yacht Holic 遊艇</div>
+                </div>
+                <div class="map-zone active-d3">
+                    <div class="zone-title d3">東釜山・Centum【Day 3】</div>
+                    <div class="zone-item">Skyline Luge 滑車</div>
+                    <div class="zone-item">樂天世界（楓之谷聯名）</div>
+                    <div class="zone-item">Brick Campus ＆ 機張市場</div>
+                    <div class="zone-item">新世界 Spa Land</div>
+                </div>
+                <div class="map-zone active-d4">
+                    <div class="zone-title d4">松島・影島・南浦【Day 4】</div>
+                    <div class="zone-item">松島海上纜車水晶車廂</div>
+                    <div class="zone-item">ARTE MUSEUM（10:25 前入場）</div>
+                    <div class="zone-item">札嘎其市場 / BIFF 廣場</div>
+                    <div class="zone-item">Cafe Miffy（影島）</div>
+                </div>
+                <div class="map-zone active-d4 wide">
+                    <div class="zone-title d4">廣安里【Day 4 晚】</div>
+                    <div class="zone-item">手環兌換 ＆ Tonshou 炸豬排</div>
+                    <div class="zone-item">2026 釜山國際煙火節 S 席</div>
+                    <div class="zone-item">札嘎其生魚片宵夜</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="day-section day1" id="day1">
+        <div class="day-title day1-bg" onclick="toggleDay('day1')">📌 DAY 1：11/4 (三) 降落釜山・西面美食前哨戰【金海機場、西面】</div>
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="time-tag">19:35 - 21:15</div>
+                <div class="spot-name">🛬 抵達金海國際機場 ＆ 前往西面飯店</div>
+                <div class="spot-desc">晚上降落金海國際機場，入境領完行李後，建議先在機場便利商店買一張 T-money 交通卡並儲值，接著前往西面辦理入住。</div>
+                <div class="info-list">
+                    <div class="info-row"><span class="info-k">🕐 時間</span><span class="info-v">19:35 班機抵達 ➔ 約 20:30 出關搭車 ➔ 21:15 抵達西面飯店</span></div>
+                    <div class="info-row"><span class="info-k">🚇 交通</span><span class="info-v">搭乘機場輕軌至「沙上站」，轉乘地鐵 2 號線至「西面站」（若搭 Uber 直達約 25 分鐘）。</span></div>
+                    <div class="info-row"><span class="info-k">💡 補充</span><span class="info-v">西面站是 1 號與 2 號線交會，去海雲台、廣安里都極為方便。</span></div>
+                </div>
+                <div class="spot-label">🛬 金海國際機場</div>
+                <div class="addr">📍 부산 강서구 공항진입로 108<br><span class="addr-en">108 Gonghangjinip-ro, Gangseo-gu, Busan</span></div>
+                <div class="btn-group">
+                    <div class="btn-cell"><a href="https://www.google.com/maps/search/?api=1&amp;query=Gimhae%20International%20Airport%2C%20108%20Gonghangjinip-ro%2C%20Gangseo-gu%2C%20Busan" target="_blank" rel="noopener" class="nav-btn btn-google">Google Map</a></div>
+                    <div class="btn-cell"><a href="https://map.naver.com/p/search/%EA%B9%80%ED%95%B4%EA%B5%AD%EC%A0%9C%EA%B3%B5%ED%95%AD" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
+                </div>
+                <div class="spot-label">🏨 西面站（住宿建議區域，飯店確定後請補上地址）</div>
+                <div class="addr">📍 부산 부산진구 서면역 (지하철 1·2호선)<br><span class="addr-en">Seomyeon Station (Line 1 / Line 2), Busanjin-gu, Busan</span></div>
+                <div class="btn-group">
+                    <div class="btn-cell"><a href="https://www.google.com/maps/search/?api=1&amp;query=Seomyeon%20Station%2C%20Busanjin-gu%2C%20Busan" target="_blank" rel="noopener" class="nav-btn btn-google">Google Map</a></div>
+                    <div class="btn-cell"><a href="https://map.naver.com/p/search/%EC%84%9C%EB%A9%B4%EC%97%AD" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="time-tag">21:30 - 23:00</div>
+                <div class="spot-name">🍖 西面商圈晚餐 / 宵夜（3 選 1）</div>
+                <div class="hours-tag">🕐 味贊王至 23:00｜螞蟻家至 00:30｜松亭豬肉湯飯 24H</div>
+                <div class="spot-desc">安頓好後，正是體驗韓國宵夜文化的最佳時機！可以選擇專人代烤的烤肉、辣炒海鮮，或是 24 小時營業的熱騰騰湯飯。</div>
+                <div class="info-list">
+                    <div class="info-row"><span class="info-k">🕐 時間</span><span class="info-v">21:30 – 23:00</span></div>
+                    <div class="info-row"><span class="info-k">🚇 交通</span><span class="info-v">從西面站步行約 5-10 分鐘皆可抵達。</span></div>
+                    <div class="info-row"><span class="info-k">💡 補充</span><span class="info-v">①味贊王鹽烤肉：必吃 3.5 公分厚切五花肉。②螞蟻家：必吃辣炒章魚蝦仁牛腸。③松亭三代豬肉湯飯：西面必吃消夜熱湯（同條國밥街另有密陽豬肉湯飯可替代）。</span></div>
+                </div>
+                <div class="spot-label">① 味贊王鹽烤肉（맛찬들 왕소금구이 서면 본점）</div>
+                <div class="addr">📍 부산 부산진구 중앙대로691번가길 24-3<br><span class="addr-en">24-3 Jungang-daero 691beonga-gil, Busanjin-gu, Busan</span></div>
+                <div class="btn-group">
+                    <div class="btn-cell"><a href="https://www.google.com/maps/search/?api=1&amp;query=%EB%B6%80%EC%82%B0%20%EB%B6%80%EC%82%B0%EC%A7%84%EA%B5%AC%20%EC%A4%91%EC%95%99%EB%8C%80%EB%A1%9C691%EB%B2%88%EA%B0%80%EA%B8%B8%2024-3" target="_blank" rel="noopener" class="nav-btn btn-google">Google Map</a></div>
+                    <div class="btn-cell"><a href="https://map.naver.com/p/search/%EB%A7%9B%EC%B0%AC%EB%93%A4%20%EC%99%95%EC%86%8C%EA%B8%88%EA%B5%AC%EC%9D%B4%20%EC%84%9C%EB%A9%B4" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
+                </div>
+                <div class="spot-label">② 螞蟻家（개미집 서면점）</div>
+                <div class="addr">📍 부산 부산진구 신천대로62번길 73<br><span class="addr-en">73 Sincheon-daero 62beon-gil, Busanjin-gu, Busan</span></div>
+                <div class="btn-group">
+                    <div class="btn-cell"><a href="https://www.google.com/maps/search/?api=1&amp;query=%EB%B6%80%EC%82%B0%20%EB%B6%80%EC%82%B0%EC%A7%84%EA%B5%AC%20%EC%8B%A0%EC%B2%9C%EB%8C%80%EB%A1%9C62%EB%B2%88%EA%B8%B8%2073" target="_blank" rel="noopener" class="nav-btn btn-google">Google Map</a></div>
+                    <div class="btn-cell"><a href="https://map.naver.com/p/search/%EA%B0%9C%EB%AF%B8%EC%A7%91%20%EC%84%9C%EB%A9%B4" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
+                </div>
+                <div class="spot-label">③ 松亭三代豬肉湯飯（송정3대국밥 서면）</div>
+                <div class="addr">📍 부산 부산진구 서면로68번길 33<br><span class="addr-en">33 Seomyeon-ro 68beon-gil, Busanjin-gu, Busan</span></div>
+                <div class="btn-group">
+                    <div class="btn-cell"><a href="https://www.google.com/maps/search/?api=1&amp;query=%EB%B6%80%EC%82%B0%20%EB%B6%80%EC%82%B0%EC%A7%84%EA%B5%AC%20%EC%84%9C%EB%A9%B4%EB%A1%9C68%EB%B2%88%EA%B8%B8%2033" target="_blank" rel="noopener" class="nav-btn btn-google">Google Map</a></div>
+                    <div class="btn-cell"><a href="https://map.naver.com/p/search/%EC%86%A1%EC%A0%953%EB%8C%80%EA%B5%AD%EB%B0%A5%20%EC%84%9C%EB%A9%B4" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="day-section day2" id="day2">
+        <div class="day-title day2-bg" onclick="toggleDay('day2')">📌 DAY 2：11/5 (四) VBP 48hr 開通・海景 SPA 與西面動漫血拚【海雲台、西面】</div>
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="time-tag">09:00 - 10:30</div>
+                <div class="spot-name">🚠 天空膠囊列車 ＆ 青沙浦墊腳石展望台</div>
+                <div class="spot-desc">早上前往海雲台藍線公園尾浦站，搭乘預訂好的天空膠囊列車前往青沙浦。下車後拍攝著名的「韓版灌籃高手平交道」，並散步至透明玻璃的墊腳石展望台感受海風。</div>
+                <div class="info-list">
+                    <div class="info-row"><span class="info-k">🕐 時間</span><span class="info-v">08:40 抵達尾浦報到 ➔ 09:00 搭乘 ➔ 09:30 抵達青沙浦拍照</span></div>
+                    <div class="info-row"><span class="info-k">🚇 交通</span><span class="info-v">搭乘地鐵 2 號線至「中洞站」7 號出口步行 15 分鐘，或從海雲台搭計程車。</span></div>
+                    <div class="info-row"><span class="info-k">💡 補充</span><span class="info-v">KKday 憑證不需換實體票，直接走上 2 樓月台入口出示 QR Code 即可驗票上車。</span></div>
+                </div>
+                <div class="spot-label">① 尾浦站（出發・藍線公園尾浦停車場）</div>
+                <div class="addr">📍 부산 해운대구 달맞이길62번길 13<br><span class="addr-en">13 Dalmaji-gil 62beon-gil, Haeundae-gu, Busan</span></div>
+                <div class="btn-group">
+                    <div class="btn-cell"><a href="https://www.google.com/maps/search/?api=1&amp;query=%EB%B6%80%EC%82%B0%20%ED%95%B4%EC%9A%B4%EB%8C%80%EA%B5%AC%20%EB%8B%AC%EB%A7%9E%EC%9D%B4%EA%B8%B862%EB%B2%88%EA%B8%B8%2013" target="_blank" rel="noopener" class="nav-btn btn-google">Google Map</a></div>
+                    <div class="btn-cell"><a href="https://map.naver.com/p/search/%EB%B8%94%EB%A3%A8%EB%9D%BC%EC%9D%B8%ED%8C%8C%ED%81%AC%20%EB%AF%B8%ED%8F%AC%EC%A0%95%EA%B1%B0%EC%9E%A5" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
+                </div>
+                <div class="spot-label">② 青沙浦站（抵達・灌籃高手平交道）</div>
+                <div class="addr">📍 부산 해운대구 청사포로 116<br><span class="addr-en">116 Cheongsapo-ro, Haeundae-gu, Busan</span></div>
+                <div class="btn-group">
+                    <div class="btn-cell"><a href="https://www.google.com/maps/search/?api=1&amp;query=%EB%B6%80%EC%82%B0%20%ED%95%B4%EC%9A%B4%EB%8C%80%EA%B5%AC%20%EC%B2%AD%EC%82%AC%ED%8F%AC%EB%A1%9C%20116" target="_blank" rel="noopener" class="nav-btn btn-google">Google Map</a></div>
+                    <div class="btn-cell"><a href="https://map.naver.com/p/search/%EC%B2%AD%EC%82%AC%ED%8F%AC%20%EC%A0%95%EA%B1%B0%EC%9E%A5" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
+                </div>
+                <div class="spot-label">③ 青沙浦墊腳石展望台（다릿돌전망대）</div>
+                <div class="addr">📍 부산 해운대구 청사포로 167<br><span class="addr-en">167 Cheongsapo-ro, Haeundae-gu, Busan</span></div>
+                <div class="btn-group">
+                    <div class="btn-cell"><a href="https://www.google.com/maps/search/?api=1&amp;query=%EB%B6%80%EC%82%B0%20%ED%95%B4%EC%9A%B4%EB%8C%80%EA%B5%AC%20%EC%B2%AD%EC%82%AC%ED%8F%AC%EB%A1%9C%20167" target="_blank" rel="noopener" class="nav-btn btn-google">Google Map</a></div>
+                    <div class="btn-cell"><a href="https://map.naver.com/p/search/%EC%B2%AD%EC%82%AC%ED%8F%AC%20%EB%8B%A4%EB%A6%BF%EB%8F%8C%EC%A0%84%EB%A7%9D%EB%8C%80" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="time-tag">10:30 - 11:00</div>
+                <div class="spot-name">🚃 海岸列車（青沙浦 ➔ 尾浦） <span class="vbp-badge">🔥 VBP 48hr 正式開通</span></div>
+                <div class="queue-badge">⚠️ 本趟行程的關鍵時刻：此時 Pass 正式啟動，效期算到 11/7 10:29 止</div>
+                <div class="spot-desc">回到青沙浦車站櫃檯，出示 Visit Busan Pass 兌換海岸列車車票搭回尾浦，48 小時效期正式開始倒數。</div>
+                <div class="info-list">
+                    <div class="info-row"><span class="info-k">🕐 時間</span><span class="info-v">10:30 兌換車票與感應 ➔ 11:00 搭回尾浦站</span></div>
+                    <div class="info-row"><span class="info-k">🚇 交通</span><span class="info-v">搭乘海岸列車（青沙浦 ➔ 尾浦）</span></div>
+                </div>
+                <div class="spot-label">青沙浦車站櫃檯</div>
+                <div class="addr">📍 부산 해운대구 청사포로 116<br><span class="addr-en">116 Cheongsapo-ro, Haeundae-gu, Busan</span></div>
+                <div class="btn-group">
+                    <div class="btn-cell"><a href="https://www.google.com/maps/search/?api=1&amp;query=%EB%B6%80%EC%82%B0%20%ED%95%B4%EC%9A%B4%EB%8C%80%EA%B5%AC%20%EC%B2%AD%EC%82%AC%ED%8F%AC%EB%A1%9C%20116" target="_blank" rel="noopener" class="nav-btn btn-google">Google Map</a></div>
+                    <div class="btn-cell"><a href="https://map.naver.com/p/search/%EC%B2%AD%EC%82%AC%ED%8F%AC%20%EC%A0%95%EA%B1%B0%EC%9E%A5" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="time-tag">11:15 - 12:50</div>
+                <div class="spot-name">🐟 海雲台午餐（2 選 1）</div>
+                <div class="spot-desc">回到海雲台，享用米其林推薦的炭烤鰻魚飯，或是走進傳統市場吃在地小吃。</div>
+                <div class="info-list">
+                    <div class="info-row"><span class="info-k">🕐 時間</span><span class="info-v">11:15 – 12:50</span></div>
+                    <div class="info-row"><span class="info-k">🚇 交通</span><span class="info-v">從尾浦站步行約 15 分鐘，或搭計程車 3 分鐘至海雲台主街。</span></div>
+                    <div class="info-row"><span class="info-k">💡 補充</span><span class="info-v">若要吃海木鰻魚飯，強烈建議 10:30 下海岸列車時，就先用 CatchTable App 線上抽號碼牌。</span></div>
+                </div>
+                <div class="spot-label">① 海木鰻魚飯（해목・米其林推薦）</div>
+                <div class="addr">📍 부산 해운대구 구남로24번길 8<br><span class="addr-en">8 Gunam-ro 24beon-gil, Haeundae-gu, Busan</span></div>
+                <div class="btn-group">
+                    <div class="btn-cell"><a href="https://www.google.com/maps/search/?api=1&amp;query=%EB%B6%80%EC%82%B0%20%ED%95%B4%EC%9A%B4%EB%8C%80%EA%B5%AC%20%EA%B5%AC%EB%82%A8%EB%A1%9C24%EB%B2%88%EA%B8%B8%208" target="_blank" rel="noopener" class="nav-btn btn-google">Google Map</a></div>
+                    <div class="btn-cell"><a href="https://map.naver.com/p/search/%ED%95%B4%EB%AA%A9%20%ED%95%B4%EC%9A%B4%EB%8C%80" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
+                </div>
+                <div class="spot-label">② 海雲台傳統市場（해운대시장）</div>
+                <div class="addr">📍 부산 해운대구 구남로41번길 22-1<br><span class="addr-en">22-1 Gunam-ro 41beon-gil, Haeundae-gu, Busan</span></div>
+                <div class="btn-group">
+                    <div class="btn-cell"><a href="https://www.google.com/maps/search/?api=1&amp;query=%EB%B6%80%EC%82%B0%20%ED%95%B4%EC%9A%B4%EB%8C%80%EA%B5%AC%20%EA%B5%AC%EB%82%A8%EB%A1%9C41%EB%B2%88%EA%B8%B8%2022-1" target="_blank" rel="noopener" class="nav-btn btn-google">Google Map</a></div>
+                    <div class="btn-cell"><a href="https://map.naver.com/p/search/%ED%95%B4%EC%9A%B4%EB%8C%80%EC%8B%9C%EC%9E%A5" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="time-tag">13:00 - 15:00</div>
+                <div class="spot-name">♨️ Club D Oasis 海景足湯 SPA <span class="vbp-badge">🔥 VBP</span></div>
+                <div class="hours-tag">🕐 持 Pass 免費入場 4 小時（原價 33,000 韓元）</div>
+                <div class="spot-desc">走回尾浦站旁邊的 LCT 大樓，持 Pass 免費享受頂級渡假風汗蒸幕。換上汗蒸服直奔 5 樓露天「清水堂」泡海景足湯，並在樺木主題房休息。</div>
+                <div class="info-list">
+                    <div class="info-row"><span class="info-k">🕐 時間</span><span class="info-v">13:00 入場 ➔ 15:00 離開</span></div>
+                    <div class="info-row"><span class="info-k">🚇 交通</span><span class="info-v">從海雲台沙灘尾端（近尾浦站）步行 1 分鐘即達。</span></div>
+                    <div class="info-row"><span class="info-k">💡 補充</span><span class="info-v">不帶泳衣也可使用汗蒸幕與露天足湯區。位置在 LCT 大樓 3-6F。</span></div>
+                </div>
+                <div class="addr">📍 부산 해운대구 달맞이길 30 LCT<br><span class="addr-en">30 Dalmaji-gil, Haeundae-gu, Busan (LCT Bldg 3-6F)</span></div>
+                <div class="btn-group">
+                    <div class="btn-cell"><a href="https://www.google.com/maps/search/?api=1&amp;query=Club%20D%20Oasis%2C%2030%20Dalmaji-gil%2C%20Haeundae-gu%2C%20Busan" target="_blank" rel="noopener" class="nav-btn btn-google">Google Map</a></div>
+                    <div class="btn-cell"><a href="https://map.naver.com/p/search/%ED%81%B4%EB%9F%BD%EB%94%94%EC%98%A4%EC%95%84%EC%8B%9C%EC%8A%A4%20%ED%95%B4%EC%9A%B4%EB%8C%80" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="time-tag">15:30 - 16:30</div>
+                <div class="spot-name">⛵ Yacht Holic 遊艇出海 <span class="vbp-badge">🔥 VBP</span></div>
+                <div class="queue-badge">⚠️ 需提前透過官方 IG（@yachtholic）預約 11/5 15:30 班次</div>
+                <div class="spot-desc">前往水營灣遊艇競技場，從海上近距離仰望廣安大橋，享受超 Chill 的午後時光。</div>
+                <div class="info-list">
+                    <div class="info-row"><span class="info-k">🕐 時間</span><span class="info-v">15:30 或 16:00 班次（航程約 50 分鐘），建議提前 20 分鐘到場</span></div>
+                    <div class="info-row"><span class="info-k">🚇 交通</span><span class="info-v">從 LCT 搭計程車前往約 10 分鐘（最近地鐵站：2 號線冬柏站）。</span></div>
+                    <div class="info-row"><span class="info-k">💡 補充</span><span class="info-v">持 Pass 免費搭乘日間班次，需提前透過官方 IG/WhatsApp 預約完成。「碼頭／登船點」以預約確認訊息為準（各平台資料不一，出發前請再確認）。</span></div>
+                </div>
+                <div class="addr">📍 부산 해운대구 해운대해변로 84 (수영만요트경기장)<br><span class="addr-en">84 Haeundaehaebyeon-ro, Haeundae-gu, Busan (Suyeongman Bay Yachting Center)</span></div>
+                <div class="btn-group">
+                    <div class="btn-cell"><a href="https://www.google.com/maps/search/?api=1&amp;query=Suyeongman%20Bay%20Yachting%20Center%2C%2084%20Haeundaehaebyeon-ro%2C%20Haeundae-gu%2C%20Busan" target="_blank" rel="noopener" class="nav-btn btn-google">Google Map</a></div>
+                    <div class="btn-cell"><a href="https://map.naver.com/p/search/%EC%88%98%EC%98%81%EB%A7%8C%EC%9A%94%ED%8A%B8%EA%B2%BD%EA%B8%B0%EC%9E%A5" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="time-tag">17:00 - 19:45</div>
+                <div class="spot-name">🧸 西面三正塔動漫巡禮 ＆ SPAO 聯名服飾</div>
+                <div class="spot-desc">傍晚返回西面商圈大採購！直衝三正塔尋找 JOJO 周邊與扭蛋，接著轉戰旁邊的 SPAO 狂掃吉伊卡哇與自嘲熊聯名款。</div>
+                <div class="info-list">
+                    <div class="info-row"><span class="info-k">🕐 時間</span><span class="info-v">17:00 逛三正塔 ➔ 18:30 逛 SPAO</span></div>
+                    <div class="info-row"><span class="info-k">🚇 交通</span><span class="info-v">地鐵 2 號線搭回「西面站」2 號出口。</span></div>
+                    <div class="info-row"><span class="info-k">💡 補充</span><span class="info-v">三正塔 11F 有 Animate，7-9F 為扭蛋一番賞；SPAO 步行 2 分鐘即達，營業至 22:00 且可退稅。</span></div>
+                </div>
+                <div class="spot-label">① 三正塔（삼정타워）</div>
+                <div class="addr">📍 부산 부산진구 중앙대로 672<br><span class="addr-en">672 Jungang-daero, Busanjin-gu, Busan</span></div>
+                <div class="btn-group">
+                    <div class="btn-cell"><a href="https://www.google.com/maps/search/?api=1&amp;query=%EB%B6%80%EC%82%B0%20%EB%B6%80%EC%82%B0%EC%A7%84%EA%B5%AC%20%EC%A4%91%EC%95%99%EB%8C%80%EB%A1%9C%20672" target="_blank" rel="noopener" class="nav-btn btn-google">Google Map</a></div>
+                    <div class="btn-cell"><a href="https://map.naver.com/p/search/%EC%82%BC%EC%A0%95%ED%83%80%EC%9B%8C%20%EC%84%9C%EB%A9%B4" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
+                </div>
+                <div class="spot-label">② SPAO 西面中央店（스파오 서면중앙점）</div>
+                <div class="addr">📍 부산 부산진구 중앙대로692번길 38<br><span class="addr-en">38 Jungang-daero 692beon-gil, Busanjin-gu, Busan</span></div>
+                <div class="btn-group">
+                    <div class="btn-cell"><a href="https://www.google.com/maps/search/?api=1&amp;query=%EB%B6%80%EC%82%B0%20%EB%B6%80%EC%82%B0%EC%A7%84%EA%B5%AC%20%EC%A4%91%EC%95%99%EB%8C%80%EB%A1%9C692%EB%B2%88%EA%B8%B8%2038" target="_blank" rel="noopener" class="nav-btn btn-google">Google Map</a></div>
+                    <div class="btn-cell"><a href="https://map.naver.com/p/search/%EC%8A%A4%ED%8C%8C%EC%98%A4%20%EC%84%9C%EB%A9%B4%EC%A4%91%EC%95%99%EC%A0%90" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="time-tag">20:00 - 21:30</div>
+                <div class="spot-name">🥩 西面晚餐：精緻烤肉或烤腸（2 選 1）</div>
+                <div class="hours-tag">🕐 Gojip 至 23:00｜Gop 週二～五 16:00 起、至 00:00（週一公休）</div>
+                <div class="spot-desc">買完戰利品後，享用西面評價極高的精品代烤豬肉，或超人氣韓牛烤腸犒賞自己。</div>
+                <div class="info-list">
+                    <div class="info-row"><span class="info-k">🕐 時間</span><span class="info-v">20:00 – 21:30</span></div>
+                    <div class="info-row"><span class="info-k">🚇 交通</span><span class="info-v">從 SPAO 步行約 5-8 分鐘。</span></div>
+                    <div class="info-row"><span class="info-k">💡 補充</span><span class="info-v">兩間皆有全程專人代烤服務。Gop（곱）以韓牛腸類／大腸為主；11/5 是週四，有營業。</span></div>
+                </div>
+                <div class="spot-label">① Gojip 西面總店（고집 서면본점）</div>
+                <div class="addr">📍 부산 부산진구 부전로 64<br><span class="addr-en">64 Bujeon-ro, Busanjin-gu, Busan</span></div>
+                <div class="btn-group">
+                    <div class="btn-cell"><a href="https://www.google.com/maps/search/?api=1&amp;query=Gojip%20Seomyeon%20Head%20Store%2C%2064%20Bujeon-ro%2C%20Busanjin-gu%2C%20Busan" target="_blank" rel="noopener" class="nav-btn btn-google">Google Map</a></div>
+                    <div class="btn-cell"><a href="https://map.naver.com/p/search/%EB%B6%80%EC%82%B0%20%EB%B6%80%EC%82%B0%EC%A7%84%EA%B5%AC%20%EB%B6%80%EC%A0%84%EB%A1%9C%2064" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
+                </div>
+                <div class="spot-label">② Gop 西面（서면 곱）</div>
+                <div class="addr">📍 부산 부산진구 가야대로784번길 7<br><span class="addr-en">7 Gaya-daero 784beon-gil, Busanjin-gu, Busan</span></div>
+                <div class="btn-group">
+                    <div class="btn-cell"><a href="https://www.google.com/maps/search/?api=1&amp;query=%EB%B6%80%EC%82%B0%20%EB%B6%80%EC%82%B0%EC%A7%84%EA%B5%AC%20%EA%B0%80%EC%95%BC%EB%8C%80%EB%A1%9C784%EB%B2%88%EA%B8%B8%207" target="_blank" rel="noopener" class="nav-btn btn-google">Google Map</a></div>
+                    <div class="btn-cell"><a href="https://map.naver.com/p/search/%EC%84%9C%EB%A9%B4%20%EA%B3%B1" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="day-section day3" id="day3">
+        <div class="day-title day3-bg" onclick="toggleDay('day3')">📌 DAY 3：11/6 (五) 東釜山楓之谷樂園・五星汗蒸幕【機張、Centum City】</div>
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="time-tag">10:00 - 11:45</div>
+                <div class="spot-name">🛷 Skyline Luge 釜山斜坡滑車 <span class="vbp-badge">🔥 VBP</span></div>
+                <div class="hours-tag">🕐 持 Pass 免費兌換 2 次滑車券（原價 27,000 韓元）</div>
+                <div class="spot-desc">早上前往東釜山，搭乘空中吊椅上山，再操控無動力滑車甩尾俯衝下山，刺激好玩。</div>
+                <div class="info-list">
+                    <div class="info-row"><span class="info-k">🕐 時間</span><span class="info-v">10:00 抵達 ➔ 11:45 離開</span></div>
+                    <div class="info-row"><span class="info-k">🚇 交通</span><span class="info-v">地鐵至「BEXCO 站」轉東海線至「奧西利亞站」，出站搭計程車 3 分鐘即達。</span></div>
+                </div>
+                <div class="addr">📍 부산 기장군 기장읍 기장해안로 205<br><span class="addr-en">205 Gijanghaean-ro, Gijang-gun, Busan</span></div>
+                <div class="btn-group">
+                    <div class="btn-cell"><a href="https://www.google.com/maps/search/?api=1&amp;query=%EB%B6%80%EC%82%B0%20%EA%B8%B0%EC%9E%A5%EA%B5%B0%20%EA%B8%B0%EC%9E%A5%EC%9D%8D%20%EA%B8%B0%EC%9E%A5%ED%95%B4%EC%95%88%EB%A1%9C%20205" target="_blank" rel="noopener" class="nav-btn btn-google">Google Map</a></div>
+                    <div class="btn-cell"><a href="https://map.naver.com/p/search/%EC%8A%A4%EC%B9%B4%EC%9D%B4%EB%9D%BC%EC%9D%B8%20%EB%A3%A8%EC%A7%80%20%EB%B6%80%EC%82%B0" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="time-tag">12:00 - 16:30</div>
+                <div class="spot-name">🍁 釜山樂天世界：楓之谷秋季聯名 <span class="vbp-badge">🔥 VBP</span></div>
+                <div class="hours-tag">🕐 持 Pass 免費換一日票</div>
+                <div class="spot-desc">進入樂天世界，除了挑戰刺激的雲霄飛車，最重要的任務是參與《楓之谷》期間限定聯名活動！務必尋找園區內的楓之谷大型造景、專屬扭蛋機，並在出口禮品店購買菇菇寶貝與皮卡啾限定周邊！</div>
+                <div class="info-list">
+                    <div class="info-row"><span class="info-k">🕐 時間</span><span class="info-v">12:00 換票入場 ➔ 16:30 離開</span></div>
+                    <div class="info-row"><span class="info-k">🚇 交通</span><span class="info-v">從斜坡滑車步行約 10 分鐘即達。</span></div>
+                </div>
+                <div class="addr">📍 부산 기장군 기장읍 동부산관광로 42<br><span class="addr-en">42 Dongbusangwangwang-ro, Gijang-gun, Busan</span></div>
+                <div class="btn-group">
+                    <div class="btn-cell"><a href="https://www.google.com/maps/search/?api=1&amp;query=%EB%B6%80%EC%82%B0%20%EA%B8%B0%EC%9E%A5%EA%B5%B0%20%EA%B8%B0%EC%9E%A5%EC%9D%8D%20%EB%8F%99%EB%B6%80%EC%82%B0%EA%B4%80%EA%B4%91%EB%A1%9C%2042" target="_blank" rel="noopener" class="nav-btn btn-google">Google Map</a></div>
+                    <div class="btn-cell"><a href="https://map.naver.com/p/search/%EB%A1%AF%EB%8D%B0%EC%9B%94%EB%93%9C%20%EC%96%B4%EB%93%9C%EB%B2%A4%EC%B2%98%20%EB%B6%80%EC%82%B0" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="time-tag">16:30 - 18:45</div>
+                <div class="spot-name">🧱 Brick Campus 樂高展 ＆ 晚餐（2 選 1） <span class="vbp-badge">🔥 VBP</span></div>
+                <div class="hours-tag">🕐 持 Pass 免費看 Brick Campus（原價 15,000 韓元）</div>
+                <div class="spot-desc">逛完樂園出來，對面就是樂天 Mall，可順刷樂高積木展，並在商場美食街或機張市場享用晚餐。</div>
+                <div class="info-list">
+                    <div class="info-row"><span class="info-k">🕐 時間</span><span class="info-v">16:30 逛樂高展（視體力決定） ➔ 17:30 晚餐</span></div>
+                    <div class="info-row"><span class="info-k">🚇 交通</span><span class="info-v">樂天世界正對面，過天橋即達。機張市場需搭計程車前往。</span></div>
+                    <div class="info-row"><span class="info-k">💡 補充</span><span class="info-v">晚餐可選 Outlet 美食街，或搭車去機張市場吃松葉蟹（機張市場 07:00–22:00，每月最後一個週二公休）。</span></div>
+                </div>
+                <div class="spot-label">🧱 Brick Campus（樂天 Mall 東釜山店內）</div>
+                <div class="addr">📍 부산 기장군 기장읍 동부산관광로 8<br><span class="addr-en">8 Dongbusangwangwang-ro, Gijang-gun, Busan</span></div>
+                <div class="btn-group">
+                    <div class="btn-cell"><a href="https://www.google.com/maps/search/?api=1&amp;query=%EB%B6%80%EC%82%B0%20%EA%B8%B0%EC%9E%A5%EA%B5%B0%20%EA%B8%B0%EC%9E%A5%EC%9D%8D%20%EB%8F%99%EB%B6%80%EC%82%B0%EA%B4%80%EA%B4%91%EB%A1%9C%208" target="_blank" rel="noopener" class="nav-btn btn-google">Google Map</a></div>
+                    <div class="btn-cell"><a href="https://map.naver.com/p/search/%EB%A1%AF%EB%8D%B0%EB%AA%B0%20%EB%8F%99%EB%B6%80%EC%82%B0%EC%A0%90" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
+                </div>
+                <div class="spot-label">🍽️ 晚餐 ① 樂天 Outlet 東釜山店美食街</div>
+                <div class="addr">📍 부산 기장군 기장읍 기장해안로 147<br><span class="addr-en">147 Gijanghaean-ro, Gijang-gun, Busan</span></div>
+                <div class="btn-group">
+                    <div class="btn-cell"><a href="https://www.google.com/maps/search/?api=1&amp;query=%EB%B6%80%EC%82%B0%20%EA%B8%B0%EC%9E%A5%EA%B5%B0%20%EA%B8%B0%EC%9E%A5%EC%9D%8D%20%EA%B8%B0%EC%9E%A5%ED%95%B4%EC%95%88%EB%A1%9C%20147" target="_blank" rel="noopener" class="nav-btn btn-google">Google Map</a></div>
+                    <div class="btn-cell"><a href="https://map.naver.com/p/search/%EB%A1%AF%EB%8D%B0%ED%94%84%EB%A6%AC%EB%AF%B8%EC%97%84%EC%95%84%EC%9A%B8%EB%A0%9B%20%EB%8F%99%EB%B6%80%EC%82%B0%EC%A0%90" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
+                </div>
+                <div class="spot-label">🦀 晚餐 ② 機張市場（松葉蟹）</div>
+                <div class="addr">📍 부산 기장군 기장읍 읍내로104번길 16<br><span class="addr-en">16 Eupnae-ro 104beon-gil, Gijang-eup, Gijang-gun, Busan</span></div>
+                <div class="btn-group">
+                    <div class="btn-cell"><a href="https://www.google.com/maps/search/?api=1&amp;query=%EB%B6%80%EC%82%B0%20%EA%B8%B0%EC%9E%A5%EA%B5%B0%20%EA%B8%B0%EC%9E%A5%EC%9D%8D%20%EC%9D%8D%EB%82%B4%EB%A1%9C104%EB%B2%88%EA%B8%B8%2016" target="_blank" rel="noopener" class="nav-btn btn-google">Google Map</a></div>
+                    <div class="btn-cell"><a href="https://map.naver.com/p/search/%EA%B8%B0%EC%9E%A5%EC%8B%9C%EC%9E%A5" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="time-tag">18:45 - 22:00</div>
+                <div class="spot-name">♨️ Centum City 逛街 ＆ 新世界 Spa Land <span class="vbp-badge">🔥 VBP</span></div>
+                <div class="hours-tag">🕐 持 Pass 免費使用 4 小時（最後入場 21:00）</div>
+                <div class="spot-desc">搭車回到 Centum City，補貨 SPAO 與快閃店後，進入全韓國最高級的五星級汗蒸幕徹底放鬆。必體驗 13 種主題汗蒸房並品嚐甜米釀配烤雞蛋。</div>
+                <div class="info-list">
+                    <div class="info-row"><span class="info-k">🕐 時間</span><span class="info-v">18:45 逛 B2 ➔ 19:30 入場 Spa Land</span></div>
+                    <div class="info-row"><span class="info-k">🚇 交通</span><span class="info-v">搭東海線回「BEXCO 站」步行連通至新世界百貨。</span></div>
+                </div>
+                <div class="addr">📍 부산 해운대구 센텀남대로 35 (신세계 센텀시티)<br><span class="addr-en">35 Centum nam-daero, Haeundae-gu, Busan (Shinsegae Centum City)</span></div>
+                <div class="btn-group">
+                    <div class="btn-cell"><a href="https://www.google.com/maps/search/?api=1&amp;query=Shinsegae%20Centum%20City%2C%2035%20Centum%20nam-daero%2C%20Haeundae-gu%2C%20Busan" target="_blank" rel="noopener" class="nav-btn btn-google">Google Map</a></div>
+                    <div class="btn-cell"><a href="https://map.naver.com/p/search/%EC%8B%A0%EC%84%B8%EA%B3%84%20%EC%84%BC%ED%85%80%EC%8B%9C%ED%8B%B0%20%EC%8A%A4%ED%8C%8C%EB%9E%9C%EB%93%9C" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="day-section day4" id="day4">
+        <div class="day-title day4-bg" onclick="toggleDay('day4')">📌 DAY 4：11/7 (六) 極限壓線・米飛兔・釜山國際煙火節【松島、影島、廣安里】</div>
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="time-tag">09:00 - 09:50</div>
+                <div class="spot-name">🚡 松島海上纜車水晶車廂 <span class="vbp-badge">🔥 VBP</span></div>
+                <div class="hours-tag">🕐 持 Pass 免費換水晶來回票</div>
+                <div class="queue-badge">⚠️ 注意時間，這站是為了下一個景點的壓線做準備！</div>
+                <div class="spot-desc">早上準時抵達松島，兌換最高等級的水晶透明車廂。腳踩透明玻璃橫越海灣，對岸拍完照立刻搭纜車折返。</div>
+                <div class="info-list">
+                    <div class="info-row"><span class="info-k">🕐 時間</span><span class="info-v">09:00 準時換票搭乘 ➔ 09:50 離開</span></div>
+                    <div class="info-row"><span class="info-k">🚇 交通</span><span class="info-v">從西面搭計程車直接前往最省時。</span></div>
+                </div>
+                <div class="addr">📍 부산 서구 송도해변로 171<br><span class="addr-en">171 Songdohaebyeon-ro, Seo-gu, Busan</span></div>
+                <div class="btn-group">
+                    <div class="btn-cell"><a href="https://www.google.com/maps/search/?api=1&amp;query=%EB%B6%80%EC%82%B0%20%EC%84%9C%EA%B5%AC%20%EC%86%A1%EB%8F%84%ED%95%B4%EB%B3%80%EB%A1%9C%20171" target="_blank" rel="noopener" class="nav-btn btn-google">Google Map</a></div>
+                    <div class="btn-cell"><a href="https://map.naver.com/p/search/%EC%86%A1%EB%8F%84%ED%95%B4%EC%83%81%EC%BC%80%EC%9D%B4%EB%B8%94%EC%B9%B4%20%EC%86%A1%EB%8F%84%EB%B2%A0%EC%9D%B4%EC%8A%A4%ED%85%8C%EC%9D%B4%EC%85%98" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="time-tag">10:05 - 11:45</div>
+                <div class="spot-name">🎨 ARTE MUSEUM 釜山 <span class="vbp-badge">🔥 VBP 壓線首選</span></div>
+                <div class="hours-tag">🕐 持 Pass 免費入場（原價 22,000 韓元）</div>
+                <div class="queue-badge">⚠️ 10:25 前務必刷 Pass 入場（Pass 效期至 10:29 止）</div>
+                <div class="spot-desc">這趟旅程時間最緊湊的一站！從松島火速搭計程車前往影島，務必在 10:29 前完成掃碼入場，享受震撼的巨浪光影秀。成功壓線後即可不限時慢慢逛！</div>
+                <div class="info-list">
+                    <div class="info-row"><span class="info-k">🕐 時間</span><span class="info-v">10:05 抵達 ➔ 10:25 前務必刷 Pass ➔ 11:45 離開</span></div>
+                    <div class="info-row"><span class="info-k">🚇 交通</span><span class="info-v">從松島搭計程車跨過南港大橋，約 12-15 分鐘。</span></div>
+                </div>
+                <div class="addr">📍 부산 영도구 해양로247번길 29<br><span class="addr-en">29 Haeyang-ro 247beon-gil, Yeongdo-gu, Busan</span></div>
+                <div class="btn-group">
+                    <div class="btn-cell"><a href="https://www.google.com/maps/search/?api=1&amp;query=%EB%B6%80%EC%82%B0%20%EC%98%81%EB%8F%84%EA%B5%AC%20%ED%95%B4%EC%96%91%EB%A1%9C247%EB%B2%88%EA%B8%B8%2029" target="_blank" rel="noopener" class="nav-btn btn-google">Google Map</a></div>
+                    <div class="btn-cell"><a href="https://map.naver.com/p/search/%EC%95%84%EB%A5%B4%EB%96%BC%EB%AE%A4%EC%A7%80%EC%97%84%20%EB%B6%80%EC%82%B0" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="time-tag">12:00 - 15:00</div>
+                <div class="spot-name">🦐 南浦洞午餐 ＆ 米飛兔主題咖啡廳</div>
+                <div class="spot-desc">中午在南浦洞逛 LINE FRIENDS 與享用海鮮午餐，飯後安排療癒的米飛兔下午茶補充戰鬥力。</div>
+                <div class="info-list">
+                    <div class="info-row"><span class="info-k">🕐 時間</span><span class="info-v">12:00 南浦洞午餐 ➔ 14:00 Cafe Miffy 下午茶</span></div>
+                    <div class="info-row"><span class="info-k">🚇 交通</span><span class="info-v">從影島搭車 8 分鐘過橋即達南浦洞。</span></div>
+                    <div class="info-row"><span class="info-k">💡 補充</span><span class="info-v">午餐可吃札嘎其海鮮或烤海鰻。⚠️ 米飛兔咖啡廳其實在「影島」山坡上（與 ARTE 同區），不接受預約、現場候位，平日 11:00–22:00、假日 11:00–23:00，Google 用店名常搜不到，請用下方地址定位；也可考慮先去米飛兔再吃南浦洞。</span></div>
+                </div>
+                <div class="spot-label">① 札嘎其市場（자갈치시장・海鮮午餐）</div>
+                <div class="addr">📍 부산 중구 자갈치해안로 52<br><span class="addr-en">52 Jagalchihaean-ro, Jung-gu, Busan</span></div>
+                <div class="btn-group">
+                    <div class="btn-cell"><a href="https://www.google.com/maps/search/?api=1&amp;query=%EB%B6%80%EC%82%B0%20%EC%A4%91%EA%B5%AC%20%EC%9E%90%EA%B0%88%EC%B9%98%ED%95%B4%EC%95%88%EB%A1%9C%2052" target="_blank" rel="noopener" class="nav-btn btn-google">Google Map</a></div>
+                    <div class="btn-cell"><a href="https://map.naver.com/p/search/%EC%9E%90%EA%B0%88%EC%B9%98%EC%8B%9C%EC%9E%A5" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
+                </div>
+                <div class="spot-label">② 南浦洞 BIFF 廣場（逛街・LINE FRIENDS 一帶）</div>
+                <div class="addr">📍 부산 중구 남포동 BIFF광장 일대<br><span class="addr-en">BIFF Square, Nampo-dong, Jung-gu, Busan</span></div>
+                <div class="btn-group">
+                    <div class="btn-cell"><a href="https://www.google.com/maps/search/?api=1&amp;query=BIFF%20Square%2C%20Nampo-dong%2C%20Jung-gu%2C%20Busan" target="_blank" rel="noopener" class="nav-btn btn-google">Google Map</a></div>
+                    <div class="btn-cell"><a href="https://map.naver.com/p/search/BIFF%EA%B4%91%EC%9E%A5" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
+                </div>
+                <div class="spot-label">③ Cafe Miffy 釜山（미피카페・影島）</div>
+                <div class="addr">📍 부산 영도구 와치로51번길 2<br><span class="addr-en">2 Wachi-ro 51beon-gil, Yeongdo-gu, Busan</span></div>
+                <div class="btn-group">
+                    <div class="btn-cell"><a href="https://www.google.com/maps/search/?api=1&amp;query=2%20Wachi-ro%2051beon-gil%2C%20Yeongdo-gu%2C%20Busan" target="_blank" rel="noopener" class="nav-btn btn-google">Google Map</a></div>
+                    <div class="btn-cell"><a href="https://map.naver.com/p/search/%EB%B6%80%EC%82%B0%20%EC%98%81%EB%8F%84%EA%B5%AC%20%EC%99%80%EC%B9%98%EB%A1%9C51%EB%B2%88%EA%B8%B8%202" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="time-tag">15:30 - 17:15</div>
+                <div class="spot-name">🎟️ 廣安里領取手環 ＆ 煙火節前準備</div>
+                <div class="spot-desc">抵達廣安里，先完成手環兌換，並在進入付費區前吃飽或買好外帶食物。</div>
+                <div class="info-list">
+                    <div class="info-row"><span class="info-k">🕐 時間</span><span class="info-v">15:30 換手環 / 逛後巷 ➔ 16:30 吃晚餐或買外帶</span></div>
+                    <div class="info-row"><span class="info-k">🚇 交通</span><span class="info-v">地鐵 2 號線至「廣安站」或「金蓮山站」步行前往海灘。</span></div>
+                    <div class="info-row"><span class="info-k">💡 補充</span><span class="info-v">憑護照正本＋KKday 憑證換票。若吃 Tonshou 炸豬排需一早用 CatchTable 線上抽號；或外帶炸雞飯捲進場吃。</span></div>
+                </div>
+                <div class="spot-label">① 手環兌換地點（廣安里海水浴場）</div>
+                <div class="addr">📍 부산 수영구 광안해변로 219<br><span class="addr-en">219 Gwanganhaebyeon-ro, Suyeong-gu, Busan</span></div>
+                <div class="btn-group">
+                    <div class="btn-cell"><a href="https://www.google.com/maps/search/?api=1&amp;query=Gwangalli%20Beach%2C%20219%20Gwanganhaebyeon-ro%2C%20Suyeong-gu%2C%20Busan" target="_blank" rel="noopener" class="nav-btn btn-google">Google Map</a></div>
+                    <div class="btn-cell"><a href="https://map.naver.com/p/search/%EA%B4%91%EC%95%88%EB%A6%AC%ED%95%B4%EC%88%98%EC%9A%95%EC%9E%A5" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
+                </div>
+                <div class="spot-label">② Tonshou 炸豬排 廣安店（톤쇼우 광안점）</div>
+                <div class="addr">📍 부산 수영구 광안해변로279번길 13<br><span class="addr-en">13 Gwanganhaebyeon-ro 279beon-gil, Suyeong-gu, Busan</span></div>
+                <div class="btn-group">
+                    <div class="btn-cell"><a href="https://www.google.com/maps/search/?api=1&amp;query=%EB%B6%80%EC%82%B0%20%EC%88%98%EC%98%81%EA%B5%AC%20%EA%B4%91%EC%95%88%ED%95%B4%EB%B3%80%EB%A1%9C279%EB%B2%88%EA%B8%B8%2013" target="_blank" rel="noopener" class="nav-btn btn-google">Google Map</a></div>
+                    <div class="btn-cell"><a href="https://map.naver.com/p/search/%ED%86%A4%EC%87%BC%EC%9A%B0%20%EA%B4%91%EC%95%88%EC%A0%90" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="time-tag">17:15 - 20:00</div>
+                <div class="spot-name">🎆 2026 釜山國際煙火節（S 席座位）</div>
+                <div class="queue-badge">⚠️ 17:55 準時關閉付費區入口，遲到視同放棄！</div>
+                <div class="spot-desc">提早進入指定座位區，享受長達一小時、超過 8 萬發的跨海大橋煙火大秀！11 月海風極冷，請務必攜帶防風外套與暖暖包。</div>
+                <div class="info-list">
+                    <div class="info-row"><span class="info-k">🕐 時間</span><span class="info-v">17:15 進入座位 ➔ 18:00 暖場 ➔ 19:00 主煙火秀</span></div>
+                    <div class="info-row"><span class="info-k">🚇 交通</span><span class="info-v">位於廣安里沙灘上。</span></div>
+                </div>
+                <div class="spot-label">廣安里海水浴場 S 席付費管制區</div>
+                <div class="addr">📍 부산 수영구 광안해변로 219<br><span class="addr-en">219 Gwanganhaebyeon-ro, Suyeong-gu, Busan</span></div>
+                <div class="btn-group">
+                    <div class="btn-cell"><a href="https://www.google.com/maps/search/?api=1&amp;query=Gwangalli%20Beach%2C%20219%20Gwanganhaebyeon-ro%2C%20Suyeong-gu%2C%20Busan" target="_blank" rel="noopener" class="nav-btn btn-google">Google Map</a></div>
+                    <div class="btn-cell"><a href="https://map.naver.com/p/search/%EA%B4%91%EC%95%88%EB%A6%AC%ED%95%B4%EC%88%98%EC%9A%95%EC%9E%A5" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="time-tag">20:30 - 22:00</div>
+                <div class="spot-name">🐟 散場宵夜：札嘎其生魚片店（廣安站店）</div>
+                <div class="spot-desc">煙火結束後，避開恐怖的地鐵人潮，先在廣安里吃頓宵夜等凌晨人潮散去。吃現切生魚片配辣魚湯，吃飽後再悠閒搭地鐵回西面。</div>
+                <div class="info-list">
+                    <div class="info-row"><span class="info-k">🕐 時間</span><span class="info-v">20:30 – 22:00</span></div>
+                    <div class="info-row"><span class="info-k">🚇 交通</span><span class="info-v">從海灘步行回廣安站途中順路吃。</span></div>
+                </div>
+                <div class="addr">📍 부산 수영구 수영로702번길 28<br><span class="addr-en">28 Suyeong-ro 702beon-gil, Suyeong-gu, Busan</span></div>
+                <div class="btn-group">
+                    <div class="btn-cell"><a href="https://www.google.com/maps/search/?api=1&amp;query=%EB%B6%80%EC%82%B0%20%EC%88%98%EC%98%81%EA%B5%AC%20%EC%88%98%EC%98%81%EB%A1%9C702%EB%B2%88%EA%B8%B8%2028" target="_blank" rel="noopener" class="nav-btn btn-google">Google Map</a></div>
+                    <div class="btn-cell"><a href="https://map.naver.com/p/search/%EC%9E%90%EA%B0%88%EC%B9%98%ED%9A%9F%EC%A7%91%20%EA%B4%91%EC%95%88" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="day-section day5" id="day5">
+        <div class="day-title day5-bg" onclick="toggleDay('day5')">📌 DAY 5：11/8 (日) 滿載而歸・平安返台【西面、金海機場】</div>
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="time-tag">08:00 - 09:00</div>
+                <div class="spot-name">🍳 西面早餐 ＆ 飯店退房（2 選 1）</div>
+                <div class="spot-desc">最後一個早晨，享用美味的韓式鐵板吐司，整理行李準備前往機場。</div>
+                <div class="info-list">
+                    <div class="info-row"><span class="info-k">🕐 時間</span><span class="info-v">08:00 – 09:00</span></div>
+                    <div class="info-row"><span class="info-k">🚇 交通</span><span class="info-v">步行</span></div>
+                    <div class="info-row"><span class="info-k">💡 補充</span><span class="info-v">推薦 Egg Drop 或 Isaac 吐司，並確認退稅單據已全部收齊。分店營業時間請以地圖顯示為準。</span></div>
+                </div>
+                <div class="spot-label">① Egg Drop 西面樂天後門店（에그드랍 서면롯데후문점）</div>
+                <div class="addr">📍 부산 부산진구 부전로66번길 12 유송빌딩 1층<br><span class="addr-en">12 Bujeon-ro 66beon-gil, Busanjin-gu, Busan (Yusong Bldg 1F)</span></div>
+                <div class="btn-group">
+                    <div class="btn-cell"><a href="https://www.google.com/maps/search/?api=1&amp;query=12%20Bujeon-ro%2066beon-gil%2C%20Busanjin-gu%2C%20Busan" target="_blank" rel="noopener" class="nav-btn btn-google">Google Map</a></div>
+                    <div class="btn-cell"><a href="https://map.naver.com/p/search/%EC%97%90%EA%B7%B8%EB%93%9C%EB%9E%8D%20%EC%84%9C%EB%A9%B4%EB%A1%AF%EB%8D%B0%ED%9B%84%EB%AC%B8%EC%A0%90" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
+                </div>
+                <div class="spot-label">② Isaac 吐司 西面店（이삭토스트 서면점）</div>
+                <div class="addr">📍 부산 부산진구 서전로10번길 61 쥬디스태화신관 1층<br><span class="addr-en">61 Seojeon-ro 10beon-gil, Busanjin-gu, Busan (Judith Taehwa Bldg 1F)</span></div>
+                <div class="btn-group">
+                    <div class="btn-cell"><a href="https://www.google.com/maps/search/?api=1&amp;query=61%20Seojeon-ro%2010beon-gil%2C%20Busanjin-gu%2C%20Busan" target="_blank" rel="noopener" class="nav-btn btn-google">Google Map</a></div>
+                    <div class="btn-cell"><a href="https://map.naver.com/p/search/%EC%9D%B4%EC%82%AD%ED%86%A0%EC%8A%A4%ED%8A%B8%20%EB%B6%80%EC%82%B0%EC%84%9C%EB%A9%B4%EC%A0%90" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="time-tag">09:00 - 12:15</div>
+                <div class="spot-name">✈️ 前往金海機場 ＆ 辦理退稅登機</div>
+                <div class="spot-desc">抵達機場，完成自助退稅與託運，帶著滿滿戰利品搭機回台。抵達出境大廳一樓先用機台掃描退稅單與護照，安檢入關後，在 4 號登機門（Gate 4）對面櫃檯領取退稅現金。</div>
+                <div class="info-list">
+                    <div class="info-row"><span class="info-k">🕐 時間</span><span class="info-v">09:00 出發 ➔ 09:45 抵達機場 ➔ 12:15 班機起飛</span></div>
+                    <div class="info-row"><span class="info-k">🚇 交通</span><span class="info-v">搭地鐵 2 號線至「沙上站」轉輕軌直達金海機場。</span></div>
+                </div>
+                <div class="addr">📍 부산 강서구 공항진입로 108<br><span class="addr-en">108 Gonghangjinip-ro, Gangseo-gu, Busan</span></div>
+                <div class="btn-group">
+                    <div class="btn-cell"><a href="https://www.google.com/maps/search/?api=1&amp;query=Gimhae%20International%20Airport%2C%20108%20Gonghangjinip-ro%2C%20Gangseo-gu%2C%20Busan" target="_blank" rel="noopener" class="nav-btn btn-google">Google Map</a></div>
+                    <div class="btn-cell"><a href="https://map.naver.com/p/search/%EA%B9%80%ED%95%B4%EA%B5%AD%EC%A0%9C%EA%B3%B5%ED%95%AD" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        © 2026 釜山樂園 × 美食特化小組 ── 祝您旅行順利、戰利品滿載！
+    </div>
+</div>
+
+<script>
+    function toggleDay(dayId) {
+        var element = document.getElementById(dayId);
+        if (element.classList.contains('collapsed')) {
+            element.classList.remove('collapsed');
+        } else {
+            element.classList.add('collapsed');
+        }
+    }
+</script>
+
+</body>
+</html>
