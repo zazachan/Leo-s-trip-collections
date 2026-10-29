@@ -372,6 +372,20 @@
             word-break: break-word;
         }
         .addr-en { color: #a3968e; font-size: 12px; }
+        .toggle-bar { display: flex; gap: 8px; margin: 0 0 18px; }
+        .toggle-btn {
+            flex: 1;
+            font: inherit;
+            font-size: 14px;
+            padding: 8px 6px;
+            color: #8c7b70;
+            background: #ffffff;
+            border: 1.5px solid #c2b8b2;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background-color 0.18s ease;
+        }
+        .toggle-btn:hover { background-color: #f0ece8; }
         .checklist {
             background: #fbf6f1;
             border: 1px solid #ecdccf;
@@ -455,7 +469,12 @@
         </div>
     </div>
 
-    <div class="day-section day1" id="day1">
+    <div class="toggle-bar">
+        <button type="button" class="toggle-btn" onclick="toggleAll(false)">👁️ 全部展開</button>
+        <button type="button" class="toggle-btn" onclick="toggleAll(true)">🕒 全部收合</button>
+    </div>
+
+    <div class="day-section day1 collapsed" id="day1">
         <div class="day-title day1-bg" onclick="toggleDay('day1')">📌 DAY 1：11/4 (三) 降落釜山・西面美食前哨戰【金海機場、西面】</div>
         <div class="timeline">
             <div class="timeline-item">
@@ -471,13 +490,13 @@
                 <div class="addr">📍 부산 강서구 공항진입로 108<br><span class="addr-en">108 Gonghangjinip-ro, Gangseo-gu, Busan</span></div>
                 <div class="btn-group">
                     <div class="btn-cell"><a href="https://www.google.com/maps/search/?api=1&amp;query=Gimhae%20International%20Airport%2C%20108%20Gonghangjinip-ro%2C%20Gangseo-gu%2C%20Busan" target="_blank" rel="noopener" class="nav-btn btn-google">Google Map</a></div>
-                    <div class="btn-cell"><a href="https://map.naver.com/p/search/%EA%B9%80%ED%95%B4%EA%B5%AD%EC%A0%9C%EA%B3%B5%ED%95%AD" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
+                    <div class="btn-cell"><a href="https://map.naver.com/v5/search/%EA%B0%95%EC%84%9C%EA%B5%AC+%EA%B3%B5%ED%95%AD%EC%A7%84%EC%9E%85%EB%A1%9C+108" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
                 </div>
                 <div class="spot-label">🏨 西面站（住宿建議區域，飯店確定後請補上地址）</div>
                 <div class="addr">📍 부산 부산진구 서면역 (지하철 1·2호선)<br><span class="addr-en">Seomyeon Station (Line 1 / Line 2), Busanjin-gu, Busan</span></div>
                 <div class="btn-group">
                     <div class="btn-cell"><a href="https://www.google.com/maps/search/?api=1&amp;query=Seomyeon%20Station%2C%20Busanjin-gu%2C%20Busan" target="_blank" rel="noopener" class="nav-btn btn-google">Google Map</a></div>
-                    <div class="btn-cell"><a href="https://map.naver.com/p/search/%EC%84%9C%EB%A9%B4%EC%97%AD" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
+                    <div class="btn-cell"><a href="https://map.naver.com/v5/search/%EC%84%9C%EB%A9%B4%EC%97%AD" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
                 </div>
             </div>
             <div class="timeline-item">
@@ -494,24 +513,24 @@
                 <div class="addr">📍 부산 부산진구 중앙대로691번가길 24-3<br><span class="addr-en">24-3 Jungang-daero 691beonga-gil, Busanjin-gu, Busan</span></div>
                 <div class="btn-group">
                     <div class="btn-cell"><a href="https://www.google.com/maps/search/?api=1&amp;query=%EB%B6%80%EC%82%B0%20%EB%B6%80%EC%82%B0%EC%A7%84%EA%B5%AC%20%EC%A4%91%EC%95%99%EB%8C%80%EB%A1%9C691%EB%B2%88%EA%B0%80%EA%B8%B8%2024-3" target="_blank" rel="noopener" class="nav-btn btn-google">Google Map</a></div>
-                    <div class="btn-cell"><a href="https://map.naver.com/p/search/%EB%A7%9B%EC%B0%AC%EB%93%A4%20%EC%99%95%EC%86%8C%EA%B8%88%EA%B5%AC%EC%9D%B4%20%EC%84%9C%EB%A9%B4" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
+                    <div class="btn-cell"><a href="https://map.naver.com/v5/search/%EB%B6%80%EC%82%B0%EC%A7%84%EA%B5%AC+%EC%A4%91%EC%95%99%EB%8C%80%EB%A1%9C691%EB%B2%88%EA%B0%80%EA%B8%B8+24-3" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
                 </div>
                 <div class="spot-label">② 螞蟻家（개미집 서면점）</div>
                 <div class="addr">📍 부산 부산진구 신천대로62번길 73<br><span class="addr-en">73 Sincheon-daero 62beon-gil, Busanjin-gu, Busan</span></div>
                 <div class="btn-group">
                     <div class="btn-cell"><a href="https://www.google.com/maps/search/?api=1&amp;query=%EB%B6%80%EC%82%B0%20%EB%B6%80%EC%82%B0%EC%A7%84%EA%B5%AC%20%EC%8B%A0%EC%B2%9C%EB%8C%80%EB%A1%9C62%EB%B2%88%EA%B8%B8%2073" target="_blank" rel="noopener" class="nav-btn btn-google">Google Map</a></div>
-                    <div class="btn-cell"><a href="https://map.naver.com/p/search/%EA%B0%9C%EB%AF%B8%EC%A7%91%20%EC%84%9C%EB%A9%B4" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
+                    <div class="btn-cell"><a href="https://map.naver.com/v5/search/%EB%B6%80%EC%82%B0%EC%A7%84%EA%B5%AC+%EC%8B%A0%EC%B2%9C%EB%8C%80%EB%A1%9C62%EB%B2%88%EA%B8%B8+73" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
                 </div>
                 <div class="spot-label">③ 松亭三代豬肉湯飯（송정3대국밥 서면）</div>
                 <div class="addr">📍 부산 부산진구 서면로68번길 33<br><span class="addr-en">33 Seomyeon-ro 68beon-gil, Busanjin-gu, Busan</span></div>
                 <div class="btn-group">
                     <div class="btn-cell"><a href="https://www.google.com/maps/search/?api=1&amp;query=%EB%B6%80%EC%82%B0%20%EB%B6%80%EC%82%B0%EC%A7%84%EA%B5%AC%20%EC%84%9C%EB%A9%B4%EB%A1%9C68%EB%B2%88%EA%B8%B8%2033" target="_blank" rel="noopener" class="nav-btn btn-google">Google Map</a></div>
-                    <div class="btn-cell"><a href="https://map.naver.com/p/search/%EC%86%A1%EC%A0%953%EB%8C%80%EA%B5%AD%EB%B0%A5%20%EC%84%9C%EB%A9%B4" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
+                    <div class="btn-cell"><a href="https://map.naver.com/v5/search/%EB%B6%80%EC%82%B0%EC%A7%84%EA%B5%AC+%EC%84%9C%EB%A9%B4%EB%A1%9C68%EB%B2%88%EA%B8%B8+33" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="day-section day2" id="day2">
+    <div class="day-section day2 collapsed" id="day2">
         <div class="day-title day2-bg" onclick="toggleDay('day2')">📌 DAY 2：11/5 (四) VBP 48hr 開通・海景 SPA 與西面動漫血拚【海雲台、西面】</div>
         <div class="timeline">
             <div class="timeline-item">
@@ -527,19 +546,19 @@
                 <div class="addr">📍 부산 해운대구 달맞이길62번길 13<br><span class="addr-en">13 Dalmaji-gil 62beon-gil, Haeundae-gu, Busan</span></div>
                 <div class="btn-group">
                     <div class="btn-cell"><a href="https://www.google.com/maps/search/?api=1&amp;query=%EB%B6%80%EC%82%B0%20%ED%95%B4%EC%9A%B4%EB%8C%80%EA%B5%AC%20%EB%8B%AC%EB%A7%9E%EC%9D%B4%EA%B8%B862%EB%B2%88%EA%B8%B8%2013" target="_blank" rel="noopener" class="nav-btn btn-google">Google Map</a></div>
-                    <div class="btn-cell"><a href="https://map.naver.com/p/search/%EB%B8%94%EB%A3%A8%EB%9D%BC%EC%9D%B8%ED%8C%8C%ED%81%AC%20%EB%AF%B8%ED%8F%AC%EC%A0%95%EA%B1%B0%EC%9E%A5" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
+                    <div class="btn-cell"><a href="https://map.naver.com/v5/search/%ED%95%B4%EC%9A%B4%EB%8C%80%EA%B5%AC+%EB%8B%AC%EB%A7%9E%EC%9D%B4%EA%B8%B862%EB%B2%88%EA%B8%B8+13" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
                 </div>
                 <div class="spot-label">② 青沙浦站（抵達・灌籃高手平交道）</div>
                 <div class="addr">📍 부산 해운대구 청사포로 116<br><span class="addr-en">116 Cheongsapo-ro, Haeundae-gu, Busan</span></div>
                 <div class="btn-group">
                     <div class="btn-cell"><a href="https://www.google.com/maps/search/?api=1&amp;query=%EB%B6%80%EC%82%B0%20%ED%95%B4%EC%9A%B4%EB%8C%80%EA%B5%AC%20%EC%B2%AD%EC%82%AC%ED%8F%AC%EB%A1%9C%20116" target="_blank" rel="noopener" class="nav-btn btn-google">Google Map</a></div>
-                    <div class="btn-cell"><a href="https://map.naver.com/p/search/%EC%B2%AD%EC%82%AC%ED%8F%AC%20%EC%A0%95%EA%B1%B0%EC%9E%A5" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
+                    <div class="btn-cell"><a href="https://map.naver.com/v5/search/%ED%95%B4%EC%9A%B4%EB%8C%80%EA%B5%AC+%EC%B2%AD%EC%82%AC%ED%8F%AC%EB%A1%9C+116" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
                 </div>
                 <div class="spot-label">③ 青沙浦墊腳石展望台（다릿돌전망대）</div>
                 <div class="addr">📍 부산 해운대구 청사포로 167<br><span class="addr-en">167 Cheongsapo-ro, Haeundae-gu, Busan</span></div>
                 <div class="btn-group">
                     <div class="btn-cell"><a href="https://www.google.com/maps/search/?api=1&amp;query=%EB%B6%80%EC%82%B0%20%ED%95%B4%EC%9A%B4%EB%8C%80%EA%B5%AC%20%EC%B2%AD%EC%82%AC%ED%8F%AC%EB%A1%9C%20167" target="_blank" rel="noopener" class="nav-btn btn-google">Google Map</a></div>
-                    <div class="btn-cell"><a href="https://map.naver.com/p/search/%EC%B2%AD%EC%82%AC%ED%8F%AC%20%EB%8B%A4%EB%A6%BF%EB%8F%8C%EC%A0%84%EB%A7%9D%EB%8C%80" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
+                    <div class="btn-cell"><a href="https://map.naver.com/v5/search/%ED%95%B4%EC%9A%B4%EB%8C%80%EA%B5%AC+%EC%B2%AD%EC%82%AC%ED%8F%AC%EB%A1%9C+167" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
                 </div>
             </div>
             <div class="timeline-item">
@@ -555,7 +574,7 @@
                 <div class="addr">📍 부산 해운대구 청사포로 116<br><span class="addr-en">116 Cheongsapo-ro, Haeundae-gu, Busan</span></div>
                 <div class="btn-group">
                     <div class="btn-cell"><a href="https://www.google.com/maps/search/?api=1&amp;query=%EB%B6%80%EC%82%B0%20%ED%95%B4%EC%9A%B4%EB%8C%80%EA%B5%AC%20%EC%B2%AD%EC%82%AC%ED%8F%AC%EB%A1%9C%20116" target="_blank" rel="noopener" class="nav-btn btn-google">Google Map</a></div>
-                    <div class="btn-cell"><a href="https://map.naver.com/p/search/%EC%B2%AD%EC%82%AC%ED%8F%AC%20%EC%A0%95%EA%B1%B0%EC%9E%A5" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
+                    <div class="btn-cell"><a href="https://map.naver.com/v5/search/%ED%95%B4%EC%9A%B4%EB%8C%80%EA%B5%AC+%EC%B2%AD%EC%82%AC%ED%8F%AC%EB%A1%9C+116" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
                 </div>
             </div>
             <div class="timeline-item">
@@ -571,13 +590,13 @@
                 <div class="addr">📍 부산 해운대구 구남로24번길 8<br><span class="addr-en">8 Gunam-ro 24beon-gil, Haeundae-gu, Busan</span></div>
                 <div class="btn-group">
                     <div class="btn-cell"><a href="https://www.google.com/maps/search/?api=1&amp;query=%EB%B6%80%EC%82%B0%20%ED%95%B4%EC%9A%B4%EB%8C%80%EA%B5%AC%20%EA%B5%AC%EB%82%A8%EB%A1%9C24%EB%B2%88%EA%B8%B8%208" target="_blank" rel="noopener" class="nav-btn btn-google">Google Map</a></div>
-                    <div class="btn-cell"><a href="https://map.naver.com/p/search/%ED%95%B4%EB%AA%A9%20%ED%95%B4%EC%9A%B4%EB%8C%80" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
+                    <div class="btn-cell"><a href="https://map.naver.com/v5/search/%ED%95%B4%EC%9A%B4%EB%8C%80%EA%B5%AC+%EA%B5%AC%EB%82%A8%EB%A1%9C24%EB%B2%88%EA%B8%B8+8" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
                 </div>
                 <div class="spot-label">② 海雲台傳統市場（해운대시장）</div>
                 <div class="addr">📍 부산 해운대구 구남로41번길 22-1<br><span class="addr-en">22-1 Gunam-ro 41beon-gil, Haeundae-gu, Busan</span></div>
                 <div class="btn-group">
                     <div class="btn-cell"><a href="https://www.google.com/maps/search/?api=1&amp;query=%EB%B6%80%EC%82%B0%20%ED%95%B4%EC%9A%B4%EB%8C%80%EA%B5%AC%20%EA%B5%AC%EB%82%A8%EB%A1%9C41%EB%B2%88%EA%B8%B8%2022-1" target="_blank" rel="noopener" class="nav-btn btn-google">Google Map</a></div>
-                    <div class="btn-cell"><a href="https://map.naver.com/p/search/%ED%95%B4%EC%9A%B4%EB%8C%80%EC%8B%9C%EC%9E%A5" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
+                    <div class="btn-cell"><a href="https://map.naver.com/v5/search/%ED%95%B4%EC%9A%B4%EB%8C%80%EA%B5%AC+%EA%B5%AC%EB%82%A8%EB%A1%9C41%EB%B2%88%EA%B8%B8+22-1" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
                 </div>
             </div>
             <div class="timeline-item">
@@ -593,7 +612,7 @@
                 <div class="addr">📍 부산 해운대구 달맞이길 30 LCT<br><span class="addr-en">30 Dalmaji-gil, Haeundae-gu, Busan (LCT Bldg 3-6F)</span></div>
                 <div class="btn-group">
                     <div class="btn-cell"><a href="https://www.google.com/maps/search/?api=1&amp;query=Club%20D%20Oasis%2C%2030%20Dalmaji-gil%2C%20Haeundae-gu%2C%20Busan" target="_blank" rel="noopener" class="nav-btn btn-google">Google Map</a></div>
-                    <div class="btn-cell"><a href="https://map.naver.com/p/search/%ED%81%B4%EB%9F%BD%EB%94%94%EC%98%A4%EC%95%84%EC%8B%9C%EC%8A%A4%20%ED%95%B4%EC%9A%B4%EB%8C%80" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
+                    <div class="btn-cell"><a href="https://map.naver.com/v5/search/%ED%95%B4%EC%9A%B4%EB%8C%80%EA%B5%AC+%EB%8B%AC%EB%A7%9E%EC%9D%B4%EA%B8%B8+30" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
                 </div>
             </div>
             <div class="timeline-item">
@@ -609,7 +628,7 @@
                 <div class="addr">📍 부산 해운대구 해운대해변로 84 (수영만요트경기장)<br><span class="addr-en">84 Haeundaehaebyeon-ro, Haeundae-gu, Busan (Suyeongman Bay Yachting Center)</span></div>
                 <div class="btn-group">
                     <div class="btn-cell"><a href="https://www.google.com/maps/search/?api=1&amp;query=Suyeongman%20Bay%20Yachting%20Center%2C%2084%20Haeundaehaebyeon-ro%2C%20Haeundae-gu%2C%20Busan" target="_blank" rel="noopener" class="nav-btn btn-google">Google Map</a></div>
-                    <div class="btn-cell"><a href="https://map.naver.com/p/search/%EC%88%98%EC%98%81%EB%A7%8C%EC%9A%94%ED%8A%B8%EA%B2%BD%EA%B8%B0%EC%9E%A5" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
+                    <div class="btn-cell"><a href="https://map.naver.com/v5/search/%ED%95%B4%EC%9A%B4%EB%8C%80%EA%B5%AC+%ED%95%B4%EC%9A%B4%EB%8C%80%ED%95%B4%EB%B3%80%EB%A1%9C+84" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
                 </div>
             </div>
             <div class="timeline-item">
@@ -625,13 +644,13 @@
                 <div class="addr">📍 부산 부산진구 중앙대로 672<br><span class="addr-en">672 Jungang-daero, Busanjin-gu, Busan</span></div>
                 <div class="btn-group">
                     <div class="btn-cell"><a href="https://www.google.com/maps/search/?api=1&amp;query=%EB%B6%80%EC%82%B0%20%EB%B6%80%EC%82%B0%EC%A7%84%EA%B5%AC%20%EC%A4%91%EC%95%99%EB%8C%80%EB%A1%9C%20672" target="_blank" rel="noopener" class="nav-btn btn-google">Google Map</a></div>
-                    <div class="btn-cell"><a href="https://map.naver.com/p/search/%EC%82%BC%EC%A0%95%ED%83%80%EC%9B%8C%20%EC%84%9C%EB%A9%B4" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
+                    <div class="btn-cell"><a href="https://map.naver.com/v5/search/%EB%B6%80%EC%82%B0%EC%A7%84%EA%B5%AC+%EC%A4%91%EC%95%99%EB%8C%80%EB%A1%9C+672" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
                 </div>
                 <div class="spot-label">② SPAO 西面中央店（스파오 서면중앙점）</div>
                 <div class="addr">📍 부산 부산진구 중앙대로692번길 38<br><span class="addr-en">38 Jungang-daero 692beon-gil, Busanjin-gu, Busan</span></div>
                 <div class="btn-group">
                     <div class="btn-cell"><a href="https://www.google.com/maps/search/?api=1&amp;query=%EB%B6%80%EC%82%B0%20%EB%B6%80%EC%82%B0%EC%A7%84%EA%B5%AC%20%EC%A4%91%EC%95%99%EB%8C%80%EB%A1%9C692%EB%B2%88%EA%B8%B8%2038" target="_blank" rel="noopener" class="nav-btn btn-google">Google Map</a></div>
-                    <div class="btn-cell"><a href="https://map.naver.com/p/search/%EC%8A%A4%ED%8C%8C%EC%98%A4%20%EC%84%9C%EB%A9%B4%EC%A4%91%EC%95%99%EC%A0%90" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
+                    <div class="btn-cell"><a href="https://map.naver.com/v5/search/%EB%B6%80%EC%82%B0%EC%A7%84%EA%B5%AC+%EC%A4%91%EC%95%99%EB%8C%80%EB%A1%9C692%EB%B2%88%EA%B8%B8+38" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
                 </div>
             </div>
             <div class="timeline-item">
@@ -648,18 +667,18 @@
                 <div class="addr">📍 부산 부산진구 부전로 64<br><span class="addr-en">64 Bujeon-ro, Busanjin-gu, Busan</span></div>
                 <div class="btn-group">
                     <div class="btn-cell"><a href="https://www.google.com/maps/search/?api=1&amp;query=Gojip%20Seomyeon%20Head%20Store%2C%2064%20Bujeon-ro%2C%20Busanjin-gu%2C%20Busan" target="_blank" rel="noopener" class="nav-btn btn-google">Google Map</a></div>
-                    <div class="btn-cell"><a href="https://map.naver.com/p/search/%EB%B6%80%EC%82%B0%20%EB%B6%80%EC%82%B0%EC%A7%84%EA%B5%AC%20%EB%B6%80%EC%A0%84%EB%A1%9C%2064" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
+                    <div class="btn-cell"><a href="https://map.naver.com/v5/search/%EB%B6%80%EC%82%B0%EC%A7%84%EA%B5%AC+%EB%B6%80%EC%A0%84%EB%A1%9C+64" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
                 </div>
                 <div class="spot-label">② Gop 西面（서면 곱）</div>
                 <div class="addr">📍 부산 부산진구 가야대로784번길 7<br><span class="addr-en">7 Gaya-daero 784beon-gil, Busanjin-gu, Busan</span></div>
                 <div class="btn-group">
                     <div class="btn-cell"><a href="https://www.google.com/maps/search/?api=1&amp;query=%EB%B6%80%EC%82%B0%20%EB%B6%80%EC%82%B0%EC%A7%84%EA%B5%AC%20%EA%B0%80%EC%95%BC%EB%8C%80%EB%A1%9C784%EB%B2%88%EA%B8%B8%207" target="_blank" rel="noopener" class="nav-btn btn-google">Google Map</a></div>
-                    <div class="btn-cell"><a href="https://map.naver.com/p/search/%EC%84%9C%EB%A9%B4%20%EA%B3%B1" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
+                    <div class="btn-cell"><a href="https://map.naver.com/v5/search/%EB%B6%80%EC%82%B0%EC%A7%84%EA%B5%AC+%EA%B0%80%EC%95%BC%EB%8C%80%EB%A1%9C784%EB%B2%88%EA%B8%B8+7" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="day-section day3" id="day3">
+    <div class="day-section day3 collapsed" id="day3">
         <div class="day-title day3-bg" onclick="toggleDay('day3')">📌 DAY 3：11/6 (五) 東釜山楓之谷樂園・五星汗蒸幕【機張、Centum City】</div>
         <div class="timeline">
             <div class="timeline-item">
@@ -674,7 +693,7 @@
                 <div class="addr">📍 부산 기장군 기장읍 기장해안로 205<br><span class="addr-en">205 Gijanghaean-ro, Gijang-gun, Busan</span></div>
                 <div class="btn-group">
                     <div class="btn-cell"><a href="https://www.google.com/maps/search/?api=1&amp;query=%EB%B6%80%EC%82%B0%20%EA%B8%B0%EC%9E%A5%EA%B5%B0%20%EA%B8%B0%EC%9E%A5%EC%9D%8D%20%EA%B8%B0%EC%9E%A5%ED%95%B4%EC%95%88%EB%A1%9C%20205" target="_blank" rel="noopener" class="nav-btn btn-google">Google Map</a></div>
-                    <div class="btn-cell"><a href="https://map.naver.com/p/search/%EC%8A%A4%EC%B9%B4%EC%9D%B4%EB%9D%BC%EC%9D%B8%20%EB%A3%A8%EC%A7%80%20%EB%B6%80%EC%82%B0" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
+                    <div class="btn-cell"><a href="https://map.naver.com/v5/search/%EA%B8%B0%EC%9E%A5%EA%B5%B0+%EA%B8%B0%EC%9E%A5%EC%9D%8D+%EA%B8%B0%EC%9E%A5%ED%95%B4%EC%95%88%EB%A1%9C+205" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
                 </div>
             </div>
             <div class="timeline-item">
@@ -689,7 +708,7 @@
                 <div class="addr">📍 부산 기장군 기장읍 동부산관광로 42<br><span class="addr-en">42 Dongbusangwangwang-ro, Gijang-gun, Busan</span></div>
                 <div class="btn-group">
                     <div class="btn-cell"><a href="https://www.google.com/maps/search/?api=1&amp;query=%EB%B6%80%EC%82%B0%20%EA%B8%B0%EC%9E%A5%EA%B5%B0%20%EA%B8%B0%EC%9E%A5%EC%9D%8D%20%EB%8F%99%EB%B6%80%EC%82%B0%EA%B4%80%EA%B4%91%EB%A1%9C%2042" target="_blank" rel="noopener" class="nav-btn btn-google">Google Map</a></div>
-                    <div class="btn-cell"><a href="https://map.naver.com/p/search/%EB%A1%AF%EB%8D%B0%EC%9B%94%EB%93%9C%20%EC%96%B4%EB%93%9C%EB%B2%A4%EC%B2%98%20%EB%B6%80%EC%82%B0" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
+                    <div class="btn-cell"><a href="https://map.naver.com/v5/search/%EA%B8%B0%EC%9E%A5%EA%B5%B0+%EA%B8%B0%EC%9E%A5%EC%9D%8D+%EB%8F%99%EB%B6%80%EC%82%B0%EA%B4%80%EA%B4%91%EB%A1%9C+42" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
                 </div>
             </div>
             <div class="timeline-item">
@@ -706,19 +725,19 @@
                 <div class="addr">📍 부산 기장군 기장읍 동부산관광로 8<br><span class="addr-en">8 Dongbusangwangwang-ro, Gijang-gun, Busan</span></div>
                 <div class="btn-group">
                     <div class="btn-cell"><a href="https://www.google.com/maps/search/?api=1&amp;query=%EB%B6%80%EC%82%B0%20%EA%B8%B0%EC%9E%A5%EA%B5%B0%20%EA%B8%B0%EC%9E%A5%EC%9D%8D%20%EB%8F%99%EB%B6%80%EC%82%B0%EA%B4%80%EA%B4%91%EB%A1%9C%208" target="_blank" rel="noopener" class="nav-btn btn-google">Google Map</a></div>
-                    <div class="btn-cell"><a href="https://map.naver.com/p/search/%EB%A1%AF%EB%8D%B0%EB%AA%B0%20%EB%8F%99%EB%B6%80%EC%82%B0%EC%A0%90" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
+                    <div class="btn-cell"><a href="https://map.naver.com/v5/search/%EA%B8%B0%EC%9E%A5%EA%B5%B0+%EA%B8%B0%EC%9E%A5%EC%9D%8D+%EB%8F%99%EB%B6%80%EC%82%B0%EA%B4%80%EA%B4%91%EB%A1%9C+8" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
                 </div>
                 <div class="spot-label">🍽️ 晚餐 ① 樂天 Outlet 東釜山店美食街</div>
                 <div class="addr">📍 부산 기장군 기장읍 기장해안로 147<br><span class="addr-en">147 Gijanghaean-ro, Gijang-gun, Busan</span></div>
                 <div class="btn-group">
                     <div class="btn-cell"><a href="https://www.google.com/maps/search/?api=1&amp;query=%EB%B6%80%EC%82%B0%20%EA%B8%B0%EC%9E%A5%EA%B5%B0%20%EA%B8%B0%EC%9E%A5%EC%9D%8D%20%EA%B8%B0%EC%9E%A5%ED%95%B4%EC%95%88%EB%A1%9C%20147" target="_blank" rel="noopener" class="nav-btn btn-google">Google Map</a></div>
-                    <div class="btn-cell"><a href="https://map.naver.com/p/search/%EB%A1%AF%EB%8D%B0%ED%94%84%EB%A6%AC%EB%AF%B8%EC%97%84%EC%95%84%EC%9A%B8%EB%A0%9B%20%EB%8F%99%EB%B6%80%EC%82%B0%EC%A0%90" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
+                    <div class="btn-cell"><a href="https://map.naver.com/v5/search/%EA%B8%B0%EC%9E%A5%EA%B5%B0+%EA%B8%B0%EC%9E%A5%EC%9D%8D+%EA%B8%B0%EC%9E%A5%ED%95%B4%EC%95%88%EB%A1%9C+147" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
                 </div>
                 <div class="spot-label">🦀 晚餐 ② 機張市場（松葉蟹）</div>
                 <div class="addr">📍 부산 기장군 기장읍 읍내로104번길 16<br><span class="addr-en">16 Eupnae-ro 104beon-gil, Gijang-eup, Gijang-gun, Busan</span></div>
                 <div class="btn-group">
                     <div class="btn-cell"><a href="https://www.google.com/maps/search/?api=1&amp;query=%EB%B6%80%EC%82%B0%20%EA%B8%B0%EC%9E%A5%EA%B5%B0%20%EA%B8%B0%EC%9E%A5%EC%9D%8D%20%EC%9D%8D%EB%82%B4%EB%A1%9C104%EB%B2%88%EA%B8%B8%2016" target="_blank" rel="noopener" class="nav-btn btn-google">Google Map</a></div>
-                    <div class="btn-cell"><a href="https://map.naver.com/p/search/%EA%B8%B0%EC%9E%A5%EC%8B%9C%EC%9E%A5" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
+                    <div class="btn-cell"><a href="https://map.naver.com/v5/search/%EA%B8%B0%EC%9E%A5%EA%B5%B0+%EA%B8%B0%EC%9E%A5%EC%9D%8D+%EC%9D%8D%EB%82%B4%EB%A1%9C104%EB%B2%88%EA%B8%B8+16" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
                 </div>
             </div>
             <div class="timeline-item">
@@ -733,12 +752,12 @@
                 <div class="addr">📍 부산 해운대구 센텀남대로 35 (신세계 센텀시티)<br><span class="addr-en">35 Centum nam-daero, Haeundae-gu, Busan (Shinsegae Centum City)</span></div>
                 <div class="btn-group">
                     <div class="btn-cell"><a href="https://www.google.com/maps/search/?api=1&amp;query=Shinsegae%20Centum%20City%2C%2035%20Centum%20nam-daero%2C%20Haeundae-gu%2C%20Busan" target="_blank" rel="noopener" class="nav-btn btn-google">Google Map</a></div>
-                    <div class="btn-cell"><a href="https://map.naver.com/p/search/%EC%8B%A0%EC%84%B8%EA%B3%84%20%EC%84%BC%ED%85%80%EC%8B%9C%ED%8B%B0%20%EC%8A%A4%ED%8C%8C%EB%9E%9C%EB%93%9C" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
+                    <div class="btn-cell"><a href="https://map.naver.com/v5/search/%ED%95%B4%EC%9A%B4%EB%8C%80%EA%B5%AC+%EC%84%BC%ED%85%80%EB%82%A8%EB%8C%80%EB%A1%9C+35" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="day-section day4" id="day4">
+    <div class="day-section day4 collapsed" id="day4">
         <div class="day-title day4-bg" onclick="toggleDay('day4')">📌 DAY 4：11/7 (六) 極限壓線・米飛兔・釜山國際煙火節【松島、影島、廣安里】</div>
         <div class="timeline">
             <div class="timeline-item">
@@ -754,7 +773,7 @@
                 <div class="addr">📍 부산 서구 송도해변로 171<br><span class="addr-en">171 Songdohaebyeon-ro, Seo-gu, Busan</span></div>
                 <div class="btn-group">
                     <div class="btn-cell"><a href="https://www.google.com/maps/search/?api=1&amp;query=%EB%B6%80%EC%82%B0%20%EC%84%9C%EA%B5%AC%20%EC%86%A1%EB%8F%84%ED%95%B4%EB%B3%80%EB%A1%9C%20171" target="_blank" rel="noopener" class="nav-btn btn-google">Google Map</a></div>
-                    <div class="btn-cell"><a href="https://map.naver.com/p/search/%EC%86%A1%EB%8F%84%ED%95%B4%EC%83%81%EC%BC%80%EC%9D%B4%EB%B8%94%EC%B9%B4%20%EC%86%A1%EB%8F%84%EB%B2%A0%EC%9D%B4%EC%8A%A4%ED%85%8C%EC%9D%B4%EC%85%98" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
+                    <div class="btn-cell"><a href="https://map.naver.com/v5/search/%EC%84%9C%EA%B5%AC+%EC%86%A1%EB%8F%84%ED%95%B4%EB%B3%80%EB%A1%9C+171" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
                 </div>
             </div>
             <div class="timeline-item">
@@ -770,7 +789,7 @@
                 <div class="addr">📍 부산 영도구 해양로247번길 29<br><span class="addr-en">29 Haeyang-ro 247beon-gil, Yeongdo-gu, Busan</span></div>
                 <div class="btn-group">
                     <div class="btn-cell"><a href="https://www.google.com/maps/search/?api=1&amp;query=%EB%B6%80%EC%82%B0%20%EC%98%81%EB%8F%84%EA%B5%AC%20%ED%95%B4%EC%96%91%EB%A1%9C247%EB%B2%88%EA%B8%B8%2029" target="_blank" rel="noopener" class="nav-btn btn-google">Google Map</a></div>
-                    <div class="btn-cell"><a href="https://map.naver.com/p/search/%EC%95%84%EB%A5%B4%EB%96%BC%EB%AE%A4%EC%A7%80%EC%97%84%20%EB%B6%80%EC%82%B0" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
+                    <div class="btn-cell"><a href="https://map.naver.com/v5/search/%EC%98%81%EB%8F%84%EA%B5%AC+%ED%95%B4%EC%96%91%EB%A1%9C247%EB%B2%88%EA%B8%B8+29" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
                 </div>
             </div>
             <div class="timeline-item">
@@ -786,19 +805,19 @@
                 <div class="addr">📍 부산 중구 자갈치해안로 52<br><span class="addr-en">52 Jagalchihaean-ro, Jung-gu, Busan</span></div>
                 <div class="btn-group">
                     <div class="btn-cell"><a href="https://www.google.com/maps/search/?api=1&amp;query=%EB%B6%80%EC%82%B0%20%EC%A4%91%EA%B5%AC%20%EC%9E%90%EA%B0%88%EC%B9%98%ED%95%B4%EC%95%88%EB%A1%9C%2052" target="_blank" rel="noopener" class="nav-btn btn-google">Google Map</a></div>
-                    <div class="btn-cell"><a href="https://map.naver.com/p/search/%EC%9E%90%EA%B0%88%EC%B9%98%EC%8B%9C%EC%9E%A5" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
+                    <div class="btn-cell"><a href="https://map.naver.com/v5/search/%EC%A4%91%EA%B5%AC+%EC%9E%90%EA%B0%88%EC%B9%98%ED%95%B4%EC%95%88%EB%A1%9C+52" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
                 </div>
                 <div class="spot-label">② 南浦洞 BIFF 廣場（逛街・LINE FRIENDS 一帶）</div>
                 <div class="addr">📍 부산 중구 남포동 BIFF광장 일대<br><span class="addr-en">BIFF Square, Nampo-dong, Jung-gu, Busan</span></div>
                 <div class="btn-group">
                     <div class="btn-cell"><a href="https://www.google.com/maps/search/?api=1&amp;query=BIFF%20Square%2C%20Nampo-dong%2C%20Jung-gu%2C%20Busan" target="_blank" rel="noopener" class="nav-btn btn-google">Google Map</a></div>
-                    <div class="btn-cell"><a href="https://map.naver.com/p/search/BIFF%EA%B4%91%EC%9E%A5" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
+                    <div class="btn-cell"><a href="https://map.naver.com/v5/search/BIFF%EA%B4%91%EC%9E%A5" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
                 </div>
                 <div class="spot-label">③ Cafe Miffy 釜山（미피카페・影島）</div>
                 <div class="addr">📍 부산 영도구 와치로51번길 2<br><span class="addr-en">2 Wachi-ro 51beon-gil, Yeongdo-gu, Busan</span></div>
                 <div class="btn-group">
                     <div class="btn-cell"><a href="https://www.google.com/maps/search/?api=1&amp;query=2%20Wachi-ro%2051beon-gil%2C%20Yeongdo-gu%2C%20Busan" target="_blank" rel="noopener" class="nav-btn btn-google">Google Map</a></div>
-                    <div class="btn-cell"><a href="https://map.naver.com/p/search/%EB%B6%80%EC%82%B0%20%EC%98%81%EB%8F%84%EA%B5%AC%20%EC%99%80%EC%B9%98%EB%A1%9C51%EB%B2%88%EA%B8%B8%202" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
+                    <div class="btn-cell"><a href="https://map.naver.com/v5/search/%EC%98%81%EB%8F%84%EA%B5%AC+%EC%99%80%EC%B9%98%EB%A1%9C51%EB%B2%88%EA%B8%B8+2" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
                 </div>
             </div>
             <div class="timeline-item">
@@ -814,13 +833,13 @@
                 <div class="addr">📍 부산 수영구 광안해변로 219<br><span class="addr-en">219 Gwanganhaebyeon-ro, Suyeong-gu, Busan</span></div>
                 <div class="btn-group">
                     <div class="btn-cell"><a href="https://www.google.com/maps/search/?api=1&amp;query=Gwangalli%20Beach%2C%20219%20Gwanganhaebyeon-ro%2C%20Suyeong-gu%2C%20Busan" target="_blank" rel="noopener" class="nav-btn btn-google">Google Map</a></div>
-                    <div class="btn-cell"><a href="https://map.naver.com/p/search/%EA%B4%91%EC%95%88%EB%A6%AC%ED%95%B4%EC%88%98%EC%9A%95%EC%9E%A5" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
+                    <div class="btn-cell"><a href="https://map.naver.com/v5/search/%EC%88%98%EC%98%81%EA%B5%AC+%EA%B4%91%EC%95%88%ED%95%B4%EB%B3%80%EB%A1%9C+219" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
                 </div>
                 <div class="spot-label">② Tonshou 炸豬排 廣安店（톤쇼우 광안점）</div>
                 <div class="addr">📍 부산 수영구 광안해변로279번길 13<br><span class="addr-en">13 Gwanganhaebyeon-ro 279beon-gil, Suyeong-gu, Busan</span></div>
                 <div class="btn-group">
                     <div class="btn-cell"><a href="https://www.google.com/maps/search/?api=1&amp;query=%EB%B6%80%EC%82%B0%20%EC%88%98%EC%98%81%EA%B5%AC%20%EA%B4%91%EC%95%88%ED%95%B4%EB%B3%80%EB%A1%9C279%EB%B2%88%EA%B8%B8%2013" target="_blank" rel="noopener" class="nav-btn btn-google">Google Map</a></div>
-                    <div class="btn-cell"><a href="https://map.naver.com/p/search/%ED%86%A4%EC%87%BC%EC%9A%B0%20%EA%B4%91%EC%95%88%EC%A0%90" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
+                    <div class="btn-cell"><a href="https://map.naver.com/v5/search/%EC%88%98%EC%98%81%EA%B5%AC+%EA%B4%91%EC%95%88%ED%95%B4%EB%B3%80%EB%A1%9C279%EB%B2%88%EA%B8%B8+13" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
                 </div>
             </div>
             <div class="timeline-item">
@@ -836,7 +855,7 @@
                 <div class="addr">📍 부산 수영구 광안해변로 219<br><span class="addr-en">219 Gwanganhaebyeon-ro, Suyeong-gu, Busan</span></div>
                 <div class="btn-group">
                     <div class="btn-cell"><a href="https://www.google.com/maps/search/?api=1&amp;query=Gwangalli%20Beach%2C%20219%20Gwanganhaebyeon-ro%2C%20Suyeong-gu%2C%20Busan" target="_blank" rel="noopener" class="nav-btn btn-google">Google Map</a></div>
-                    <div class="btn-cell"><a href="https://map.naver.com/p/search/%EA%B4%91%EC%95%88%EB%A6%AC%ED%95%B4%EC%88%98%EC%9A%95%EC%9E%A5" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
+                    <div class="btn-cell"><a href="https://map.naver.com/v5/search/%EC%88%98%EC%98%81%EA%B5%AC+%EA%B4%91%EC%95%88%ED%95%B4%EB%B3%80%EB%A1%9C+219" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
                 </div>
             </div>
             <div class="timeline-item">
@@ -850,12 +869,12 @@
                 <div class="addr">📍 부산 수영구 수영로702번길 28<br><span class="addr-en">28 Suyeong-ro 702beon-gil, Suyeong-gu, Busan</span></div>
                 <div class="btn-group">
                     <div class="btn-cell"><a href="https://www.google.com/maps/search/?api=1&amp;query=%EB%B6%80%EC%82%B0%20%EC%88%98%EC%98%81%EA%B5%AC%20%EC%88%98%EC%98%81%EB%A1%9C702%EB%B2%88%EA%B8%B8%2028" target="_blank" rel="noopener" class="nav-btn btn-google">Google Map</a></div>
-                    <div class="btn-cell"><a href="https://map.naver.com/p/search/%EC%9E%90%EA%B0%88%EC%B9%98%ED%9A%9F%EC%A7%91%20%EA%B4%91%EC%95%88" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
+                    <div class="btn-cell"><a href="https://map.naver.com/v5/search/%EC%88%98%EC%98%81%EA%B5%AC+%EC%88%98%EC%98%81%EB%A1%9C702%EB%B2%88%EA%B8%B8+28" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="day-section day5" id="day5">
+    <div class="day-section day5 collapsed" id="day5">
         <div class="day-title day5-bg" onclick="toggleDay('day5')">📌 DAY 5：11/8 (日) 滿載而歸・平安返台【西面、金海機場】</div>
         <div class="timeline">
             <div class="timeline-item">
@@ -871,13 +890,13 @@
                 <div class="addr">📍 부산 부산진구 부전로66번길 12 유송빌딩 1층<br><span class="addr-en">12 Bujeon-ro 66beon-gil, Busanjin-gu, Busan (Yusong Bldg 1F)</span></div>
                 <div class="btn-group">
                     <div class="btn-cell"><a href="https://www.google.com/maps/search/?api=1&amp;query=12%20Bujeon-ro%2066beon-gil%2C%20Busanjin-gu%2C%20Busan" target="_blank" rel="noopener" class="nav-btn btn-google">Google Map</a></div>
-                    <div class="btn-cell"><a href="https://map.naver.com/p/search/%EC%97%90%EA%B7%B8%EB%93%9C%EB%9E%8D%20%EC%84%9C%EB%A9%B4%EB%A1%AF%EB%8D%B0%ED%9B%84%EB%AC%B8%EC%A0%90" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
+                    <div class="btn-cell"><a href="https://map.naver.com/v5/search/%EB%B6%80%EC%82%B0%EC%A7%84%EA%B5%AC+%EB%B6%80%EC%A0%84%EB%A1%9C66%EB%B2%88%EA%B8%B8+12" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
                 </div>
                 <div class="spot-label">② Isaac 吐司 西面店（이삭토스트 서면점）</div>
                 <div class="addr">📍 부산 부산진구 서전로10번길 61 쥬디스태화신관 1층<br><span class="addr-en">61 Seojeon-ro 10beon-gil, Busanjin-gu, Busan (Judith Taehwa Bldg 1F)</span></div>
                 <div class="btn-group">
                     <div class="btn-cell"><a href="https://www.google.com/maps/search/?api=1&amp;query=61%20Seojeon-ro%2010beon-gil%2C%20Busanjin-gu%2C%20Busan" target="_blank" rel="noopener" class="nav-btn btn-google">Google Map</a></div>
-                    <div class="btn-cell"><a href="https://map.naver.com/p/search/%EC%9D%B4%EC%82%AD%ED%86%A0%EC%8A%A4%ED%8A%B8%20%EB%B6%80%EC%82%B0%EC%84%9C%EB%A9%B4%EC%A0%90" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
+                    <div class="btn-cell"><a href="https://map.naver.com/v5/search/%EB%B6%80%EC%82%B0%EC%A7%84%EA%B5%AC+%EC%84%9C%EC%A0%84%EB%A1%9C10%EB%B2%88%EA%B8%B8+61" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
                 </div>
             </div>
             <div class="timeline-item">
@@ -891,7 +910,7 @@
                 <div class="addr">📍 부산 강서구 공항진입로 108<br><span class="addr-en">108 Gonghangjinip-ro, Gangseo-gu, Busan</span></div>
                 <div class="btn-group">
                     <div class="btn-cell"><a href="https://www.google.com/maps/search/?api=1&amp;query=Gimhae%20International%20Airport%2C%20108%20Gonghangjinip-ro%2C%20Gangseo-gu%2C%20Busan" target="_blank" rel="noopener" class="nav-btn btn-google">Google Map</a></div>
-                    <div class="btn-cell"><a href="https://map.naver.com/p/search/%EA%B9%80%ED%95%B4%EA%B5%AD%EC%A0%9C%EA%B3%B5%ED%95%AD" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
+                    <div class="btn-cell"><a href="https://map.naver.com/v5/search/%EA%B0%95%EC%84%9C%EA%B5%AC+%EA%B3%B5%ED%95%AD%EC%A7%84%EC%9E%85%EB%A1%9C+108" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
                 </div>
             </div>
         </div>
@@ -903,6 +922,13 @@
 </div>
 
 <script>
+    function toggleAll(collapse) {
+        var days = document.querySelectorAll('.day-section');
+        for (var i = 0; i < days.length; i++) {
+            days[i].classList.toggle('collapsed', collapse);
+        }
+    }
+
     function toggleDay(dayId) {
         var element = document.getElementById(dayId);
         if (element.classList.contains('collapsed')) {
