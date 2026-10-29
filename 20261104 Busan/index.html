@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>釜山樂園美食通 — 5天4夜互動導航地圖 (莫蘭迪舒適風格)</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
     <style>
         @page {
             size: A4;
@@ -372,6 +373,30 @@
             word-break: break-word;
         }
         .addr-en { color: #a3968e; font-size: 12px; }
+        #busan-map { height: 460px; width: 100%; background: #e9e5e1; z-index: 0; }
+        @media (max-width: 600px) { #busan-map { height: 380px; } }
+        .route-chips { display: flex; flex-wrap: wrap; gap: 6px; padding: 10px 12px; background: #ffffff; border-bottom: 1px solid #eae5e1; }
+        .route-chip {
+            font: inherit; font-size: 12.5px; padding: 4px 10px; cursor: pointer;
+            color: #6e6762; background: #ffffff; border: 1.5px solid #d9d2cc; border-radius: 14px;
+        }
+        .route-chip.active { color: #ffffff; border-color: transparent; }
+        .route-hint { padding: 8px 12px; font-size: 12px; color: #a3968e; background: #faf9f7; }
+        .map-fail { padding: 40px 16px; text-align: center; color: #a3968e; }
+        .pin {
+            width: 26px; height: 26px; border-radius: 50%; color: #ffffff; font-size: 12px; font-weight: bold;
+            display: flex; align-items: center; justify-content: center;
+            border: 2px solid #ffffff; box-shadow: 0 1px 4px rgba(0,0,0,0.35); cursor: pointer;
+            white-space: nowrap;
+        }
+        .pin.wide { width: auto; min-width: 26px; padding: 0 6px; border-radius: 13px; }
+        .pin.dot { width: 18px; height: 18px; font-size: 10px; background: #ffffff !important; border-width: 2px; border-style: solid; }
+        .pin.pulse { animation: pinpulse 0.6s ease 3; }
+        @keyframes pinpulse { 50% { transform: scale(1.5); } }
+        .route-arrow { font-size: 11px; line-height: 11px; text-align: center; text-shadow: 0 0 2px #fff, 0 0 2px #fff; }
+        .maplink { margin-left: 8px; font-size: 12px; font-weight: normal; color: #7a8fa3; text-decoration: none; border-bottom: 1px dotted #9cb4cc; }
+        .timeline-item.flash { animation: itemflash 1.8s ease; }
+        @keyframes itemflash { 0%, 60% { background: #fff6d6; box-shadow: 0 0 0 3px #e6c76a; } 100% { background: #ffffff; box-shadow: none; } }
         .toggle-bar { display: flex; gap: 8px; margin: 0 0 18px; }
         .toggle-btn {
             flex: 1;
@@ -469,6 +494,15 @@
         </div>
     </div>
 
+    <div class="map-dashboard" id="busan-map-card">
+        <div class="map-header">
+            <div class="map-header-cell">🗺️ 釜山 5 天路線地圖（實驗版）</div>
+        </div>
+        <div class="route-chips" id="route-chips"></div>
+        <div id="busan-map"></div>
+        <div class="route-hint">圓點內的數字＝當天行程順序（顏色＝第幾天，虛線箭頭＝移動方向）；空心小點＝同一時段的備選地點。<b>點圓點會自動展開並跳到下方對應的行程說明。</b>座標僅供概覽，實際導航請用各行程下方的 Google / Naver 按鈕。</div>
+    </div>
+
     <div class="toggle-bar">
         <button type="button" class="toggle-btn" onclick="toggleAll(false)">👁️ 全部展開</button>
         <button type="button" class="toggle-btn" onclick="toggleAll(true)">🕒 全部收合</button>
@@ -477,8 +511,8 @@
     <div class="day-section day1 collapsed" id="day1">
         <div class="day-title day1-bg" onclick="toggleDay('day1')">📌 DAY 1：11/4 (三) 降落釜山・西面美食前哨戰【金海機場、西面】</div>
         <div class="timeline">
-            <div class="timeline-item">
-                <div class="time-tag">19:35 - 21:15</div>
+            <div class="timeline-item" id="day1-i1">
+                <div class="time-tag">19:35 - 21:15 <a href="#busan-map" class="maplink" data-item="day1-i1" onclick="focusItem(this.dataset.item);return false;">🗺️ 看地圖位置</a></div>
                 <div class="spot-name">🛬 抵達金海國際機場 ＆ 前往西面飯店</div>
                 <div class="spot-desc">晚上降落金海國際機場，入境領完行李後，建議先在機場便利商店買一張 T-money 交通卡並儲值，接著前往西面辦理入住。</div>
                 <div class="info-list">
@@ -499,8 +533,8 @@
                     <div class="btn-cell"><a href="https://map.naver.com/v5/search/%EC%84%9C%EB%A9%B4%EC%97%AD" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
                 </div>
             </div>
-            <div class="timeline-item">
-                <div class="time-tag">21:30 - 23:00</div>
+            <div class="timeline-item" id="day1-i2">
+                <div class="time-tag">21:30 - 23:00 <a href="#busan-map" class="maplink" data-item="day1-i2" onclick="focusItem(this.dataset.item);return false;">🗺️ 看地圖位置</a></div>
                 <div class="spot-name">🍖 西面商圈晚餐 / 宵夜（3 選 1）</div>
                 <div class="hours-tag">🕐 味贊王至 23:00｜螞蟻家至 00:30｜松亭豬肉湯飯 24H</div>
                 <div class="spot-desc">安頓好後，正是體驗韓國宵夜文化的最佳時機！可以選擇專人代烤的烤肉、辣炒海鮮，或是 24 小時營業的熱騰騰湯飯。</div>
@@ -533,8 +567,8 @@
     <div class="day-section day2 collapsed" id="day2">
         <div class="day-title day2-bg" onclick="toggleDay('day2')">📌 DAY 2：11/5 (四) VBP 48hr 開通・海景 SPA 與西面動漫血拚【海雲台、西面】</div>
         <div class="timeline">
-            <div class="timeline-item">
-                <div class="time-tag">09:00 - 10:30</div>
+            <div class="timeline-item" id="day2-i1">
+                <div class="time-tag">09:00 - 10:30 <a href="#busan-map" class="maplink" data-item="day2-i1" onclick="focusItem(this.dataset.item);return false;">🗺️ 看地圖位置</a></div>
                 <div class="spot-name">🚠 天空膠囊列車 ＆ 青沙浦墊腳石展望台</div>
                 <div class="spot-desc">早上前往海雲台藍線公園尾浦站，搭乘預訂好的天空膠囊列車前往青沙浦。下車後拍攝著名的「韓版灌籃高手平交道」，並散步至透明玻璃的墊腳石展望台感受海風。</div>
                 <div class="info-list">
@@ -561,8 +595,8 @@
                     <div class="btn-cell"><a href="https://map.naver.com/v5/search/%ED%95%B4%EC%9A%B4%EB%8C%80%EA%B5%AC+%EC%B2%AD%EC%82%AC%ED%8F%AC%EB%A1%9C+167" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
                 </div>
             </div>
-            <div class="timeline-item">
-                <div class="time-tag">10:30 - 11:00</div>
+            <div class="timeline-item" id="day2-i2">
+                <div class="time-tag">10:30 - 11:00 <a href="#busan-map" class="maplink" data-item="day2-i2" onclick="focusItem(this.dataset.item);return false;">🗺️ 看地圖位置</a></div>
                 <div class="spot-name">🚃 海岸列車（青沙浦 ➔ 尾浦） <span class="vbp-badge">🔥 VBP 48hr 正式開通</span></div>
                 <div class="queue-badge">⚠️ 本趟行程的關鍵時刻：此時 Pass 正式啟動，效期算到 11/7 10:29 止</div>
                 <div class="spot-desc">回到青沙浦車站櫃檯，出示 Visit Busan Pass 兌換海岸列車車票搭回尾浦，48 小時效期正式開始倒數。</div>
@@ -577,8 +611,8 @@
                     <div class="btn-cell"><a href="https://map.naver.com/v5/search/%ED%95%B4%EC%9A%B4%EB%8C%80%EA%B5%AC+%EC%B2%AD%EC%82%AC%ED%8F%AC%EB%A1%9C+116" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
                 </div>
             </div>
-            <div class="timeline-item">
-                <div class="time-tag">11:15 - 12:50</div>
+            <div class="timeline-item" id="day2-i3">
+                <div class="time-tag">11:15 - 12:50 <a href="#busan-map" class="maplink" data-item="day2-i3" onclick="focusItem(this.dataset.item);return false;">🗺️ 看地圖位置</a></div>
                 <div class="spot-name">🐟 海雲台午餐（2 選 1）</div>
                 <div class="spot-desc">回到海雲台，享用米其林推薦的炭烤鰻魚飯，或是走進傳統市場吃在地小吃。</div>
                 <div class="info-list">
@@ -599,8 +633,8 @@
                     <div class="btn-cell"><a href="https://map.naver.com/v5/search/%ED%95%B4%EC%9A%B4%EB%8C%80%EA%B5%AC+%EA%B5%AC%EB%82%A8%EB%A1%9C41%EB%B2%88%EA%B8%B8+22-1" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
                 </div>
             </div>
-            <div class="timeline-item">
-                <div class="time-tag">13:00 - 15:00</div>
+            <div class="timeline-item" id="day2-i4">
+                <div class="time-tag">13:00 - 15:00 <a href="#busan-map" class="maplink" data-item="day2-i4" onclick="focusItem(this.dataset.item);return false;">🗺️ 看地圖位置</a></div>
                 <div class="spot-name">♨️ Club D Oasis 海景足湯 SPA <span class="vbp-badge">🔥 VBP</span></div>
                 <div class="hours-tag">🕐 持 Pass 免費入場 4 小時（原價 33,000 韓元）</div>
                 <div class="spot-desc">走回尾浦站旁邊的 LCT 大樓，持 Pass 免費享受頂級渡假風汗蒸幕。換上汗蒸服直奔 5 樓露天「清水堂」泡海景足湯，並在樺木主題房休息。</div>
@@ -615,8 +649,8 @@
                     <div class="btn-cell"><a href="https://map.naver.com/v5/search/%ED%95%B4%EC%9A%B4%EB%8C%80%EA%B5%AC+%EB%8B%AC%EB%A7%9E%EC%9D%B4%EA%B8%B8+30" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
                 </div>
             </div>
-            <div class="timeline-item">
-                <div class="time-tag">15:30 - 16:30</div>
+            <div class="timeline-item" id="day2-i5">
+                <div class="time-tag">15:30 - 16:30 <a href="#busan-map" class="maplink" data-item="day2-i5" onclick="focusItem(this.dataset.item);return false;">🗺️ 看地圖位置</a></div>
                 <div class="spot-name">⛵ Yacht Holic 遊艇出海 <span class="vbp-badge">🔥 VBP</span></div>
                 <div class="queue-badge">⚠️ 需提前透過官方 IG（@yachtholic）預約 11/5 15:30 班次</div>
                 <div class="spot-desc">前往水營灣遊艇競技場，從海上近距離仰望廣安大橋，享受超 Chill 的午後時光。</div>
@@ -631,8 +665,8 @@
                     <div class="btn-cell"><a href="https://map.naver.com/v5/search/%ED%95%B4%EC%9A%B4%EB%8C%80%EA%B5%AC+%ED%95%B4%EC%9A%B4%EB%8C%80%ED%95%B4%EB%B3%80%EB%A1%9C+84" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
                 </div>
             </div>
-            <div class="timeline-item">
-                <div class="time-tag">17:00 - 19:45</div>
+            <div class="timeline-item" id="day2-i6">
+                <div class="time-tag">17:00 - 19:45 <a href="#busan-map" class="maplink" data-item="day2-i6" onclick="focusItem(this.dataset.item);return false;">🗺️ 看地圖位置</a></div>
                 <div class="spot-name">🧸 西面三正塔動漫巡禮 ＆ SPAO 聯名服飾</div>
                 <div class="spot-desc">傍晚返回西面商圈大採購！直衝三正塔尋找 JOJO 周邊與扭蛋，接著轉戰旁邊的 SPAO 狂掃吉伊卡哇與自嘲熊聯名款。</div>
                 <div class="info-list">
@@ -653,8 +687,8 @@
                     <div class="btn-cell"><a href="https://map.naver.com/v5/search/%EB%B6%80%EC%82%B0%EC%A7%84%EA%B5%AC+%EC%A4%91%EC%95%99%EB%8C%80%EB%A1%9C692%EB%B2%88%EA%B8%B8+38" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
                 </div>
             </div>
-            <div class="timeline-item">
-                <div class="time-tag">20:00 - 21:30</div>
+            <div class="timeline-item" id="day2-i7">
+                <div class="time-tag">20:00 - 21:30 <a href="#busan-map" class="maplink" data-item="day2-i7" onclick="focusItem(this.dataset.item);return false;">🗺️ 看地圖位置</a></div>
                 <div class="spot-name">🥩 西面晚餐：精緻烤肉或烤腸（2 選 1）</div>
                 <div class="hours-tag">🕐 Gojip 至 23:00｜Gop 週二～五 16:00 起、至 00:00（週一公休）</div>
                 <div class="spot-desc">買完戰利品後，享用西面評價極高的精品代烤豬肉，或超人氣韓牛烤腸犒賞自己。</div>
@@ -681,8 +715,8 @@
     <div class="day-section day3 collapsed" id="day3">
         <div class="day-title day3-bg" onclick="toggleDay('day3')">📌 DAY 3：11/6 (五) 東釜山楓之谷樂園・五星汗蒸幕【機張、Centum City】</div>
         <div class="timeline">
-            <div class="timeline-item">
-                <div class="time-tag">10:00 - 11:45</div>
+            <div class="timeline-item" id="day3-i1">
+                <div class="time-tag">10:00 - 11:45 <a href="#busan-map" class="maplink" data-item="day3-i1" onclick="focusItem(this.dataset.item);return false;">🗺️ 看地圖位置</a></div>
                 <div class="spot-name">🛷 Skyline Luge 釜山斜坡滑車 <span class="vbp-badge">🔥 VBP</span></div>
                 <div class="hours-tag">🕐 持 Pass 免費兌換 2 次滑車券（原價 27,000 韓元）</div>
                 <div class="spot-desc">早上前往東釜山，搭乘空中吊椅上山，再操控無動力滑車甩尾俯衝下山，刺激好玩。</div>
@@ -696,8 +730,8 @@
                     <div class="btn-cell"><a href="https://map.naver.com/v5/search/%EA%B8%B0%EC%9E%A5%EA%B5%B0+%EA%B8%B0%EC%9E%A5%EC%9D%8D+%EA%B8%B0%EC%9E%A5%ED%95%B4%EC%95%88%EB%A1%9C+205" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
                 </div>
             </div>
-            <div class="timeline-item">
-                <div class="time-tag">12:00 - 16:30</div>
+            <div class="timeline-item" id="day3-i2">
+                <div class="time-tag">12:00 - 16:30 <a href="#busan-map" class="maplink" data-item="day3-i2" onclick="focusItem(this.dataset.item);return false;">🗺️ 看地圖位置</a></div>
                 <div class="spot-name">🍁 釜山樂天世界：楓之谷秋季聯名 <span class="vbp-badge">🔥 VBP</span></div>
                 <div class="hours-tag">🕐 持 Pass 免費換一日票</div>
                 <div class="spot-desc">進入樂天世界，除了挑戰刺激的雲霄飛車，最重要的任務是參與《楓之谷》期間限定聯名活動！務必尋找園區內的楓之谷大型造景、專屬扭蛋機，並在出口禮品店購買菇菇寶貝與皮卡啾限定周邊！</div>
@@ -711,8 +745,8 @@
                     <div class="btn-cell"><a href="https://map.naver.com/v5/search/%EA%B8%B0%EC%9E%A5%EA%B5%B0+%EA%B8%B0%EC%9E%A5%EC%9D%8D+%EB%8F%99%EB%B6%80%EC%82%B0%EA%B4%80%EA%B4%91%EB%A1%9C+42" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
                 </div>
             </div>
-            <div class="timeline-item">
-                <div class="time-tag">16:30 - 18:45</div>
+            <div class="timeline-item" id="day3-i3">
+                <div class="time-tag">16:30 - 18:45 <a href="#busan-map" class="maplink" data-item="day3-i3" onclick="focusItem(this.dataset.item);return false;">🗺️ 看地圖位置</a></div>
                 <div class="spot-name">🧱 Brick Campus 樂高展 ＆ 晚餐（2 選 1） <span class="vbp-badge">🔥 VBP</span></div>
                 <div class="hours-tag">🕐 持 Pass 免費看 Brick Campus（原價 15,000 韓元）</div>
                 <div class="spot-desc">逛完樂園出來，對面就是樂天 Mall，可順刷樂高積木展，並在商場美食街或機張市場享用晚餐。</div>
@@ -740,8 +774,8 @@
                     <div class="btn-cell"><a href="https://map.naver.com/v5/search/%EA%B8%B0%EC%9E%A5%EA%B5%B0+%EA%B8%B0%EC%9E%A5%EC%9D%8D+%EC%9D%8D%EB%82%B4%EB%A1%9C104%EB%B2%88%EA%B8%B8+16" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
                 </div>
             </div>
-            <div class="timeline-item">
-                <div class="time-tag">18:45 - 22:00</div>
+            <div class="timeline-item" id="day3-i4">
+                <div class="time-tag">18:45 - 22:00 <a href="#busan-map" class="maplink" data-item="day3-i4" onclick="focusItem(this.dataset.item);return false;">🗺️ 看地圖位置</a></div>
                 <div class="spot-name">♨️ Centum City 逛街 ＆ 新世界 Spa Land <span class="vbp-badge">🔥 VBP</span></div>
                 <div class="hours-tag">🕐 持 Pass 免費使用 4 小時（最後入場 21:00）</div>
                 <div class="spot-desc">搭車回到 Centum City，補貨 SPAO 與快閃店後，進入全韓國最高級的五星級汗蒸幕徹底放鬆。必體驗 13 種主題汗蒸房並品嚐甜米釀配烤雞蛋。</div>
@@ -760,8 +794,8 @@
     <div class="day-section day4 collapsed" id="day4">
         <div class="day-title day4-bg" onclick="toggleDay('day4')">📌 DAY 4：11/7 (六) 極限壓線・米飛兔・釜山國際煙火節【松島、影島、廣安里】</div>
         <div class="timeline">
-            <div class="timeline-item">
-                <div class="time-tag">09:00 - 09:50</div>
+            <div class="timeline-item" id="day4-i1">
+                <div class="time-tag">09:00 - 09:50 <a href="#busan-map" class="maplink" data-item="day4-i1" onclick="focusItem(this.dataset.item);return false;">🗺️ 看地圖位置</a></div>
                 <div class="spot-name">🚡 松島海上纜車水晶車廂 <span class="vbp-badge">🔥 VBP</span></div>
                 <div class="hours-tag">🕐 持 Pass 免費換水晶來回票</div>
                 <div class="queue-badge">⚠️ 注意時間，這站是為了下一個景點的壓線做準備！</div>
@@ -776,8 +810,8 @@
                     <div class="btn-cell"><a href="https://map.naver.com/v5/search/%EC%84%9C%EA%B5%AC+%EC%86%A1%EB%8F%84%ED%95%B4%EB%B3%80%EB%A1%9C+171" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
                 </div>
             </div>
-            <div class="timeline-item">
-                <div class="time-tag">10:05 - 11:45</div>
+            <div class="timeline-item" id="day4-i2">
+                <div class="time-tag">10:05 - 11:45 <a href="#busan-map" class="maplink" data-item="day4-i2" onclick="focusItem(this.dataset.item);return false;">🗺️ 看地圖位置</a></div>
                 <div class="spot-name">🎨 ARTE MUSEUM 釜山 <span class="vbp-badge">🔥 VBP 壓線首選</span></div>
                 <div class="hours-tag">🕐 持 Pass 免費入場（原價 22,000 韓元）</div>
                 <div class="queue-badge">⚠️ 10:25 前務必刷 Pass 入場（Pass 效期至 10:29 止）</div>
@@ -792,8 +826,8 @@
                     <div class="btn-cell"><a href="https://map.naver.com/v5/search/%EC%98%81%EB%8F%84%EA%B5%AC+%ED%95%B4%EC%96%91%EB%A1%9C247%EB%B2%88%EA%B8%B8+29" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
                 </div>
             </div>
-            <div class="timeline-item">
-                <div class="time-tag">12:00 - 15:00</div>
+            <div class="timeline-item" id="day4-i3">
+                <div class="time-tag">12:00 - 15:00 <a href="#busan-map" class="maplink" data-item="day4-i3" onclick="focusItem(this.dataset.item);return false;">🗺️ 看地圖位置</a></div>
                 <div class="spot-name">🦐 南浦洞午餐 ＆ 米飛兔主題咖啡廳</div>
                 <div class="spot-desc">中午在南浦洞逛 LINE FRIENDS 與享用海鮮午餐，飯後安排療癒的米飛兔下午茶補充戰鬥力。</div>
                 <div class="info-list">
@@ -820,8 +854,8 @@
                     <div class="btn-cell"><a href="https://map.naver.com/v5/search/%EC%98%81%EB%8F%84%EA%B5%AC+%EC%99%80%EC%B9%98%EB%A1%9C51%EB%B2%88%EA%B8%B8+2" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
                 </div>
             </div>
-            <div class="timeline-item">
-                <div class="time-tag">15:30 - 17:15</div>
+            <div class="timeline-item" id="day4-i4">
+                <div class="time-tag">15:30 - 17:15 <a href="#busan-map" class="maplink" data-item="day4-i4" onclick="focusItem(this.dataset.item);return false;">🗺️ 看地圖位置</a></div>
                 <div class="spot-name">🎟️ 廣安里領取手環 ＆ 煙火節前準備</div>
                 <div class="spot-desc">抵達廣安里，先完成手環兌換，並在進入付費區前吃飽或買好外帶食物。</div>
                 <div class="info-list">
@@ -842,8 +876,8 @@
                     <div class="btn-cell"><a href="https://map.naver.com/v5/search/%EC%88%98%EC%98%81%EA%B5%AC+%EA%B4%91%EC%95%88%ED%95%B4%EB%B3%80%EB%A1%9C279%EB%B2%88%EA%B8%B8+13" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
                 </div>
             </div>
-            <div class="timeline-item">
-                <div class="time-tag">17:15 - 20:00</div>
+            <div class="timeline-item" id="day4-i5">
+                <div class="time-tag">17:15 - 20:00 <a href="#busan-map" class="maplink" data-item="day4-i5" onclick="focusItem(this.dataset.item);return false;">🗺️ 看地圖位置</a></div>
                 <div class="spot-name">🎆 2026 釜山國際煙火節（S 席座位）</div>
                 <div class="queue-badge">⚠️ 17:55 準時關閉付費區入口，遲到視同放棄！</div>
                 <div class="spot-desc">提早進入指定座位區，享受長達一小時、超過 8 萬發的跨海大橋煙火大秀！11 月海風極冷，請務必攜帶防風外套與暖暖包。</div>
@@ -858,8 +892,8 @@
                     <div class="btn-cell"><a href="https://map.naver.com/v5/search/%EC%88%98%EC%98%81%EA%B5%AC+%EA%B4%91%EC%95%88%ED%95%B4%EB%B3%80%EB%A1%9C+219" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
                 </div>
             </div>
-            <div class="timeline-item">
-                <div class="time-tag">20:30 - 22:00</div>
+            <div class="timeline-item" id="day4-i6">
+                <div class="time-tag">20:30 - 22:00 <a href="#busan-map" class="maplink" data-item="day4-i6" onclick="focusItem(this.dataset.item);return false;">🗺️ 看地圖位置</a></div>
                 <div class="spot-name">🐟 散場宵夜：札嘎其生魚片店（廣安站店）</div>
                 <div class="spot-desc">煙火結束後，避開恐怖的地鐵人潮，先在廣安里吃頓宵夜等凌晨人潮散去。吃現切生魚片配辣魚湯，吃飽後再悠閒搭地鐵回西面。</div>
                 <div class="info-list">
@@ -877,8 +911,8 @@
     <div class="day-section day5 collapsed" id="day5">
         <div class="day-title day5-bg" onclick="toggleDay('day5')">📌 DAY 5：11/8 (日) 滿載而歸・平安返台【西面、金海機場】</div>
         <div class="timeline">
-            <div class="timeline-item">
-                <div class="time-tag">08:00 - 09:00</div>
+            <div class="timeline-item" id="day5-i1">
+                <div class="time-tag">08:00 - 09:00 <a href="#busan-map" class="maplink" data-item="day5-i1" onclick="focusItem(this.dataset.item);return false;">🗺️ 看地圖位置</a></div>
                 <div class="spot-name">🍳 西面早餐 ＆ 飯店退房（2 選 1）</div>
                 <div class="spot-desc">最後一個早晨，享用美味的韓式鐵板吐司，整理行李準備前往機場。</div>
                 <div class="info-list">
@@ -899,8 +933,8 @@
                     <div class="btn-cell"><a href="https://map.naver.com/v5/search/%EB%B6%80%EC%82%B0%EC%A7%84%EA%B5%AC+%EC%84%9C%EC%A0%84%EB%A1%9C10%EB%B2%88%EA%B8%B8+61" target="_blank" rel="noopener" class="nav-btn btn-naver">Naver Map 🧭</a></div>
                 </div>
             </div>
-            <div class="timeline-item">
-                <div class="time-tag">09:00 - 12:15</div>
+            <div class="timeline-item" id="day5-i2">
+                <div class="time-tag">09:00 - 12:15 <a href="#busan-map" class="maplink" data-item="day5-i2" onclick="focusItem(this.dataset.item);return false;">🗺️ 看地圖位置</a></div>
                 <div class="spot-name">✈️ 前往金海機場 ＆ 辦理退稅登機</div>
                 <div class="spot-desc">抵達機場，完成自助退稅與託運，帶著滿滿戰利品搭機回台。抵達出境大廳一樓先用機台掃描退稅單與護照，安檢入關後，在 4 號登機門（Gate 4）對面櫃檯領取退稅現金。</div>
                 <div class="info-list">
@@ -937,6 +971,117 @@
             element.classList.add('collapsed');
         }
     }
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script>
+
+(function () {
+    var DATA = [{"day": "day1", "color": "#6f8ba6", "label": "Day 1 · 11/4", "items": [{"id": "day1-i1", "n": 1, "time": "19:35 - 21:15", "name": "🛬 抵達金海國際機場 ＆ 前往西面飯店", "multi": true, "pts": [{"ll": [35.1795, 128.9382], "main": true, "name": "🛬 金海國際機場", "seq": 0}, {"ll": [35.157812, 129.060047], "main": true, "name": "🏨 西面站（住宿建議區域，飯店確定後請補上地址）", "seq": 1}]}, {"id": "day1-i2", "n": 2, "time": "21:30 - 23:00", "name": "🍖 西面商圈晚餐 / 宵夜（3 選 1）", "multi": false, "pts": [{"ll": [35.155487, 129.055672], "main": true, "name": "① 味贊王鹽烤肉（맛찬들 왕소금구이 서면 본점）", "seq": 0}, {"ll": [35.154012, 129.058266], "main": false, "name": "② 螞蟻家（개미집 서면점）", "seq": -1}, {"ll": [35.155563, 129.058547], "main": false, "name": "③ 松亭三代豬肉湯飯（송정3대국밥 서면）", "seq": -1}]}]}, {"day": "day2", "color": "#b08568", "label": "Day 2 · 11/5", "items": [{"id": "day2-i1", "n": 1, "time": "09:00 - 10:30", "name": "🚠 天空膠囊列車 ＆ 青沙浦墊腳石展望台", "multi": true, "pts": [{"ll": [35.158287, 129.172766], "main": true, "name": "① 尾浦站（出發・藍線公園尾浦停車場）", "seq": 0}, {"ll": [35.161362, 129.191891], "main": true, "name": "② 青沙浦站（抵達・灌籃高手平交道）", "seq": 1}, {"ll": [35.163312, 129.195266], "main": true, "name": "③ 青沙浦墊腳石展望台（다릿돌전망대）", "seq": 2}]}, {"id": "day2-i2", "n": 2, "time": "10:30 - 11:00", "name": "🚃 海岸列車（青沙浦 ➔ 尾浦）", "multi": false, "pts": [{"ll": [35.161362, 129.191891], "main": true, "name": "青沙浦車站櫃檯", "seq": 0}]}, {"id": "day2-i3", "n": 3, "time": "11:15 - 12:50", "name": "🐟 海雲台午餐（2 選 1）", "multi": false, "pts": [{"ll": [35.161787, 129.159672], "main": true, "name": "① 海木鰻魚飯（해목・米其林推薦）", "seq": 0}, {"ll": [35.161387, 129.162328], "main": false, "name": "② 海雲台傳統市場（해운대시장）", "seq": -1}]}, {"id": "day2-i4", "n": 4, "time": "13:00 - 15:00", "name": "♨️ Club D Oasis 海景足湯 SPA", "multi": false, "pts": [{"ll": [35.160062, 129.168484], "main": true, "name": "♨️ Club D Oasis 海景足湯 SPA", "seq": 0}]}, {"id": "day2-i5", "n": 5, "time": "15:30 - 16:30", "name": "⛵ Yacht Holic 遊艇出海", "multi": false, "pts": [{"ll": [35.160487, 129.141203], "main": true, "name": "⛵ Yacht Holic 遊艇出海", "seq": 0}]}, {"id": "day2-i6", "n": 6, "time": "17:00 - 19:45", "name": "🧸 西面三正塔動漫巡禮 ＆ SPAO 聯名服飾", "multi": false, "pts": [{"ll": [35.153012, 129.059609], "main": true, "name": "① 三正塔（삼정타워）", "seq": 0}, {"ll": [35.154212, 129.061234], "main": false, "name": "② SPAO 西面中央店（스파오 서면중앙점）", "seq": -1}]}, {"id": "day2-i7", "n": 7, "time": "20:00 - 21:30", "name": "🥩 西面晚餐：精緻烤肉或烤腸（2 選 1）", "multi": false, "pts": [{"ll": [35.155738, 129.054891], "main": true, "name": "① Gojip 西面總店（고집 서면본점）", "seq": 0}, {"ll": [35.157113, 129.057328], "main": false, "name": "② Gop 西面（서면 곱）", "seq": -1}]}]}, {"day": "day3", "color": "#6f9482", "label": "Day 3 · 11/6", "items": [{"id": "day3-i1", "n": 1, "time": "10:00 - 11:45", "name": "🛷 Skyline Luge 釜山斜坡滑車", "multi": false, "pts": [{"ll": [35.195812, 129.215797], "main": true, "name": "🛷 Skyline Luge 釜山斜坡滑車", "seq": 0}]}, {"id": "day3-i2", "n": 2, "time": "12:00 - 16:30", "name": "🍁 釜山樂天世界：楓之谷秋季聯名", "multi": false, "pts": [{"ll": [35.194212, 129.213597], "main": true, "name": "🍁 釜山樂天世界：楓之谷秋季聯名", "seq": 0}]}, {"id": "day3-i3", "n": 3, "time": "16:30 - 18:45", "name": "🧱 Brick Campus 樂高展 ＆ 晚餐（2 選 1）", "multi": false, "pts": [{"ll": [35.193011999999996, 129.21179700000002], "main": true, "name": "🧱 Brick Campus（樂天 Mall 東釜山店內）", "seq": 0}, {"ll": [35.192212, 129.212797], "main": false, "name": "🍽️ 晚餐 ① 樂天 Outlet 東釜山店美食街", "seq": -1}, {"ll": [35.243537, 129.215203], "main": false, "name": "🦀 晚餐 ② 機張市場（松葉蟹）", "seq": -1}]}, {"id": "day3-i4", "n": 4, "time": "18:45 - 22:00", "name": "♨️ Centum City 逛街 ＆ 新世界 Spa Land", "multi": false, "pts": [{"ll": [35.168912, 129.129641], "main": true, "name": "♨️ Centum City 逛街 ＆ 新世界 Spa Land", "seq": 0}]}]}, {"day": "day4", "color": "#8577a0", "label": "Day 4 · 11/7", "items": [{"id": "day4-i1", "n": 1, "time": "09:00 - 09:50", "name": "🚡 松島海上纜車水晶車廂", "multi": false, "pts": [{"ll": [35.076712, 129.023359], "main": true, "name": "🚡 松島海上纜車水晶車廂", "seq": 0}]}, {"id": "day4-i2", "n": 2, "time": "10:05 - 11:45", "name": "🎨 ARTE MUSEUM 釜山", "multi": false, "pts": [{"ll": [35.087062, 129.076359], "main": true, "name": "🎨 ARTE MUSEUM 釜山", "seq": 0}]}, {"id": "day4-i3", "n": 3, "time": "12:00 - 15:00", "name": "🦐 南浦洞午餐 ＆ 米飛兔主題咖啡廳", "multi": true, "pts": [{"ll": [35.096712, 129.031109], "main": true, "name": "① 札嘎其市場（자갈치시장・海鮮午餐）", "seq": 0}, {"ll": [35.0982, 129.0287], "main": false, "name": "② 南浦洞 BIFF 廣場（逛街・LINE FRIENDS 一帶）", "seq": -1}, {"ll": [35.088037, 129.060953], "main": true, "name": "③ Cafe Miffy 釜山（미피카페・影島）", "seq": 1}]}, {"id": "day4-i4", "n": 4, "time": "15:30 - 17:15", "name": "🎟️ 廣安里領取手環 ＆ 煙火節前準備", "multi": false, "pts": [{"ll": [35.1532, 129.1187], "main": true, "name": "① 手環兌換地點（廣安里海水浴場）", "seq": 0}, {"ll": [35.156463, 129.124797], "main": false, "name": "② Tonshou 炸豬排 廣安店（톤쇼우 광안점）", "seq": -1}]}, {"id": "day4-i5", "n": 5, "time": "17:15 - 20:00", "name": "🎆 2026 釜山國際煙火節（S 席座位）", "multi": false, "pts": [{"ll": [35.1532, 129.1187], "main": true, "name": "廣安里海水浴場 S 席付費管制區", "seq": 0}]}, {"id": "day4-i6", "n": 6, "time": "20:30 - 22:00", "name": "🐟 散場宵夜：札嘎其生魚片店（廣安站店）", "multi": false, "pts": [{"ll": [35.166587, 129.116984], "main": true, "name": "🐟 散場宵夜：札嘎其生魚片店（廣安站店）", "seq": 0}]}]}, {"day": "day5", "color": "#a67b84", "label": "Day 5 · 11/8", "items": [{"id": "day5-i1", "n": 1, "time": "08:00 - 09:00", "name": "🍳 西面早餐 ＆ 飯店退房（2 選 1）", "multi": false, "pts": [{"ll": [35.155762, 129.055359], "main": true, "name": "① Egg Drop 西面樂天後門店（에그드랍 서면롯데후문점）", "seq": 0}, {"ll": [35.155262, 129.060672], "main": false, "name": "② Isaac 吐司 西面店（이삭토스트 서면점）", "seq": -1}]}, {"id": "day5-i2", "n": 2, "time": "09:00 - 12:15", "name": "✈️ 前往金海機場 ＆ 辦理退稅登機", "multi": false, "pts": [{"ll": [35.1795, 128.9382], "main": true, "name": "✈️ 前往金海機場 ＆ 辦理退稅登機", "seq": 0}]}]}];
+    var box = document.getElementById('busan-map');
+    function jumpTo(id) {
+        var el = document.getElementById(id);
+        if (!el) return;
+        el.closest('.day-section').classList.remove('collapsed');
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        el.classList.remove('flash');
+        void el.offsetWidth;
+        el.classList.add('flash');
+    }
+    if (typeof L === 'undefined') {
+        box.innerHTML = '<div class="map-fail">🗺️ 地圖載入失敗（需要網路連線）。行程說明與導航按鈕不受影響。</div>';
+        window.focusItem = jumpTo;
+        return;
+    }
+    var map = L.map(box, { scrollWheelZoom: false });
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    var groups = {}, bounds = {}, pins = {}, seen = {};
+    function place(ll) {
+        var k = ll[0].toFixed(4) + ',' + ll[1].toFixed(4), n = seen[k] || 0;
+        seen[k] = n + 1;
+        return [ll[0] + n * 0.0007, ll[1] + n * 0.0007];
+    }
+    function pinIcon(color, text, dot, wide) {
+        var style = dot ? 'border-color:' + color + ';color:' + color : 'background:' + color;
+        return L.divIcon({
+            className: '',
+            html: '<div class="pin' + (dot ? ' dot' : '') + (wide ? ' wide' : '') + '" style="' + style + '">' + text + '</div>',
+            iconSize: dot ? [18, 18] : (wide ? [38, 26] : [26, 26]),
+            iconAnchor: dot ? [9, 9] : (wide ? [19, 13] : [13, 13])
+        });
+    }
+
+    DATA.forEach(function (d) {
+        var g = L.layerGroup(), line = [], pts = [];
+        d.items.forEach(function (it) {
+            it.pts.forEach(function (p) {
+                var ll = place(p.ll), label = it.n + (it.multi && p.main ? String.fromCharCode(97 + p.seq) : '');
+                var m = L.marker(ll, {
+                    icon: pinIcon(d.color, label, !p.main, it.multi && p.main),
+                    zIndexOffset: p.main ? 500 : 0, riseOnHover: true
+                });
+                m.bindTooltip('<b>' + it.time + '</b><br>' + p.name.replace(/</g, '&lt;'), { direction: 'top', offset: [0, -10] });
+                m.on('click', function () { jumpTo(it.id); });
+                m.addTo(g);
+                (pins[it.id] = pins[it.id] || []).push(m);
+                pts.push(ll);
+                if (p.main) line.push(ll);
+            });
+        });
+        L.polyline(line, { color: d.color, weight: 3, opacity: 0.8, dashArray: '7 6' }).addTo(g);
+        for (var i = 1; i < line.length; i++) {
+            var a = line[i - 1], b = line[i], dy = b[0] - a[0], dx = (b[1] - a[1]) * Math.cos(a[0] * Math.PI / 180);
+            if (Math.abs(dy) + Math.abs(dx) < 0.004) continue;
+            var ang = Math.atan2(dx, dy) * 180 / Math.PI;
+            L.marker([(a[0] + b[0]) / 2, (a[1] + b[1]) / 2], {
+                interactive: false, keyboard: false,
+                icon: L.divIcon({ className: '', iconSize: [12, 12], iconAnchor: [6, 6],
+                    html: '<div class="route-arrow" style="color:' + d.color + ';transform:rotate(' + ang + 'deg)">▲</div>' })
+            }).addTo(g);
+        }
+        groups[d.day] = g;
+        bounds[d.day] = pts;
+    });
+
+    var chipBox = document.getElementById('route-chips'), chips = {};
+    function show(day) {
+        var all = [];
+        DATA.forEach(function (d) {
+            var on = day === 'all' || day === d.day;
+            if (on) { map.addLayer(groups[d.day]); all = all.concat(bounds[d.day]); } else { map.removeLayer(groups[d.day]); }
+        });
+        map.fitBounds(L.latLngBounds(all).pad(0.18));
+        Object.keys(chips).forEach(function (k) {
+            var c = chips[k], active = k === day;
+            c.classList.toggle('active', active);
+            c.style.background = active ? (k === 'all' ? '#737980' : c.dataset.color) : '';
+        });
+    }
+    function addChip(key, text, color) {
+        var b = document.createElement('button');
+        b.type = 'button'; b.className = 'route-chip'; b.textContent = text; b.dataset.color = color || '';
+        b.onclick = function () { show(key); };
+        chipBox.appendChild(b); chips[key] = b;
+    }
+    addChip('all', '全部 5 天');
+    DATA.forEach(function (d) { addChip(d.day, d.label, d.color); });
+    show('all');
+
+    window.focusItem = function (id) {
+        var day = id.split('-')[0];
+        show(day);
+        document.getElementById('busan-map-card').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        (pins[id] || []).forEach(function (m) {
+            var el = m.getElement && m.getElement();
+            if (el) { var p = el.firstChild; p.classList.remove('pulse'); void p.offsetWidth; p.classList.add('pulse'); }
+        });
+    };
+    setTimeout(function () { map.invalidateSize(); }, 300);
+})();
+
 </script>
 
 </body>
