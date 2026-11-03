@@ -62,32 +62,22 @@
             display: flex;
             align-items: center;
             gap: 14px;
-            background: #faf9f7;
-            border: 1.5px solid #dbd5d0;
+            background: #c98f8a;
+            color: #ffffff;
             border-radius: 12px;
             padding: 12px 16px;
-            margin-bottom: 22px;
-            box-shadow: 0 2px 10px rgba(85, 80, 76, 0.08);
-            transition: border-color 0.25s ease, background-color 0.25s ease;
+            margin-bottom: 14px;
+            box-shadow: 0 4px 14px rgba(85, 80, 76, 0.22);
+            transition: background-color 0.25s ease;
         }
-        .status-bar.done { border-color: #8fa89b; background: #f3f7f4; }
-        .light {
-            flex: 0 0 auto;
-            width: 34px;
-            height: 34px;
-            border-radius: 50%;
-            background: #c98f8a;
-            box-shadow: 0 0 0 4px rgba(201, 143, 138, 0.22), inset 0 -3px 6px rgba(0, 0, 0, 0.12);
-            transition: background-color 0.25s ease, box-shadow 0.25s ease;
-        }
-        .status-bar.done .light {
-            background: #6fae88;
-            box-shadow: 0 0 0 4px rgba(111, 174, 136, 0.28), 0 0 14px rgba(111, 174, 136, 0.55), inset 0 -3px 6px rgba(0, 0, 0, 0.12);
-        }
+        .status-bar.done { background: #6fae88; }
         .status-text { flex: 1 1 auto; min-width: 0; }
-        .status-title { font-weight: bold; color: #474340; font-size: 16px; line-height: 1.3; }
-        .status-sub { font-size: 12px; color: #a3968e; }
-        .reset-btn {
+        .status-title { font-weight: bold; font-size: 16px; line-height: 1.3; }
+        .status-sub { font-size: 12px; color: rgba(255, 255, 255, 0.88); }
+        .status-bar .pill-btn { color: #7a6a62; border-color: transparent; }
+        .status-bar.done .pill-btn { color: #4f8a67; }
+
+        .pill-btn {
             flex: 0 0 auto;
             font: inherit;
             font-size: 14px;
@@ -99,8 +89,26 @@
             cursor: pointer;
             transition: background-color 0.18s ease;
         }
-        .reset-btn:hover { background: #f0ece8; }
-        .reset-btn:active { background: #e8e2dd; }
+        .pill-btn:hover { background: #f0ece8; }
+        .pill-btn:active { background: #e8e2dd; }
+
+        .toolbar {
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+            margin-bottom: 14px;
+        }
+        .pill-btn.on { background: #8c7b70; color: #ffffff; border-color: #8c7b70; }
+        .edit-hint {
+            display: none;
+            font-size: 12px;
+            color: #8c7b70;
+            background: #f7f3ee;
+            border-radius: 8px;
+            padding: 8px 12px;
+            margin-bottom: 14px;
+        }
+        body.editing .edit-hint { display: block; }
 
         /* ── 分類區塊 ── */
         .group { margin-bottom: 22px; }
@@ -115,14 +123,12 @@
             padding-left: 10px;
         }
         .group-count { font-size: 12px; color: #b5a9a2; font-weight: normal; }
-        .g1 { --c: #c98f8a; }
-        .g2 { --c: #8da6bd; }
-        .g3 { --c: #c7a78f; }
-        .g4 { --c: #8fa89b; }
-        .g5 { --c: #a195b8; }
+        .g-req { --c: #8da6bd; }
+        .g-opt { --c: #a195b8; }
 
         .items { list-style: none; margin: 0; padding: 0; }
-        .item label {
+        .empty { font-size: 13px; color: #b5a9a2; padding: 6px 12px; }
+        .item label, .item .edit-row {
             display: flex;
             align-items: center;
             gap: 12px;
@@ -131,6 +137,8 @@
             background: #faf9f7;
             border: 1.5px solid #e8e2dd;
             border-radius: 10px;
+        }
+        .item label {
             cursor: pointer;
             -webkit-tap-highlight-color: transparent;
             transition: background-color 0.15s ease, border-color 0.15s ease;
@@ -144,10 +152,43 @@
             accent-color: #6fae88;
             cursor: pointer;
         }
-        .item .txt { flex: 1 1 auto; transition: color 0.15s ease; }
-        .item .note { font-size: 12px; color: #a3968e; margin-left: 6px; }
+        .item .txt { flex: 1 1 auto; min-width: 0; word-break: break-word; transition: color 0.15s ease; }
         .item.checked label { background: #f3f7f4; border-color: #cfdcd4; }
         .item.checked .txt { color: #a3968e; text-decoration: line-through; text-decoration-color: #c2b8b2; }
+
+        .mini-btn {
+            flex: 0 0 auto;
+            font: inherit;
+            font-size: 12px;
+            line-height: 1;
+            color: #8c7b70;
+            background: #ffffff;
+            border: 1.5px solid #c2b8b2;
+            border-radius: 16px;
+            padding: 7px 10px;
+            cursor: pointer;
+        }
+        .mini-btn:hover { background: #f0ece8; }
+        .mini-btn.del { color: #b0605a; border-color: #dcbcb8; }
+        .mini-btn.del:hover { background: #faf0ef; }
+
+        .add-row { display: none; gap: 8px; margin-top: 8px; }
+        body.editing .add-row { display: flex; }
+        .add-row input {
+            flex: 1 1 auto;
+            min-width: 0;
+            font: inherit;
+            font-size: 16px;
+            padding: 8px 12px;
+            border: 1.5px solid #dbd5d0;
+            border-radius: 10px;
+            background: #ffffff;
+            color: #55504c;
+        }
+        .add-row input:focus { outline: none; border-color: #8c7b70; }
+
+        .restore { display: none; text-align: center; margin-top: 6px; }
+        body.editing .restore { display: block; }
 
         .footer {
             text-align: center;
@@ -165,128 +206,212 @@
     <a href="../index.html" class="back-btn">← 返回首頁</a>
     <header>
         <h1>🧳 出國前 CHECK 名單</h1>
-        <p>勾選紀錄只存在這台裝置，不會與其他人同步</p>
+        <p>勾選與名單都只存在這台裝置，不會與其他人同步</p>
     </header>
 
     <div class="status-bar" id="status">
-        <div class="light" id="light"></div>
         <div class="status-text">
             <div class="status-title" id="status-title">尚未完成</div>
             <div class="status-sub" id="status-sub"></div>
         </div>
-        <button type="button" class="reset-btn" id="reset">重製</button>
+        <button type="button" class="pill-btn" id="reset">重置</button>
     </div>
 
+    <div class="toolbar">
+        <button type="button" class="pill-btn" id="edit-toggle">✏️ 編輯名單</button>
+    </div>
+    <div class="edit-hint">編輯模式：可「移到」另一個類別、刪除，或在下方輸入框新增項目。「重置」只會清除勾選，不會動到名單。</div>
+
     <div id="lists"></div>
+
+    <div class="restore"><button type="button" class="pill-btn" id="restore">還原預設名單</button></div>
 
     <div class="footer">© Leo's Trip Collections</div>
 </div>
 
 <script>
-    // 要增減項目只改這裡；勾選紀錄以「項目文字」當 key
-    var GROUPS = [
-        { cls: 'g1', title: '⭐ 最重要', items: [
-            { t: '韓國入境填單' }
-        ]},
-        { cls: 'g2', title: '🧳 打包行李', items: [
-            { t: '萬用插頭' }, { t: '牙刷牙膏' }, { t: '筆電＋充電器' }, { t: 'AR 眼鏡？' },
-            { t: '浴巾' }, { t: '衣服 3 套' }, { t: '內衣褲' }, { t: '手機充電器' },
-            { t: '杯套' }, { t: '手機掛繩' }, { t: '相機＋充電器' }
-        ]},
-        { cls: 'g3', title: '🛒 待買', items: [
-            { t: '洗面乳？' }
-        ]},
-        { cls: 'g4', title: '✅ 出發前檢查', items: [
-            { t: '手錶充電器' }, { t: '行動電源' }, { t: '手機' }, { t: '家裡鑰匙' },
-            { t: '錢包' }, { t: '護照' }, { t: '耳機' }, { t: '卡套' }, { t: '刮鬍刀' }
-        ]},
-        { cls: 'g5', title: '🎒 隨身小物', items: [
-            { t: '小雨傘' }, { t: '手錶' }, { t: '口罩' }
-        ]}
+    // 預設名單（沒有自訂過的裝置會用這份）。「必要」全部勾完才會亮綠燈，「選填」不影響燈號。
+    var DEFAULT_LIST = {
+        req: [
+            '入境填單/簽證/台胞證 (韓國/日本/香港/大陸...)', '護照', '手機', '家裡鑰匙', '錢包', '外國幣', '交通卡', '卡套',
+            '筆電/平板和充電器', '衣服(依照天數準備)', '內衣褲(依照天數準備)',
+            '手機/手錶 充電線+豆腐頭', '相機＋充電器 + 藍芽控制器', '行動電源', '耳機', '刮鬍刀', '小雨傘',
+            '萬用插頭', '口罩',
+            '牙刷牙膏', '洗面乳', '浴巾'
+        ],
+        opt: ['AR 眼鏡', '手機掛繩', '杯套', '手錶']
+    };
+    var CATS = [
+        { id: 'req', cls: 'g-req', title: '✅ 必要', other: 'opt', moveTo: '移到選填' },
+        { id: 'opt', cls: 'g-opt', title: '✨ 選填', other: 'req', moveTo: '移到必要' }
     ];
 
-    var KEY = 'leo-precheck-v1';
+    var LIST_KEY = 'leo-precheck-list-v1';   // 名單（含類別）
+    var CHECK_KEY = 'leo-precheck-v1';       // 勾選紀錄，以「項目文字」當 key
 
-    function load() {
-        try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) { return {}; }
+    function read(key) {
+        try { return JSON.parse(localStorage.getItem(key)); } catch (e) { return null; }
     }
-    function save(state) {
-        try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {}
+    function write(key, val) {
+        try { localStorage.setItem(key, JSON.stringify(val)); } catch (e) {}
+    }
+    function cloneDefault() {
+        return { req: DEFAULT_LIST.req.slice(), opt: DEFAULT_LIST.opt.slice() };
+    }
+    function loadList() {
+        var l = read(LIST_KEY);
+        if (l && Array.isArray(l.req) && Array.isArray(l.opt)) return l;
+        return cloneDefault();
     }
 
-    var state = load();
-    var boxes = [];
-    var wrap = document.getElementById('lists');
+    var list = loadList();
+    var checks = read(CHECK_KEY) || {};
+    var editing = false;
 
-    GROUPS.forEach(function (g) {
-        var sec = document.createElement('section');
-        sec.className = 'group ' + g.cls;
-        var h = document.createElement('h2');
-        h.className = 'group-title';
-        var name = document.createElement('span');
-        name.textContent = g.title;
-        var cnt = document.createElement('span');
-        cnt.className = 'group-count';
-        h.appendChild(name); h.appendChild(cnt);
-        sec.appendChild(h);
+    var $ = function (id) { return document.getElementById(id); };
+    var wrap = $('lists');
 
-        var ul = document.createElement('ul');
-        ul.className = 'items';
-        g.items.forEach(function (it) {
-            var li = document.createElement('li');
-            li.className = 'item';
-            var lb = document.createElement('label');
-            var cb = document.createElement('input');
-            cb.type = 'checkbox';
-            cb.checked = !!state[it.t];
-            var tx = document.createElement('span');
-            tx.className = 'txt';
-            tx.textContent = it.t;
-            if (it.n) {
-                var nt = document.createElement('span');
-                nt.className = 'note';
-                nt.textContent = it.n;
-                tx.appendChild(nt);
-            }
-            lb.appendChild(cb); lb.appendChild(tx);
-            li.appendChild(lb);
-            ul.appendChild(li);
-            boxes.push({ cb: cb, li: li, key: it.t, group: sec, cnt: cnt });
-            cb.addEventListener('change', function () {
-                if (cb.checked) state[it.t] = 1; else delete state[it.t];
-                save(state);
-                render();
+    function el(tag, cls, text) {
+        var e = document.createElement(tag);
+        if (cls) e.className = cls;
+        if (text != null) e.textContent = text;
+        return e;
+    }
+    function exists(t) { return list.req.indexOf(t) >= 0 || list.opt.indexOf(t) >= 0; }
+    function saveList() { write(LIST_KEY, list); }
+    function saveChecks() { write(CHECK_KEY, checks); }
+
+    function build() {
+        wrap.textContent = '';
+        CATS.forEach(function (cat) {
+            var items = list[cat.id];
+            var sec = el('section', 'group ' + cat.cls);
+            var h = el('h2', 'group-title');
+            h.appendChild(el('span', '', cat.title));
+            var cnt = el('span', 'group-count');
+            cnt.dataset.cat = cat.id;
+            h.appendChild(cnt);
+            sec.appendChild(h);
+
+            var ul = el('ul', 'items');
+            if (!items.length) ul.appendChild(el('li', 'empty', '（目前沒有項目）'));
+            items.forEach(function (t) {
+                var li = el('li', 'item');
+                li.dataset.key = t;
+                if (editing) {
+                    var row = el('div', 'edit-row');
+                    row.appendChild(el('span', 'txt', t));
+                    var mv = el('button', 'mini-btn', cat.moveTo);
+                    mv.type = 'button';
+                    mv.addEventListener('click', function () {
+                        list[cat.id].splice(list[cat.id].indexOf(t), 1);
+                        list[cat.other].push(t);
+                        saveList(); build();
+                    });
+                    var del = el('button', 'mini-btn del', '刪除');
+                    del.type = 'button';
+                    del.addEventListener('click', function () {
+                        list[cat.id].splice(list[cat.id].indexOf(t), 1);
+                        delete checks[t];
+                        saveList(); saveChecks(); build();
+                    });
+                    row.appendChild(mv); row.appendChild(del);
+                    li.appendChild(row);
+                } else {
+                    var lb = el('label');
+                    var cb = document.createElement('input');
+                    cb.type = 'checkbox';
+                    cb.checked = !!checks[t];
+                    cb.addEventListener('change', function () {
+                        if (cb.checked) checks[t] = 1; else delete checks[t];
+                        saveChecks(); render();
+                    });
+                    lb.appendChild(cb);
+                    lb.appendChild(el('span', 'txt', t));
+                    li.appendChild(lb);
+                }
+                ul.appendChild(li);
             });
+            sec.appendChild(ul);
+
+            var add = el('div', 'add-row');
+            var inp = document.createElement('input');
+            inp.type = 'text';
+            inp.placeholder = '新增到「' + cat.title.replace(/^\S+\s/, '') + '」…';
+            var btn = el('button', 'pill-btn', '新增');
+            btn.type = 'button';
+            var doAdd = function () {
+                var t = inp.value.trim();
+                if (!t) return;
+                if (exists(t)) { inp.value = ''; inp.placeholder = '「' + t + '」已經在名單裡了'; return; }
+                list[cat.id].push(t);
+                saveList(); build();
+            };
+            btn.addEventListener('click', doAdd);
+            inp.addEventListener('keydown', function (e) { if (e.key === 'Enter') doAdd(); });
+            add.appendChild(inp); add.appendChild(btn);
+            sec.appendChild(add);
+
+            wrap.appendChild(sec);
         });
-        sec.appendChild(ul);
-        wrap.appendChild(sec);
-    });
+        render();
+    }
 
     function render() {
-        var done = 0, perGroup = new Map();
-        boxes.forEach(function (b) {
-            b.li.classList.toggle('checked', b.cb.checked);
-            if (b.cb.checked) done++;
-            var p = perGroup.get(b.group) || { d: 0, t: 0, cnt: b.cnt };
-            p.t++; if (b.cb.checked) p.d++;
-            perGroup.set(b.group, p);
+        var counts = {};
+        CATS.forEach(function (cat) {
+            var d = 0;
+            list[cat.id].forEach(function (t) { if (checks[t]) d++; });
+            counts[cat.id] = { d: d, t: list[cat.id].length };
         });
-        perGroup.forEach(function (p) { p.cnt.textContent = p.d + ' / ' + p.t; });
-        var total = boxes.length, all = done === total;
-        document.getElementById('status').classList.toggle('done', all);
-        document.getElementById('status-title').textContent = all ? '全部完成，可以出發！' : '尚未完成';
-        document.getElementById('status-sub').textContent = all ? done + ' / ' + total + ' 項已確認' : '還差 ' + (total - done) + ' 項（' + done + ' / ' + total + '）';
+        document.querySelectorAll('.group-count').forEach(function (c) {
+            var k = counts[c.dataset.cat];
+            c.textContent = k.d + ' / ' + k.t;
+        });
+        document.querySelectorAll('.item').forEach(function (li) {
+            li.classList.toggle('checked', !!checks[li.dataset.key]);
+        });
+
+        var r = counts.req, all = r.t > 0 && r.d === r.t;
+        $('status').classList.toggle('done', all);
+        $('status-title').textContent = all ? '必要項目全部完成，可以出發！' : '尚未完成';
+        $('status-sub').textContent = r.t === 0
+            ? '「必要」類別目前沒有項目'
+            : (all ? '必要 ' + r.d + ' / ' + r.t : '必要還差 ' + (r.t - r.d) + ' 項（' + r.d + ' / ' + r.t + '）')
+              + '　選填 ' + counts.opt.d + ' / ' + counts.opt.t;
     }
 
-    document.getElementById('reset').addEventListener('click', function () {
-        if (Object.keys(state).length && !confirm('要取消所有勾選嗎？')) return;
-        state = {};
-        save(state);
-        boxes.forEach(function (b) { b.cb.checked = false; });
-        render();
+    $('reset').addEventListener('click', function () {
+        checks = {};
+        saveChecks();
+        build();
     });
 
-    render();
+    $('edit-toggle').addEventListener('click', function () {
+        editing = !editing;
+        document.body.classList.toggle('editing', editing);
+        this.classList.toggle('on', editing);
+        this.textContent = editing ? '✔ 完成編輯' : '✏️ 編輯名單';
+        build();
+    });
+
+    $('restore').addEventListener('click', function () {
+        // 不用瀏覽器內建的 confirm()（部分內嵌瀏覽器會直接擋掉）：第一次按先變成確認字樣，3 秒內再按一次才執行
+        var btn = this;
+        if (!btn.dataset.armed) {
+            btn.dataset.armed = '1';
+            btn.textContent = '再按一次確認還原（變更會消失）';
+            setTimeout(function () { delete btn.dataset.armed; btn.textContent = '還原預設名單'; }, 3000);
+            return;
+        }
+        delete btn.dataset.armed;
+        btn.textContent = '還原預設名單';
+        list = cloneDefault();
+        saveList();
+        build();
+    });
+
+    build();
 </script>
 
 </body>
