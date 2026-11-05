@@ -374,6 +374,17 @@
         }
         .addr-en { color: #a3968e; font-size: 12px; }
         .spot-hours { font-size: 12.5px; color: #7a716a; margin: 2px 0 6px; }
+        .shop-tips { margin: 0 0 12px 0; background: #fbf6f1; border: 1px solid #eadfd5; border-radius: 6px; font-size: 13px; color: #6e6762; }
+        .shop-tips summary { cursor: pointer; padding: 7px 10px; font-weight: bold; color: #8c5f4d; list-style: none; }
+        .shop-tips summary::-webkit-details-marker { display: none; }
+        .shop-tips summary::after { content: "＋"; float: right; color: #b5a9a2; }
+        .shop-tips[open] summary::after { content: "－"; }
+        .shop-tips ul { margin: 0; padding: 0 10px 8px 26px; }
+        .shop-tips li { margin: 6px 0; line-height: 1.55; }
+        .shop-when { margin-left: 6px; font-size: 11.5px; color: #8c5f4d; background: #f3e4d9; border-radius: 8px; padding: 0 7px; white-space: nowrap; }
+        .shop-btns { display: flex; gap: 6px; margin-top: 5px; }
+        .shop-btn { font-size: 12px; color: #fff; text-decoration: none; padding: 3px 12px; border-radius: 12px; }
+        .shop-note { margin: 0 10px 10px; padding-top: 6px; border-top: 1px dashed #e3d6ca; font-size: 12px; color: #a3968e; line-height: 1.55; }
         .fab-map {
             position: fixed; right: 16px; bottom: 20px; z-index: 1000;
             display: flex; align-items: center; gap: 6px;
@@ -664,8 +675,18 @@
                 <div class="info-list">
                     <div class="info-row"><span class="info-k">🕐 時間</span><span class="info-v">17:30 下船 ➔ 18:15 抵達西面、逛三正塔 ➔ 19:15 逛 SPAO</span></div>
                     <div class="info-row"><span class="info-k">🚇 交通</span><span class="info-v">17:30 從 Yacht Holic 碼頭搭計程車，或搭地鐵 2 號線（冬柏站上車）至「西面站」2 號出口；逛完、吃完再搭 2 號線回海雲台休息。</span></div>
-                    <div class="info-row"><span class="info-k">💡 補充</span><span class="info-v">三正塔 11F 有 Animate，7-9F 為扭蛋一番賞；SPAO 步行 2 分鐘即達，營業至 22:00 且可退稅。</span></div>
+                    <div class="info-row"><span class="info-k">💡 補充</span><span class="info-v">三正塔內有 Animate 與扭蛋一番賞店（樓層以大樓導覽為準）；SPAO 步行 2 分鐘即達，營業至 22:00 且可退稅。</span></div>
                 </div>
+                <details class="shop-tips">
+                    <summary>🛍️ 順路購物提醒（4 處）</summary>
+                    <ul>
+                        <li><b>三正塔 扭蛋・一番賞（百變怪重點區）</b><span class="shop-when">約 18:15–19:15</span><br>據網路整理，大樓內有扭蛋與一番賞店，可找百變怪戒指、充電線保護套、小公仔；Animate 約在 11F 一帶，可順便找 JOJO。各店樓層未經證實，請以大樓導覽為準。<span class="shop-btns"><a href="https://www.google.com/maps/search/?api=1&amp;query=Samjung%20Tower%2C%20672%20Jungang-daero%2C%20Busanjin-gu%2C%20Busan" target="_blank" rel="noopener" class="shop-btn btn-google">Google Map</a><a href="https://map.naver.com/v5/search/%EC%82%BC%EC%A0%95%ED%83%80%EC%9B%8C+%EC%84%9C%EB%A9%B4" target="_blank" rel="noopener" class="shop-btn btn-naver">Naver Map 🧭</a></span></li>
+                        <li><b>J-Goods（西面二號街）</b><span class="shop-when">順路</span><br>進口日本動漫周邊的買手店，偶爾會有日本寶可夢中心進口的百變怪娃娃、吊飾。<span class="shop-btns"><a href="https://www.google.com/maps/search/?api=1&amp;query=J-Goods%20Seomyeon%20Busan" target="_blank" rel="noopener" class="shop-btn btn-google">Google Map</a><a href="https://map.naver.com/v5/search/J-Goods+%EC%84%9C%EB%A9%B4" target="_blank" rel="noopener" class="shop-btn btn-naver">Naver Map 🧭</a></span></li>
+                        <li><b>SPAO 西面中央店</b><span class="shop-when">約 19:15–19:40</span><br>吉伊卡哇聯名睡衣與服飾（地點見下方）。<span class="shop-btns"><a href="https://www.google.com/maps/search/?api=1&amp;query=SPAO%20Seomyeon%20Jungang%2C%2038%20Jungang-daero%20692beon-gil%2C%20Busanjin-gu%2C%20Busan" target="_blank" rel="noopener" class="shop-btn btn-google">Google Map</a><a href="https://map.naver.com/v5/search/%EC%8A%A4%ED%8C%8C%EC%98%A4+%EC%84%9C%EB%A9%B4%EC%A4%91%EC%95%99%EC%A0%90" target="_blank" rel="noopener" class="shop-btn btn-naver">Naver Map 🧭</a></span></li>
+                        <li><b>PIVOT PLAY（田浦咖啡街）</b><span class="shop-when">約 19:40–20:20</span><br>各大熱門角色公仔，也能做烏薩奇、吉伊卡哇的 DIY 鍵帽；從 SPAO 步行約 7–10 分鐘。<span class="shop-btns"><a href="https://www.google.com/maps/search/?api=1&amp;query=PIVOT%20PLAY%20Jeonpo%20Busan" target="_blank" rel="noopener" class="shop-btn btn-google">Google Map</a><a href="https://map.naver.com/v5/search/PIVOT+PLAY+%EC%A0%84%ED%8F%AC" target="_blank" rel="noopener" class="shop-btn btn-naver">Naver Map 🧭</a></span></li>
+                    </ul>
+                    <div class="shop-note">若加上 PIVOT PLAY，晚餐順延到約 20:20，再在田浦／西面交界吃 Gojip 或 Gop。店家資訊整理自網路，營業時間請以地圖為準。</div>
+                </details>
                 <div class="spot-label">① 三正塔（삼정타워）</div>
                 <div class="addr">📍 부산 부산진구 중앙대로 672<br><span class="addr-en">672 Jungang-daero, Busanjin-gu, Busan</span></div>
                 <div class="spot-hours">🕐 營業時間：11:00–22:00</div>
@@ -780,9 +801,17 @@
                 <div class="hours-tag">🕐 持 Pass 免費使用 4 小時（最後入場 21:00）</div>
                 <div class="spot-desc">搭車回到 Centum City，補貨 SPAO 與快閃店後，進入全韓國最高級的五星級汗蒸幕徹底放鬆。必體驗 13 種主題汗蒸房並品嚐甜米釀配烤雞蛋。</div>
                 <div class="info-list">
-                    <div class="info-row"><span class="info-k">🕐 時間</span><span class="info-v">18:45 逛 B2 ➔ 19:30 入場 Spa Land</span></div>
+                    <div class="info-row"><span class="info-k">🕐 時間</span><span class="info-v">18:45 逛街（SPAO 等）➔ 19:30 入場 Spa Land</span></div>
                     <div class="info-row"><span class="info-k">🚇 交通</span><span class="info-v">搭東海線回「BEXCO 站」步行連通至新世界百貨；結束後搭 2 號線或計程車回海雲台飯店。</span></div>
                 </div>
+                <details class="shop-tips">
+                    <summary>🛍️ 順路購物提醒（2 處）</summary>
+                    <ul>
+                        <li><b>SPAO 新世界 Centum City Mall 店</b><span class="shop-when">約 18:45–19:10</span><br>吉伊卡哇聯名商品先逛這裡。<span class="shop-btns"><a href="https://www.google.com/maps/search/?api=1&amp;query=SPAO%20Shinsegae%20Centum%20City%2C%2035%20Centum%20nam-daero%2C%20Haeundae-gu%2C%20Busan" target="_blank" rel="noopener" class="shop-btn btn-google">Google Map</a><a href="https://map.naver.com/v5/search/%EC%8A%A4%ED%8C%8C%EC%98%A4+%EC%8B%A0%EC%84%B8%EA%B3%84+%EC%84%BC%ED%85%80%EC%8B%9C%ED%8B%B0" target="_blank" rel="noopener" class="shop-btn btn-naver">Naver Map 🧭</a></span></li>
+                        <li><b>Miniso 名創優品</b><span class="shop-when">約 19:10–19:40</span><br>同在新世界 Centum City 內，樓層未查到（有說法是在 SPAO 樓上，未證實），請看現場導覽或問櫃檯；據說近期有吉伊卡哇絨毛玩偶、包包與鑰匙圈。<span class="shop-btns"><a href="https://www.google.com/maps/search/?api=1&amp;query=MINISO%20Shinsegae%20Centum%20City%2C%20Haeundae-gu%2C%20Busan" target="_blank" rel="noopener" class="shop-btn btn-google">Google Map</a><a href="https://map.naver.com/v5/search/%EB%AF%B8%EB%8B%88%EC%86%8C+%EC%8B%A0%EC%84%B8%EA%B3%84+%EC%84%BC%ED%85%80%EC%8B%9C%ED%8B%B0" target="_blank" rel="noopener" class="shop-btn btn-naver">Naver Map 🧭</a></span></li>
+                    </ul>
+                    <div class="shop-note">逛完約 19:45 前往 Spa Land 即可（最後入場 21:00）。店家資訊整理自網路，營業時間請以地圖為準。</div>
+                </details>
                 <div class="addr">📍 부산 해운대구 센텀남대로 35 (신세계 센텀시티)<br><span class="addr-en">35 Centum nam-daero, Haeundae-gu, Busan (Shinsegae Centum City)</span></div>
                 <div class="spot-hours">🕐 營業時間：09:00–22:00（最後入場 21:00）</div>
                 <div class="btn-group">
@@ -838,6 +867,15 @@
                     <div class="info-row"><span class="info-k">🚇 交通</span><span class="info-v">從影島搭車 8 分鐘過橋即達南浦洞。</span></div>
                     <div class="info-row"><span class="info-k">💡 補充</span><span class="info-v">午餐可吃札嘎其海鮮或烤海鰻。⚠️ 米飛兔咖啡廳其實在「影島」山坡上（與 ARTE 同區），不接受預約、現場候位，平日 11:00–22:00、假日 11:00–23:00，Google 用店名常搜不到，請用下方地址定位；也可考慮先去米飛兔再吃南浦洞。</span></div>
                 </div>
+                <details class="shop-tips">
+                    <summary>🛍️ 順路購物提醒（3 處）</summary>
+                    <ul>
+                        <li><b>樂天百貨光復店（LINE FRIENDS）</b><span class="shop-when">約 11:50–12:30</span><br>LINE FRIENDS 看熊大。另有資料提到玩具反斗城的寶可夢專區，但查不到光復店有分店，不確定有沒有，順路看看即可。<span class="shop-btns"><a href="https://www.google.com/maps/search/?api=1&amp;query=Lotte%20Department%20Store%20Gwangbok%2C%20Busan" target="_blank" rel="noopener" class="shop-btn btn-google">Google Map</a><a href="https://map.naver.com/v5/search/%EB%A1%AF%EB%8D%B0%EB%B0%B1%ED%99%94%EC%A0%90+%EA%B4%91%EB%B3%B5%EC%A0%90" target="_blank" rel="noopener" class="shop-btn btn-naver">Naver Map 🧭</a></span></li>
+                        <li><b>Artbox 釜山光復一號店</b><span class="shop-when">約 12:30–13:10</span><br>位在 BIFF 廣場旁（비프광장로 28，一樓；營業約 11:00–22:30），不在光復路上。找吉伊卡哇餐具（湯匙、玻璃碗）、MagSafe 磁吸支架；文具區也看看百變怪滑鼠墊、便利貼、盲盒。<span class="shop-btns"><a href="https://www.google.com/maps/search/?api=1&amp;query=Artbox%20Gwangbok%2C%2028%20BIFF%20gwangjang-ro%2C%20Jung-gu%2C%20Busan" target="_blank" rel="noopener" class="shop-btn btn-google">Google Map</a><a href="https://map.naver.com/v5/search/%EB%B6%80%EC%82%B0+%EC%A4%91%EA%B5%AC+%EB%B9%84%ED%94%84%EA%B4%91%EC%9E%A5%EB%A1%9C+28" target="_blank" rel="noopener" class="shop-btn btn-naver">Naver Map 🧭</a></span></li>
+                        <li><b>國際市場 日本雜貨街</b><span class="shop-when">約 13:10–13:40</span><br>與 Artbox 同在南浦洞，步行可達。巷弄內的日本直營雜貨店可找日本直輸的吉伊卡哇、夢奇奇、三麗鷗周邊；扭蛋店也有寶可夢系列。<span class="shop-btns"><a href="https://www.google.com/maps/search/?api=1&amp;query=Gukje%20Market%2C%20Busan" target="_blank" rel="noopener" class="shop-btn btn-google">Google Map</a><a href="https://map.naver.com/v5/search/%EA%B5%AD%EC%A0%9C%EC%8B%9C%EC%9E%A5" target="_blank" rel="noopener" class="shop-btn btn-naver">Naver Map 🧭</a></span></li>
+                    </ul>
+                    <div class="shop-note">這三處排完，午餐約落在 13:40 之後，再接 Cafe Miffy（影島、現場候位），15:30 還要到廣安里換手環，時間偏緊；若米飛兔排隊久，建議先砍國際市場那一段。店家資訊整理自網路，營業時間請以地圖為準。</div>
+                </details>
                 <div class="spot-label">① 札嘎其市場（자갈치시장・海鮮午餐）</div>
                 <div class="addr">📍 부산 중구 자갈치해안로 52<br><span class="addr-en">52 Jagalchihaean-ro, Jung-gu, Busan</span></div>
                 <div class="spot-hours">🕐 營業時間：約 09:00–21:00（市場內各店營業時間不同）</div>
